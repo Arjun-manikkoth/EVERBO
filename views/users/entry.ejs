@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Entry page</title>
+	
+	<link rel="stylesheet" href="/styles/style.css">
+	
+</head>
+<body>
+	<div class="wrapper">
+		<div class="title-text">
+			 <div class="title login">
+					Login
+			 </div>
+			 <div class="title signup">
+					Register
+			 </div>
+		</div>
+	
+		<% if(locals.message_signup) {%>
+			<div class="signup-error">
+				<span class="message"><%=message_signup%></span>
+			</div>
+	  <%}%>
+		<div class="form-container">
+			 <div class="slide-controls">
+					<input type="radio" name="slide" id="login" checked>
+					<input type="radio" name="slide" id="signup">
+					<label for="login" class="slide login">Signin</label>
+					<label for="signup" class="slide signup">Signup</label>
+					<div class="slider-tab"></div>
+			 </div>
+
+			 <div class="form-inner">
+					<form action="/user_login" class="login" method="post" onsubmit="return validatelogin()">
+
+							<% if(locals.message_signin) {%>
+								<div class="error">
+									<span class="message"><%=message_signin%></span>
+								</div>
+									 <%}%>
+					
+						 <div class="field">
+								<input type="text"name="email" placeholder="Email Address" id="email-login">			
+						 </div>
+						 <span id="email-error-login"></span>
+
+						 <div class="field">
+								<input type="password" name="password" placeholder="Password" id="password-login">
+						 </div>
+						 <span id="password-error-login"></span>
+
+						 <div class="pass-link">
+								<a href="#">Forgot password?</a>
+						 </div>
+						 <div class="login-buttons">
+              <div class="field btn">
+								<div class="btn-layer"></div>
+								<input type="submit" value="Login">
+						 </div>
+						 </div>
+						 
+						 <div class="signup-link">
+								Don't have an account? <a href="">Signup now</a>
+						 </div>
+			
+		  
+					</form>
+					<form action="/user_registration" class="signup" method="post" onsubmit="return validatesignup()">
+			
+						 <div class="field">
+								<input type="text" name="name"  placeholder="Name" id="name-signup">
+						 </div>
+						 <span id="name-error-signup"></span>
+
+						 <div class="field">
+								<input type="text" name="email" placeholder="Email Address" id="email-signup" >
+						 </div>
+						 <span id="email-error-signup"></span>
+
+						 <div class="field">
+							<input type="text" name="mobileno" placeholder="Mobile no"  id="mobile_no-signup">
+					 </div>
+					 <span id="mobile_no-error-signup"></span>
+
+						 <div class="field">
+								<input type="password" name="password" placeholder="Password" id="password-signup"  >
+						 </div>
+						 <span id="password-error-signup"></span>
+
+						 <div class="field">
+							<input type="password" placeholder="Confirm password"  id="newpassword-signup">
+					 </div>
+					 <span id="newpassword-error-signup"></span>
+
+						 <div class="field btn">
+								<div class="btn-layer"></div>
+								<input type="submit" value="Signup">
+						 </div>
+					</form>
+			 </div>
+		</div>
+ </div>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+	<script src="/scripts/user_entry.js"></script>
+
+
+</body>
+</html>
