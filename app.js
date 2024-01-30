@@ -11,7 +11,6 @@ const userRoute=require("./routes/userRoute")
 //for all user routes
 app.use("/", userRoute);
 
-//asdfsadfasfdasdfsf
 
 //creating server
 const PORT = 3000;
