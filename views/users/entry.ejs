@@ -1,14 +1,46 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Entry page</title>
-	
-	<link rel="stylesheet" href="/styles/style.css">
-	
-</head>
-<body>
+<%-include("../layouts/user/header.ejs")-%>
+
+<header class="header trans_300">
+<!-- Main Navigation -->
+
+	<div class="main_nav_container">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 text-right">
+					<div class="logo_container">
+						<a href="#">EVER<span>BO</span></a>
+					</div>
+					<nav class="navbar">
+						<ul class="navbar_menu">
+							<li><a href="#">home</a></li>
+							<li><a href="#">shop</a></li>
+							<li><a href="#">new arrivals</a></li>
+							<li><a href="#">best sellers</a></li>
+							<li><a href="#">contact us</a></li>
+						</ul>
+						<ul class="navbar_user">
+							<li><a href="#"><i class="fa fa-search" aria-hidden="true"></i></a></li>
+							<li><a href="#"><i class="fa fa-user" aria-hidden="true"></i></a></li>
+							<li class="checkout">
+								<a href="#">
+									<i class="fa fa-shopping-cart" aria-hidden="true"></i>
+									<span id="checkout_items" class="checkout_items">2</span>
+								</a>
+							</li>
+						</ul>
+						<div class="hamburger_container">
+							<i class="fa fa-bars" aria-hidden="true"></i>
+						</div>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</header>
+
+ <div class="containerbox">
+
 	<div class="wrapper">
 		<div class="title-text">
 			 <div class="title login">
@@ -103,9 +135,61 @@
 			 </div>
 		</div>
  </div>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-	<script src="/scripts/user_entry.js"></script>
+ </div>
 
 
-</body>
-</html>
+<!-- Footer -->
+<div class="footer_entry">
+	
+	  <!-- Site footer -->
+    <footer class="site-footer">
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <h6>About</h6>
+            <p class="text-justify">Where style meets passion, our curated collection at EVERBO embodies the essence of fashion, weaving together trends, comfort, and confidence to redefine your wardrobe narrative.</p>
+          </div>
+
+          <div class="col-xs-6 col-md-3">
+            <h6>ACCOUNT</h6>
+            <ul class="footer-links">
+              <li><a href="http://scanfcode.com/category/c-language/">My Account</a></li>
+              <li><a href="http://scanfcode.com/category/front-end-development/">cart</a></li>
+              <li><a href="http://scanfcode.com/category/back-end-development/">Wishlist</a></li>
+              <li><a href="http://scanfcode.com/category/java-programming-language/">My Orders</a></li>
+            </ul>
+          </div>
+
+          <div class="col-xs-6 col-md-3">
+            <h6>Contact Us</h6>
+            <ul class="footer-links">
+              <li>EVERBO Towers</li>
+              <li>2ND Street</li>
+              <li>Bangalore</li>
+              <li>Karnataka,India</li>
+            </ul>
+          </div>
+        </div>
+        <hr>
+      </div>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-8 col-sm-6 col-xs-12">
+            <p class="copyright-text">Connect with us through our social media handles
+            </p>
+          </div>
+
+          <div class="col-md-4 col-sm-6 col-xs-12">
+            <ul class="social-icons">
+              <li><a class="facebook" href="#"><i class="fa fa-facebook"></i></a></li>
+              <li><a class="twitter" href="#"><i class="fa fa-twitter"></i></a></li>
+              <li><a class="dribbble" href="#"><i class="fa fa-dribbble"></i></a></li>
+              <li><a class="linkedin" href="#"><i class="fa fa-linkedin"></i></a></li>   
+            </ul>
+          </div>
+        </div>
+      </div>
+</footer>
+</div>
+
+<%-include("../layouts/user/footer.ejs")-%>

@@ -1,6 +1,17 @@
 const User = require("../models/userModel");
 const bcrypt = require("bcrypt")
 
+const loadLanding = async (req, res) => {
+
+  try {
+    res.render("otp_verification")
+  }
+  catch (error) { 
+    console.log(error.message);
+  }
+
+
+}
 const loadLogin = async (req,res) => { 
   try {
     res.render("entry")
@@ -76,4 +87,4 @@ const insertUser = async (req, res) => {
 }
 
 
-module.exports = {verifyLogin,insertUser,loadLogin}
+module.exports = {verifyLogin,insertUser,loadLogin,loadLanding}

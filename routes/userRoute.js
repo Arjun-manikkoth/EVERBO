@@ -19,12 +19,12 @@ user_route.set("views","./views/users")
 
 
 //loading page
-//user_route.get("/entry", userController.loadLogin)
+user_route.get("/", userController.loadLanding)
 
-//home page
+//login page
 user_route.get("/entry", userController.loadLogin)
 
-//user registration
+//user registration 
 user_route.post("/user_registration", userController.insertUser)
 
 //user login

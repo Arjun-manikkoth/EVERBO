@@ -5,13 +5,7 @@
   box-sizing: border-box;
   font-family: 'Poppins', sans-serif;
 }
-html,body{
-  display: grid;
-  height: 100%;
-  width: 100%;
-  place-items: center;
- background-color: rgba(255, 236, 223, 0.893);
-}
+
 .wrapper{
   overflow: hidden;
   max-width: 390px;
@@ -19,6 +13,8 @@ html,body{
   padding: 30px;
   border-radius: 5px;
   box-shadow: 0px 15px 20px rgba(0,0,0,0.1);
+  margin-top: 138px;
+  margin: 0 auto;
 }
 .wrapper .title-text{
   display: flex;
@@ -207,4 +203,9 @@ form .btn input[type="submit"]{
 }
 .pass-link{
   margin-top: 20px;
+}
+.containerbox{
+  padding-top: 135px;
+  padding-bottom: 180px;
+
 }
