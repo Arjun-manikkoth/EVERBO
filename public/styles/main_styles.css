@@ -1300,7 +1300,12 @@ section
 /*********************************
 7. Best Sellers
 *********************************/
-
+.best_sellers{
+	padding-top: 40px;
+}
+.new_arrivals{
+	padding-top: 20px;
+}
 .product_slider_container
 {
 	width: 100%;
@@ -1389,6 +1394,7 @@ section
 .benefit
 {
 	margin-top: 74px;
+	margin-bottom: 120px;
 }
 .benefit_row
 {

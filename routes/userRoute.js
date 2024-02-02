@@ -15,20 +15,21 @@ user_route.set("view engine", "ejs")
 user_route.set("views","./views/users")
 
 
-//landing page 
 
 
-//loading page
+//landing page
 user_route.get("/", userController.loadLanding)
 
 //login page
 user_route.get("/entry", userController.loadLogin)
 
-//user registration 
+//user registration data to db
 user_route.post("/user_registration", userController.insertUser)
 
-//user login
+//user login check
 user_route.post("/user_login",userController.verifyLogin)
 
+//shop page
+user_route.get("/shop", userController.loadShop);
 
 module.exports = user_route;

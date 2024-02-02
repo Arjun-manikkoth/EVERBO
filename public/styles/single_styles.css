@@ -816,7 +816,7 @@ section
 {
 	color: #fe4c50;
 }
-.red_button
+.red_buttons
 {
 	display: -webkit-inline-box;
 	display: -moz-inline-box;
@@ -836,11 +836,11 @@ section
 	-o-transition: all 0.3s ease;
 	transition: all 0.3s ease;
 }
-.red_button:hover
+.red_buttons:hover
 {
 	background: #FE7C7F !important;
 }
-.red_button a
+.red_buttons a
 {
 	display: block;
 	color: #FFFFFF;
@@ -1030,7 +1030,7 @@ section
 	line-height: 30px;
 	margin-top: 21px;
 }
-.product_price
+.product_prices
 {
 	display: inline-block;
 	font-size: 24px;
@@ -1110,7 +1110,7 @@ section
 {
 	color: #b5aec4;
 }
-.add_to_cart_button
+.add_to_cart_buttons
 {
 	width: 160px;
 	margin-left: 19px;

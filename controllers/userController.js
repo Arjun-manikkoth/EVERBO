@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt")
 const loadLanding = async (req, res) => {
 
   try {
-    res.render("otp_verification")
+    res.render("landing")
   }
   catch (error) { 
     console.log(error.message);
@@ -40,7 +40,7 @@ const verifyLogin = async (req,res) => {
     if (userData) {
       const passwordMatch=await bcrypt.compare(Password,userData.password)
       if (passwordMatch) { 
-        res.redirect("/home")
+        res.redirect("/shop")
       }
       else { 
         res.render("entry",{message_signin:"Invalid username/password"})
@@ -87,4 +87,15 @@ const insertUser = async (req, res) => {
 }
 
 
-module.exports = {verifyLogin,insertUser,loadLogin,loadLanding}
+const loadShop = async (req, res) => {
+  
+  try { 
+    res.render("product")
+  }
+  catch (error) {
+    
+    console.log(error.message)
+  }
+}
+
+module.exports = {verifyLogin,insertUser,loadLogin,loadLanding,loadShop}
