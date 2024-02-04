@@ -19,6 +19,7 @@
 .wrapper .title-text{
   display: flex;
   width: 200%;
+  padding-bottom: 5px;
 }
 .wrapper .title{
   width: 50%;
@@ -128,7 +129,7 @@ form .field input:focus::placeholder{
 }
 .form-inner form .signup-link{
   text-align: center;
-  margin-top: 30px;
+  margin-top: 26px;
 }
 .form-inner form .pass-link a,
 .form-inner form .signup-link a{
@@ -139,14 +140,14 @@ form .field input:focus::placeholder{
 .form-inner form .signup-link a:hover{
   text-decoration: underline;
 }
-form .btn{
+form .btns{
   height: 50px;
   width: 100%;
   border-radius: 5px;
   position: relative;
   overflow: hidden;
 }
-form .btn .btn-layer{
+form .btns .btn-layer{
   height: 100%;
   width: 300%;
   position: absolute;
@@ -155,10 +156,10 @@ form .btn .btn-layer{
   border-radius: 5px;
 
 }
-form .btn:hover .btn-layer{
+form .btns:hover .btn-layer{
   left: 0;
 }
-form .btn input[type="submit"]{
+form .btns input[type="submit"]{
   height: 100%;
   width: 100%;
   z-index: 1;
@@ -199,13 +200,83 @@ form .btn input[type="submit"]{
   color: rgb(253, 111, 111);
 }
 .login-buttons{
-  padding-top: 12px;
+  padding-top: 8px;
 }
 .pass-link{
   margin-top: 20px;
 }
 .containerbox{
-  padding-top: 135px;
+  padding-top: 158px;
   padding-bottom: 180px;
 
+}
+.reset-para{
+  font-size: 14px;
+  color: #707070;
+  margin-top: 28px;
+  margin-bottom: 30px;
+  font-weight: 420;
+}
+.reset-button{
+ 
+  padding-top: 7px;
+  margin-bottom:14px;
+
+}
+.forgotbox{
+  padding-top: 200px;
+  padding-bottom: 180px;
+
+}
+.forgot{
+  padding-top: 40px;
+}
+.reset-message,.otpverify-message{
+    padding-top: 10px;
+    font-size: 15px;
+    color: #ff0c0c;
+  }
+.otpverify-message{
+ margin-left: auto !important;
+ margin-right: auto !important;
+}
+.reset-error{
+  padding-top: 20px;
+}
+.resetbox{
+  padding-top: 200px;
+  padding-bottom: 180px;
+}
+.innerbox-reset{
+  padding-top: 22px;
+}
+.reset-button{
+  padding-top: 25px;
+}
+
+.containerotp{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.input {
+  width: 40px;
+  border: none;
+  border-bottom: 3px solid rgba(0, 0, 0, 0.5);
+  margin: 0 10px;
+  text-align: center;
+  font-size: 36px;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.input:focus {
+  border-bottom: 3px solid orange;
+  outline: none;
+}
+
+.input:nth-child(1) {
+  cursor: pointer;
+  pointer-events: all;
 }

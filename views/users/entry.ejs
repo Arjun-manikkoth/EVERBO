@@ -1,43 +1,5 @@
 <%-include("../layouts/user/header.ejs")-%>
 
-<header class="header trans_300">
-<!-- Main Navigation -->
-
-	<div class="main_nav_container">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-12 text-right">
-					<div class="logo_container">
-						<a href="#">EVER<span>BO</span></a>
-					</div>
-					<nav class="navbar">
-						<ul class="navbar_menu">
-							<li><a href="/">home</a></li>
-							<li><a href="#">shop</a></li>
-							<li><a href="/#newarrivals">new arrivals</a></li>
-							<li><a href="/#bestsellers">best sellers</a></li>
-							<li><a href="#">contact us</a></li>
-						</ul>
-						<ul class="navbar_user">
-							<li><a href="#"><i class="fa fa-search" aria-hidden="true"></i></a></li>
-							<li><a href="#"><i class="fa fa-user" aria-hidden="true"></i></a></li>
-							<li class="checkout">
-								<a href="#">
-									<i class="fa fa-shopping-cart" aria-hidden="true"></i>
-								</a>
-							</li>
-						</ul>
-						<div class="hamburger_container">
-							<i class="fa fa-bars" aria-hidden="true"></i>
-						</div>
-					</nav>
-				</div>
-			</div>
-		</div>
-	</div>
-
-</header>
-
  <div class="containerbox">
 
 	<div class="wrapper">
@@ -52,7 +14,7 @@
 	
 		<% if(locals.message_signup) {%>
 			<div class="signup-error">
-				<span class="message"><%=message_signup%></span>
+				<span class="message" id="signup-error"><%=message_signup%></span>
 			</div>
 	  <%}%>
 		<div class="form-container">
@@ -69,12 +31,12 @@
 
 							<% if(locals.message_signin) {%>
 								<div class="error">
-									<span class="message"><%=message_signin%></span>
+									<span class="message" id="signin-error"><%=message_signin%></span>
 								</div>
 									 <%}%>
 					
 						 <div class="field">
-								<input type="text"name="email" placeholder="Email Address" id="email-login">			
+								<input type="text"name="email" placeholder="Email Address" id="email-login" oninput="clear_error('signin-error')">			
 						 </div>
 						 <span id="email-error-login"></span>
 
@@ -84,12 +46,12 @@
 						 <span id="password-error-login"></span>
 
 						 <div class="pass-link">
-								<a href="#">Forgot password?</a>
+								<a href="/forgot_password">Forgot password?</a>
 						 </div>
 						 <div class="login-buttons">
-              <div class="field btn">
+              <div class="field btns">
 								<div class="btn-layer"></div>
-								<input type="submit" value="Login">
+								<input type="submit" class="submit" value="Login">
 						 </div>
 						 </div>
 						 
@@ -102,7 +64,7 @@
 					<form action="/user_registration" class="signup" method="post" onsubmit="return validatesignup()">
 			
 						 <div class="field">
-								<input type="text" name="name"  placeholder="Name" id="name-signup">
+								<input type="text" name="name"  placeholder="Name" id="name-signup" oninput="clear_error('signup-error')" >
 						 </div>
 						 <span id="name-error-signup"></span>
 
@@ -126,69 +88,14 @@
 					 </div>
 					 <span id="newpassword-error-signup"></span>
 
-						 <div class="field btn">
+						 <div class="field btns">
 								<div class="btn-layer"></div>
-								<input type="submit" value="Signup">
+								<input type="submit" class="submit" value="Signup">
 						 </div>
 					</form>
 			 </div>
 		</div>
  </div>
  </div>
-
-
-<!-- Footer -->
-<div class="footer_entry">
-	
-	  <!-- Site footer -->
-    <footer class="site-footer">
-      <div class="container">
-        <div class="row">
-          <div class="col-sm-12 col-md-6">
-            <h6>About</h6>
-            <p class="text-justify">Where style meets passion, our curated collection at EVERBO embodies the essence of fashion, weaving together trends, comfort, and confidence to redefine your wardrobe narrative.</p>
-          </div>
-
-          <div class="col-xs-6 col-md-3">
-            <h6>ACCOUNT</h6>
-            <ul class="footer-links">
-              <li><a href="http://scanfcode.com/category/c-language/">My Account</a></li>
-              <li><a href="http://scanfcode.com/category/front-end-development/">Cart</a></li>
-              <li><a href="http://scanfcode.com/category/back-end-development/">Wishlist</a></li>
-              <li><a href="http://scanfcode.com/category/java-programming-language/">My Orders</a></li>
-            </ul>
-          </div>
-
-          <div class="col-xs-6 col-md-3">
-            <h6>Contact Us</h6>
-            <ul class="footer-links">
-              <li>EVERBO Towers</li>
-              <li>2ND Street</li>
-              <li>Bangalore</li>
-              <li>Karnataka,India</li>
-            </ul>
-          </div>
-        </div>
-        <hr>
-      </div>
-      <div class="container">
-        <div class="row">
-          <div class="col-md-8 col-sm-6 col-xs-12">
-            <p class="copyright-text">Connect with us through our social media handles
-            </p>
-          </div>
-
-          <div class="col-md-4 col-sm-6 col-xs-12">
-            <ul class="social-icons">
-              <li><a class="facebook" href="#"><i class="fa fa-facebook"></i></a></li>
-              <li><a class="twitter" href="#"><i class="fa fa-twitter"></i></a></li>
-              <li><a class="dribbble" href="#"><i class="fa fa-dribbble"></i></a></li>
-              <li><a class="linkedin" href="#"><i class="fa fa-linkedin"></i></a></li>   
-            </ul>
-          </div>
-        </div>
-      </div>
-</footer>
-</div>
 
 <%-include("../layouts/user/footer.ejs")-%>

@@ -17,6 +17,12 @@ const userSchema=mongoose.Schema({
   password: {
     type: String,
     required: true
+  },
+  otp_verify: {
+    verified: { type:Boolean,default:false },
+    otp: {type:String},
+    createdAt: {type:Date},
+    expiresAt: {type:Date}
   }
 });
 

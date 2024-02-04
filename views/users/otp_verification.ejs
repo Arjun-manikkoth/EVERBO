@@ -1,126 +1,53 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OTP Verification</title>
-  <meta name="description" content="Colo Shop Template">
-  <link rel="stylesheet" type="text/css" href="styles/bootstrap4/bootstrap.min.css">
-  <link href="plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-  <link rel="stylesheet" type="text/css" href="plugins/OwlCarousel2-2.2.1/owl.carousel.css">
-  <link rel="stylesheet" type="text/css" href="plugins/OwlCarousel2-2.2.1/owl.theme.default.css">
-  <link rel="stylesheet" type="text/css" href="plugins/OwlCarousel2-2.2.1/animate.css">
-  <link rel="stylesheet" type="text/css" href="styles/main_styles.css">
-  <link rel="stylesheet" type="text/css" href="styles/responsive.css">
-  <link rel="stylesheet" type="text/css" href="styles/footer.css">
-  <link rel="stylesheet" type="text/css" href="styles/otp_verification.css">
-</head>
-<body>
-  
-  <header class="header trans_300">
+<%-include("../layouts/user/header.ejs")-%>
 
+ <div class="forgotbox">
 
+	<div class="wrapper forgot">
+		<div class="title-text">
+			 <div class="title login">
+					Verify OTP
+			 </div>
+		</div>
 
-    <!-- Main Navigation -->
-    
-      <div class="main_nav_container">
-        <div class="container">
-          <div class="row">
-            <div class="col-lg-12 text-right">
-              <div class="logo_container">
-                <a href="#">EVER<span>BO</span></a>
-              </div>
-              <nav class="navbar">
-                <ul class="navbar_menu">
-                  <li><a href="#">home</a></li>
-                  <li><a href="#">shop</a></li>
-                  <li><a href="#">new arrivals</a></li>
-                  <li><a href="#">best sellers</a></li>
-                  <li><a href="#">contact us</a></li>
-                </ul>
-                <ul class="navbar_user">
-                  <li><a href="#"><i class="fa fa-search" aria-hidden="true"></i></a></li>
-                  <li><a href="#"><i class="fa fa-user" aria-hidden="true"></i></a></li>
-                  <li class="checkout">
-                    <a href="#">
-                      <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                      <span id="checkout_items" class="checkout_items">2</span>
-                    </a>
-                  </li>
-                </ul>
-                <div class="hamburger_container">
-                  <i class="fa fa-bars" aria-hidden="true"></i>
-                </div>
-              </nav>
+		<div class="form-container">
+			 
+			 <div class="form-inner">
+					<form action="/otp_verification" class="login" method="post" onsubmit="return validateotp()">
+						<% if(locals.message_otpverification) {%>
+							<div class="reset-error otp-error">
+								<span class="otpverify-message"><%=message_otpverification%></span>
+							</div>
+						<%}%>		   
+						<p class="reset-para">An OTP has been sent to your registered Email,Please check your Email and enter your OTP </p>
+						<div class="containerotp">
+              <div id="inputs" class="inputs">
+                <input class="input" type="text"
+                    inputmode="numeric" maxlength="1" name="input1" id="input1"/>
+                <input class="input" type="text"
+                    inputmode="numeric" maxlength="1" name="input2" id="input2"/>
+                <input class="input" type="text"
+                    inputmode="numeric" maxlength="1" name="input3" id="input3"/>
+                <input class="input" type="text"
+                    inputmode="numeric" maxlength="1" name="input4" id="input4"/>
+                <input type="hidden"  name="id" value="<%=user._id%>">
             </div>
-          </div>
-        </div>
-      </div>
-    
-    </header>
-    
-<!--content-->
+            </div>
+       
+						 <span id="email-error-login"></span>
+           
+						 <div class="reset-button">
+              <div class="field btns">
+								<div class="btn-layer"></div>
+								<input type="submit" value="Verify">
+						 </div>
+						 </div>
+						
+		  
+					</form>
+					
+			 </div>
+		</div>
+ </div>
+ </div>
 
-  
-  <div class="footer_entry"></div>
-      <!-- Site footer -->
-      <footer class="site-footer">
-        <div class="container">
-          <div class="row">
-            <div class="col-sm-12 col-md-6">
-              <h6>About</h6>
-              <p class="text-justify">Where style meets passion, our curated collection at EVERBO embodies the essence of fashion, weaving together trends, comfort, and confidence to redefine your wardrobe narrative.</p>
-            </div>
-  
-            <div class="col-xs-6 col-md-3">
-              <h6>ACCOUNT</h6>
-              <ul class="footer-links">
-                <li><a href="http://scanfcode.com/category/c-language/">My Account</a></li>
-                <li><a href="http://scanfcode.com/category/front-end-development/">cart</a></li>
-                <li><a href="http://scanfcode.com/category/back-end-development/">Wishlist</a></li>
-                <li><a href="http://scanfcode.com/category/java-programming-language/">My Orders</a></li>
-              </ul>
-            </div>
-  
-            <div class="col-xs-6 col-md-3">
-              <h6>Contact Us</h6>
-              <ul class="footer-links">
-                <li>EVERBO Towers</li>
-                <li>2ND Street</li>
-                <li>Bangalore</li>
-                <li>Karnataka,India</li>
-              </ul>
-            </div>
-          </div>
-          <hr>
-        </div>
-        <div class="container">
-          <div class="row">
-            <div class="col-md-8 col-sm-6 col-xs-12">
-              <p class="copyright-text">Connect with us through our social media handles
-              </p>
-            </div>
-  
-            <div class="col-md-4 col-sm-6 col-xs-12">
-              <ul class="social-icons">
-                <li><a class="facebook" href="#"><i class="fa fa-facebook"></i></a></li>
-                <li><a class="twitter" href="#"><i class="fa fa-twitter"></i></a></li>
-                <li><a class="dribbble" href="#"><i class="fa fa-dribbble"></i></a></li>
-                <li><a class="linkedin" href="#"><i class="fa fa-linkedin"></i></a></li>   
-              </ul>
-            </div>
-          </div>
-        </div>
-  </footer>
-
-
-  <script src="scripts/userScripts/jquery-3.2.1.min.js"></script>
-  <script src="styles/bootstrap4/popper.js"></script>
-  <script src="styles/bootstrap4/bootstrap.min.js"></script>
-  <script src="plugins/Isotope/isotope.pkgd.min.js"></script>
-  <script src="plugins/OwlCarousel2-2.2.1/owl.carousel.js"></script>
-  <script src="plugins/easing/easing.js"></script>
-  <script src="scripts/userScripts/otp_verification.js"></script>
-
-</body>
-</html>
+<%-include("../layouts/user/footer.ejs")-%>

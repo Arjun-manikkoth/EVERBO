@@ -150,7 +150,7 @@ h6::selection
 }
 ::-webkit-input-placeholder
 {
-	font-size: 16px !important;
+	font-size: 17px !important;
 	font-weight: 500;
 	color: #777777 !important;
 }
@@ -168,13 +168,13 @@ h6::selection
 }
 :-ms-input-placeholder
 {
-	font-size: 16px !important;
+	font-size: 17px !important;
 	font-weight: 500;
 	color: #777777 !important;
 }
 ::input-placeholder
 {
-	font-size: 16px !important;
+	font-size: 17px !important;
 	font-weight: 500;
 	color: #777777 !important;
 }
@@ -843,7 +843,7 @@ section
 	font-weight: 400;
 	line-height: 1;
 }
-.red_button
+.red_button1
 {
 	display: -webkit-inline-box;
 	display: -moz-inline-box;
@@ -863,11 +863,11 @@ section
 	-o-transition: all 0.3s ease;
 	transition: all 0.3s ease;
 }
-.red_button:hover
+.red_button1:hover
 {
 	background: #FE7C7F !important;
 }
-.red_button a
+.red_button1 a
 {
 	display: block;
 	color: #FFFFFF;
@@ -957,7 +957,7 @@ section
 .new_arrivals_sorting
 {
 	display: inline-block;
-	border-radius: 3px;
+	border-radius: 3px; 
 	margin-top: 59px;
 	overflow: visible;
 }
@@ -1005,13 +1005,13 @@ section
 	width: 100%;
 	margin-top: 57px;
 }
-.product-item
+.product-items
 {
 	width: 20%;
 	height: 380px;
 	cursor: pointer;
 }
-.product-item::after
+.product-items::after
 {
 	display: block;
 	position: absolute;
@@ -1029,7 +1029,7 @@ section
 	-o-transition: all 0.3s ease;
 	transition: all 0.3s ease;
 }
-.product-item:hover::after
+.product-items:hover::after
 {
 	box-shadow: 0 25px 29px rgba(63, 78, 100, 0.15);
 	border: solid 2px rgba(235,235,235,1);
@@ -1162,7 +1162,7 @@ section
 	font-size: 12px;
 	font-weight: 600;
 }
-.product-item:hover .add_to_cart_button
+.product-items:hover .add_to_cart_button
 {
 	visibility: visible;
 	opacity: 1;
@@ -1187,7 +1187,7 @@ section
 	visibility: visible;
 	opacity: 1;
 }
-.product-item:hover .favorite
+.product-items:hover .favorite
 {
 	visibility: visible;
 	opacity: 1;
@@ -1328,7 +1328,7 @@ section
 {
 	overflow: visible !important;
 }
-.product_slider_item .product-item
+.product_slider_item .product-items
 {
 	height: 340px;
 }
@@ -1336,7 +1336,7 @@ section
 {
 	width: 20%;
 }
-.product_slider_item .product-item
+.product_slider_item .product-items
 {
 	width: 100% !important;
 }
@@ -1689,4 +1689,7 @@ section
 .footer_social ul li a:hover
 {
 	color: #fe4c50;
+}
+.rupee,.rupeereal{
+	font-family: sans-serif;
 }
