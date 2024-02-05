@@ -237,4 +237,12 @@ function validateotp() {
 	if (input1 === "" || input2 === "" || input3 === "" || input4 === "" || input1 === null || input2 === null || input3 === null || input4 === null) { 
 		return false;
 	}
-	}
+}
+	
+var timeleft = 60;
+    var downloadTimer = setInterval(function(){
+    timeleft--;
+    document.getElementById("countdowntimer").textContent = timeleft;
+    if(timeleft <= 0)
+        clearInterval(downloadTimer);
+    },1000);

@@ -3,8 +3,6 @@ const bcrypt = require("bcrypt")
 const nodemailer = require("nodemailer")
 
 
-
-
 //user passwordhash
 const securepassword = async (password) => { 
   try { 
@@ -31,9 +29,6 @@ const passwordReset = async (req, res)=>{
   }
 }
 
-
-
-
 //user signup verification using otp
 const sentOtpVerificationMail = async (email,id) => { 
   try {
@@ -52,7 +47,7 @@ const sentOtpVerificationMail = async (email,id) => {
       from: "itsmearjun1028@gmail.com",
       to: email,
       subject: "Verificaton mail",
-      html: `<p>Enter <b>${generate_otp}</b> in the website for verifiying your account.</p><p>This code expires in <b>60 seconds</b></p>`
+      html: `<p>Enter this code <b>${generate_otp}</b> to verify your account.</p><p>This code expires in <b>60 seconds</b></p>`
     }
     transporter.sendMail(mailOptions, (error,info) => {
       if (error) { 
@@ -117,29 +112,28 @@ const sentResetPasswordMail = async (email,id) => {
 
 }
 
-
-
 //user signup otp verification
 const otpVerifySignUp = async (req, res) => { 
   try {  
     const otp=req.body.input1 + req.body.input2 + req.body.input3 + req.body.input4;
-    const userId = req.body.id;
+    const userId = req.session.user_Id;
     const userData = await User.findById({ _id: userId });
+    if (userData.otp_verify.expiresAt < Date.now()) {
 
-    if (userData) { 
-       const otphash = await bcrypt.compare(otp, userData.otp_verify.otp)
-    if (otphash) {
-      res.redirect("/shop")
-      }
-    else {
-      res.render("otp_verification", {message_otpverification:"Invalid OTP",user:userData})
-      }
+      await User.updateOne({ _id: userId }, { $set: { "otp_verify.otp": "" } });
+      res.render("otp_verification", {message_otpverification:"OTP expired"})
     }
-   
     else { 
-      res.render("otp_verification", { message_otpverification: "Registration failed",user:userData})
+
+       const otphash = await bcrypt.compare(otp, userData.otp_verify.otp)
+       if (otphash) {
+         await User.updateOne({ _id: userId }, { $set: { is_verified: 1 } });
+         res.redirect("/shop")
+       }
+     else {
+         res.render("otp_verification", { message_otpverification: "Invalid OTP" });
+       }
     }
-    
   }
   catch (error) { 
     console.log(error.message)
@@ -220,11 +214,13 @@ const verifyLogin = async (req,res) => {
   try {
     const Email = req.body.email
     const Password = req.body.password
+    
     const userData = await User.findOne({ email: Email });
-
+     
     if (userData) {
       const passwordMatch=await bcrypt.compare(Password,userData.password)
       if (passwordMatch) { 
+        req.session.user_Id = userData.id;
         res.redirect("/shop")
       }
       else { 
@@ -244,13 +240,18 @@ const verifyLogin = async (req,res) => {
 const insertUser = async (req, res) => { 
   try {
     const signedin = await User.findOne({ email: req.body.email })
-
     if (signedin) {
-      res.render("entry",{message_signup:"Already a user"})
+      if (signedin.is_verified == 1) { 
+       
+        res.render("entry",{message_signup:"Already a user"})
+      } 
+      else {
+        res.render("otp_verification");
+      }
     }
     else { 
       const hpassword = await securepassword(req.body.password);
-      const user=new User({
+        const user = new User({
         name: req.body.name,
         email: req.body.email,
         mobile_no:req.body.mobileno,
@@ -258,11 +259,10 @@ const insertUser = async (req, res) => {
       })
       const userData = await user.save();
 
-      if (userData) {
-
+      if (userData) {      
         await sentOtpVerificationMail(req.body.email, userData._id);
-        const data=await User.findOne({email:req.body.email})
-        res.render("otp_verification", {user:data})
+        req.session.user_Id = userData._id;
+        res.render("otp_verification")
       }  
       else { 
         res.render("entry", {message_signup:"Registration failed"})
@@ -285,6 +285,29 @@ const loadProduct = async (req, res) => {
   }
 }
 
+const userLogout = async (req,res) => {
+
+  try {
+    req.session.destroy();
+    res.redirect("/");
+  }
+  catch (error) {
+    console.log(error.message)
+  }
+}
+
+
+const otpResend = async (req, res) => {
+  try {
+   const userData= await User.findById({ _id: req.session.user_Id })
+    await sentOtpVerificationMail(userData.email, req.session.user_Id);
+    res.render("otp_verification");
+  }
+  catch (error) {
+    console.log(error.message)  
+  }
+}
+
 module.exports = {
   verifyLogin,
   insertUser,
@@ -296,5 +319,7 @@ module.exports = {
   forgotVerify,
   loadReset,
   otpVerifySignUp,
-  passwordReset
+  passwordReset,
+  userLogout,
+  otpResend
 }

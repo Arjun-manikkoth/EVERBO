@@ -257,7 +257,7 @@ form .btns input[type="submit"]{
 .containerotp{
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: first baseline;
 }
 
 .input {
@@ -279,4 +279,34 @@ form .btns input[type="submit"]{
 .input:nth-child(1) {
   cursor: pointer;
   pointer-events: all;
+}
+.otpspan-div{
+  display: flex;
+  justify-content: center;
+}
+#otpspan{
+  padding-top: 28px;
+}
+.otpverify-button{
+  padding-bottom: 5px;
+}
+#logoutbtn a{
+text-decoration: none;  
+color: white;
+}
+.breadcrumbs{
+  justify-content: space-between;
+}
+#resend-code{
+
+  text-decoration: none;
+  color:rgb(56, 56, 245);
+  font-weight: 500;
+  font-size: 15px;
+
+}
+.resend-otp{
+  display: flex;
+  justify-content: center;
+  padding-top: 20px;
 }

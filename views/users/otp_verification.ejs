@@ -29,17 +29,25 @@
                     inputmode="numeric" maxlength="1" name="input3" id="input3"/>
                 <input class="input" type="text"
                     inputmode="numeric" maxlength="1" name="input4" id="input4"/>
-                <input type="hidden"  name="id" value="<%=user._id%>">
+          
             </div>
             </div>
        
 						 <span id="email-error-login"></span>
-           
-						 <div class="reset-button">
+             <div class="otpspan-div">
+							<p id="otpspan">OTP expires in <span id="countdowntimer">60 </span> Seconds</p>
+						 </div>
+					
+
+						 <div class="otpverify-button">
               <div class="field btns">
 								<div class="btn-layer"></div>
 								<input type="submit" value="Verify">
 						 </div>
+						 <div class="resend-otp">
+							<a href="/resend_otp" id="resend-code">Resend code</a>
+						 </div>
+						 
 						 </div>
 						
 		  

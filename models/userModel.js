@@ -18,6 +18,10 @@ const userSchema=mongoose.Schema({
     type: String,
     required: true
   },
+  is_verified: {
+    type:Number,
+    default: 0
+  },
   otp_verify: {
     verified: { type:Boolean,default:false },
     otp: {type:String},
