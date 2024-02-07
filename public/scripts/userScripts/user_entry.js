@@ -1,7 +1,3 @@
-//prevent resubmission
-if ( window.history.replaceState ) {
-	window.history.replaceState( null, null, window.location.href );
-}
 //entry form slider
 window.onload = function () {
 	const loginText = document.querySelector(".title-text .login");
@@ -228,6 +224,7 @@ function validatereset() {
 		}
 	});
 
+	
 function validateotp() {
 		
 	var input1 = document.getElementById("input1").value

@@ -1,0 +1,62 @@
+<%-include("../layouts/admin/header.ejs")-%>
+	
+		<div class="report-container"> 
+				<%-include("../layouts/admin/header.ejs")-%>
+	
+			<div class="report-container"> 
+			<div class="title-container">
+				<div class="table-title">
+          Products
+        </div> 
+				<div class="btn_add_categories">
+					<button class="btn btn-dark"><a href="/admin/add_Products">+Products</a></button>
+				</div>
+				
+
+			</div>
+      	   
+						<div class="container">
+							<div class="row">
+									<div class="col">
+											<table class="table table-hover table-responsive">
+													<thead>
+														<tr>
+															<th class="col-1" scope="col">No</th>
+															<th class="col-1" scope="col">Product</th>
+															<th class="col-1" scope="col">Image</th>
+															<th class="col-1" scope="col">Category</th>
+															<th class="col-1" scope="col">Description</th>
+															<th class="col-1" scope="col">Quantity</th>
+															<th class="col-1" scope="col">Status</th>
+															<th class="col-1" scope="col">Price</th>
+															<th class="col-1" scope="col">Discount</th>
+															<th class="col-1" scope="col">Actions</th>
+															<th class="col-1" scope="col">Actions</th>
+														</tr>
+													</thead>
+													<tbody>
+															<tr>
+																	
+																<%userDetails.forEach((user)=>{%>
+																	<tr>
+																		<td><%=user._id%></td>
+																		<td><%=user.name%></td>
+																		<td><%=user.email%></td>
+																		<td><%=user.mobile_no%></td>
+																		<td><button type="button" class="btn-sm btn-green blockButton" id="<%=user._id%>" onclick="toggleColorAndText('<%=user._id%>')" ><a href="/admin/block?id=<%=user._id%>" class="blockanchor">Block</a></button></td> 
+											
+												
+															</tr>
+													</tbody>
+											</table>
+									</div>
+							</div>
+					</div>
+						
+          </tbody>
+        </table>
+
+	 </div> 
+
+
+	<%-include("../layouts/admin/footer.ejs")-%>

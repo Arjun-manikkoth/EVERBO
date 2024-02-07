@@ -16,16 +16,16 @@ const securepassword = async (password) => {
 
 //setup new password to db
 const passwordReset = async (req, res)=>{
-  const id = req.query.userId;
+  const Id = req.query.Id;
   const newpassword = await securepassword(req.body.password);
-  const userData = await User.updateOne({ _id: id }, { $set: { password: newpassword } });
+  const userData = await User.updateOne({ _id: Id }, { $set: { password: newpassword } });
   console.log(userData)
 
   if (userData) {
-    res.render("reset_password", { message_resetpassword: "Please login with your new password" })
+    res.render("reset_password", { message_resetpassword: "Please login with your new password", id: Id })
   }
   else { 
-    res.render("reset_password", {message_resetpassword:"Password reset failed"})
+  res.render("reset_password", { message_resetpassword: "Password reset failed" ,id:Id})
   }
 }
 
@@ -143,8 +143,8 @@ const otpVerifySignUp = async (req, res) => {
 //password reset page load
 const loadReset = async (req, res) => { 
   try {
-
-     res.render("Reset_password")
+    const Id= req.query.userId
+    res.render("Reset_password", {id:Id})
   }
   catch (error) { 
     console.log(error.message)
@@ -216,20 +216,25 @@ const verifyLogin = async (req,res) => {
     const Password = req.body.password
     
     const userData = await User.findOne({ email: Email });
-     
-    if (userData) {
-      const passwordMatch=await bcrypt.compare(Password,userData.password)
-      if (passwordMatch) { 
-        req.session.user_Id = userData.id;
-        res.redirect("/shop")
+    if (userData.is_blocked == 1) {
+      res.render("entry", { message_signin:"Access Denied"})
+    }
+    else {
+      if (userData) {
+        const passwordMatch=await bcrypt.compare(Password,userData.password)
+        if (passwordMatch) { 
+          req.session.user_Id = userData.id;
+          res.redirect("/shop")
+        }
+        else { 
+          res.render("entry",{message_signin:"Invalid username/password"})
+         }
       }
       else { 
-        res.render("entry",{message_signin:"Invalid username/password"})
-       }
-    }
-    else { 
-      res.render("entry",{message_signin:"Account doesnot exist"})
-    }   
+        res.render("entry",{message_signin:"Account doesnot exist"})
+      }   
+     }
+   
   }
   catch(error) { 
     console.log(error.message);

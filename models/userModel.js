@@ -22,6 +22,10 @@ const userSchema=mongoose.Schema({
     type:Number,
     default: 0
   },
+  is_blocked: {
+    type: Number,
+    default:0
+  },
   otp_verify: {
     verified: { type:Boolean,default:false },
     otp: {type:String},

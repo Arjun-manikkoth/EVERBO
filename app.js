@@ -6,11 +6,16 @@ const express = require("express");
 const app = express();
 
 //importing userrouter
-const userRoute=require("./routes/userRoute")
+const userRoute = require("./routes/userRoute")
+
+//importing adminrouter
+const adminRoute=require("./routes/adminRoute")
 
 //for all user routes
 app.use("/", userRoute);
 
+//for all admin routes
+app.use("/admin", adminRoute);
 
 //creating server
 const PORT = 3000;
