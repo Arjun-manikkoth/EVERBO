@@ -1,32 +1,19 @@
 const express = require("express");
 const user_route = express();
-const session = require("express-session")
-const nocache= require("nocache")
+const session=require("express-session")
 const userController = require("../controllers/userController")
 const auth=require("../middlewares/userAuth")
 
-
-user_route.use(nocache());
-
-//parse data
-user_route.use(express.json())
-user_route.use(express.urlencoded({extended:true}))
-
-
-//static file
-user_route.use(express.static("public"));
-
-//setting the view engine
-user_route.set("view engine", "ejs")
+//setting the path for the view engine
 user_route.set("views","./views/users")
 
-
-
+//user session
 user_route.use(session({
   secret: 'secret',
   resave: true,
   saveUninitialized:false
 }));
+
 
 
 //landing page

@@ -6,7 +6,7 @@
           Categories
         </div> 
 				<div class="btn_add_categories">
-					<button class="btn btn-dark"><a href="/admin/add_categories">+Category</a></button>
+					<button class="btn btn-dark category"><a href="/admin/add_category" class="category-add">+Category</a></button>
 				</div>
 				
 
@@ -18,33 +18,37 @@
 											<table class="table table-hover table-responsive">
 													<thead>
 														<tr>
-															<th class="col-1" scope="col">No</th>
+															<th class="col-3" scope="col">Id</th>
 															<th class="col-2" scope="col">Category name</th>
-															<th class="col-2" scope="col">Image</th>
-															<th class="col-5" scope="col">Description</th>
-															<th  class="col-2" scope="col">Actions</th>
+															<th class="col-3" scope="col">Image</th>
+															<th class="col-3" scope="col">Description</th>
+															<th class="col-2" scope="col">Actions</th>
 														</tr>
 													</thead>
 													<tbody>
-															<tr>
-																	
-																<%userDetails.forEach((user)=>{%>
-																	<tr>
-																		<td><%=user._id%></td>
-																		<td><%=user.name%></td>
-																		<td><%=user.email%></td>
-																		<td><%=user.mobile_no%></td>
-																		<td><button type="button" class="btn-sm btn-green blockButton" id="<%=user._id%>" onclick="toggleColorAndText('<%=user._id%>')" ><a href="/admin/block?id=<%=user._id%>" class="blockanchor">Block</a></button></td> 
-											
-												
+														<%category.forEach((categ)=>{%>
+															<tr> 
+																    <%if(categ.is_deleted==0){%>
+																		<td><%=categ._id%></td>
+																		<td><%=categ.name%></td>
+																		<td><img src="/images/userImages/<%=categ.image%>" width="140px" alt="<%=categ.image%>"></td>
+																		<td><%=categ.description%></td>
+																		<td>
+																			<div class="categ-edit">
+																				<button type="button" class="btn btn-success btn-sm"> <a href="/admin/edit_category?id=<%=categ._id%>" class=" categ-edit ">Edit</a></button>
+																				<button type="button" class="btn btn-danger btn-sm ms-2 "><a href="/admin/delete_category?id=<%=categ._id%>" class=" categ-edit ">Delete</a> </button>
+																			</div>
+																		</td>
+																		<%}%>				
 															</tr>
+															<%})%>
 													</tbody>
 											</table>
 									</div>
 							</div>
 					</div>
 						
-          </tbody>
+          
         </table>
 
 

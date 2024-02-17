@@ -1,6 +1,8 @@
 const User = require("../models/userModel");
 const bcrypt = require("bcrypt")
 const nodemailer = require("nodemailer")
+const Product = require("../models/productModel")
+const Category = require("../models/categoryModel")
 
 
 //user passwordhash
@@ -182,7 +184,9 @@ const forgotLoad = async (req, res) => {
 //load landing page 
 const loadLanding = async (req, res) => {
   try {
-    res.render("landing")
+    const category = await Category.find({})
+    const product=await Product.find({})
+    res.render("landing",{product,category})
   }
   catch (error) { 
     console.log(error.message);
@@ -192,7 +196,9 @@ const loadLanding = async (req, res) => {
 //load shop page with products view
 const loadShop = async (req, res) => {
   try {
-    res.render("shop")
+    const category = await Category.find({})
+    const product=await Product.find({})
+    res.render("shop", {product,category})
   }
   catch (error) { 
     console.log(error.message);
@@ -216,11 +222,13 @@ const verifyLogin = async (req,res) => {
     const Password = req.body.password
     
     const userData = await User.findOne({ email: Email });
-    if (userData.is_blocked == 1) {
-      res.render("entry", { message_signin:"Access Denied"})
-    }
-    else {
-      if (userData) {
+    
+   
+    if (userData) {
+      if (userData.is_blocked == 1) {
+        res.render("entry", { message_signin: "Access Denied" })
+      } else { 
+      
         const passwordMatch=await bcrypt.compare(Password,userData.password)
         if (passwordMatch) { 
           req.session.user_Id = userData.id;
@@ -230,10 +238,12 @@ const verifyLogin = async (req,res) => {
           res.render("entry",{message_signin:"Invalid username/password"})
          }
       }
+        
+      }
       else { 
         res.render("entry",{message_signin:"Account doesnot exist"})
       }   
-     }
+     
    
   }
   catch(error) { 
@@ -260,7 +270,8 @@ const insertUser = async (req, res) => {
         name: req.body.name,
         email: req.body.email,
         mobile_no:req.body.mobileno,
-        password:hpassword
+        password: hpassword
+     
       })
       const userData = await user.save();
 

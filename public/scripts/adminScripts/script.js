@@ -47,11 +47,92 @@ function clear_error(id) {
 }
 
 //dashboard
-let menuicn = document.querySelector(".menuicn"); 
+let menuicn = document.querySelector("menuicn"); 
 let nav = document.querySelector(".navcontainer"); 
 
-menuicn.addEventListener("click", () => { 
+menuicn.addEventListener("onClick", () => { 
+	console.log("itshappening")
 	nav.classList.toggle("navclose"); 
 })
 
 
+function validatecategory() { 
+ console.log("hello")
+		flag = 1;
+		var categoryspan = document.getElementById("category-error")
+		var descriptionspan = document.getElementById("description-error")
+		var imagespan=document.getElementById("image-error")
+		
+		var category = document.getElementById("categoryName").value
+		var description = document.getElementById("description").value
+		var image = document.getElementById("image").value
+	
+		if (category == "" || category == null) {
+			categoryspan.innerHTML = "&#x1F6C8; Category is a required field"
+			document.getElementById("categoryName").focus();
+			flag = 0;
+		} else {
+			categoryspan.innerHTML = ""
+		}
+			
+	
+	if (description == "" || description == null) {
+		descriptionspan.innerHTML = "&#x1F6C8; Description is a required field"
+		document.getElementById("description").focus();
+		flag = 0;
+	}
+	else {
+		descriptionspan.innerHTML = ""
+	}
+
+		if (image == "" || image == null) {
+			imagespan.innerHTML = "&#x1F6C8; image not uploaded"
+			document.getElementById("image").focus();
+			flag = 0;
+		}
+		else { 
+			imagespan.innerHTML = "";
+	}
+	
+		if (flag == 0)
+				return false
+		else
+			return true
+	
+}
+
+function validateEditCategory() { 
+
+	flag = 1;
+	var categoryspan = document.getElementById("category-error")
+	var descriptionspan = document.getElementById("description-error")
+	var imagespan=document.getElementById("image-error")
+	
+	var category = document.getElementById("categoryName").value
+	var description = document.getElementById("description").value
+	var image = document.getElementById("image").value
+
+	if (category == "" || category == null) {
+		categoryspan.innerHTML = "&#x1F6C8; Category is a required field"
+		document.getElementById("categoryName").focus();
+		flag = 0;
+	} else {
+		categoryspan.innerHTML = ""
+	}
+		
+
+if (description == "" || description == null) {
+	descriptionspan.innerHTML = "&#x1F6C8; Description is a required field"
+	document.getElementById("description").focus();
+	flag = 0;
+}
+else {
+	descriptionspan.innerHTML = ""
+}
+
+	if (flag == 0)
+			return false
+	else
+		return true
+
+}

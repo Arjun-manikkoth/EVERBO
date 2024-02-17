@@ -394,3 +394,18 @@ table
 .btn_add_categories{
 	padding-right: 20px;
 }
+.category-add{
+	text-decoration: none;
+	color: white;
+
+}
+.category-add:hover{
+	color: white;
+}
+.category-add:active{
+	color: white;
+}
+.categ-edit,.categ-edit:hover{
+	text-decoration: none;
+	color: white;
+}

@@ -24,7 +24,12 @@
               <td><%=user.name%></td>
               <td><%=user.email%></td>
               <td><%=user.mobile_no%></td>
-              <td><button type="button" class="btn-sm btn-green blockButton" id="<%=user._id%>" onclick="toggleColorAndText('<%=user._id%>')" ><a href="/admin/block?id=<%=user._id%>" class="blockanchor">Block</a></button></td> 
+              <%if(user.is_blocked==0){%>
+              <td><button type="button" class="btn-sm btn-green blockButton"><a href="/admin/block?id=<%=user._id%>" class="blockanchor">Block</a></button></td> 
+              <%}else{%>
+                <td><button type="button" class="btn-sm btn-red blockButton"><a href="/admin/block?id=<%=user._id%>" class="blockanchor">UnBlock</a></button></td> 
+          
+                <%}%>
 
             </tr>
             <%})%>
