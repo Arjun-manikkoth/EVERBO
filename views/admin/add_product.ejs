@@ -21,14 +21,14 @@
         <span class="message" id="error-message"><%=message%></span>
       </div>
          <%}%>
-    <form  action="/admin/add_products" method="post" enctype="multipart/form-data" >
+    <form  action="/admin/add_products" method="post" enctype="multipart/form-data"  onsubmit="return validateProduct()">
     
   
         <div class="row">
            <div class="form-group col-md-12">
-             <label for="categoryName">Product Name</label>
-             <input type="text" class="form-control" name="name" id="categoryName" placeholder="Name of the product">
-             <span id="category-error"></span>
+             <label for="productName">Product Name</label>
+             <input type="text" class="form-control" name="name" id="productName" placeholder="Name of the product">
+             <span id="product-error"></span>
            </div>
         </div>
          
@@ -42,13 +42,14 @@
         
         <div class="row">
           <div class="form-group col-md-6">
-            <label for="categoryName">Quantity</label>
-            <input type="number" class="form-control" name="quantity" id="categoryName" placeholder="Quantity of product">
-            <span id="category-error"></span>
+            <label for="quantity">Quantity</label>
+            <input type="number" class="form-control" name="quantity" id="quantity" placeholder="Quantity of product">
+            <span id="quanity-error"></span>
           </div>
           <div class="form-group col-md-6">
-            <label for="iprice">Price</label>
+            <label for="price">Price</label>
             <input type="number" class="form-control" name="price" id="price" placeholder="Price of product">
+            <span id="price-error"></span>
           </div>
         </div>
 
