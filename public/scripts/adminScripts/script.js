@@ -174,10 +174,12 @@ function validatecategory() {
 	 
  }
  //dashboard
-let menuicn = document.querySelector("menuicn"); 
+let menuicn = document.querySelector(".menuicn"); 
 let nav = document.querySelector(".navcontainer"); 
 
-menuicn.addEventListener("onClick", () => { 
-	console.log("itshappening")
-	nav.classList.toggle("navclose"); 
-})
+	menuicn.addEventListener("click", () => { 
+		console.log("itshappening")
+		nav.classList.toggle("navclose"); 
+	})
+	
+
