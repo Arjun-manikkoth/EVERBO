@@ -103,14 +103,14 @@
 
 									<%product.forEach((prod)=>{%>
 
-									<div class="product-item men">
+									<div class="product-item <%=prod.category%>">
 										<div class="product discount product_filter">
 											<div class="product_image">
-												<img src="/images/userImages/<%=prod.image%>" alt="<%=prod.name%> image">
+												<img src="/images/userImages/<%=prod.image%>" alt="<%=prod.name%>">
 											</div>
 											<div class="favorite favorite_right"></div>
 											<div class="product_info">
-												<h6 class="product_name"><a href="#"><%=prod.name%></a></h6>
+												<h6 class="product_name"><a href="/product?prodId=<%=prod._id%>"><%=prod.name%></a></h6>
 												<div class="product_price">Rs.<%=prod.price%>.00</div>
 											</div>
 										</div>

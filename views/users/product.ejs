@@ -25,15 +25,15 @@
 						<div class="col-lg-3 thumbnails_col order-lg-1 order-2">
 							<div class="single_product_thumbnails">
 								<ul>
-									<li><img src="images/userImages/single_1_thumb.jpg" alt="" data-image="images/userImages/single_1.jpg"></li>
-									<li class="active"><img src="images/userImages/single_2_thumb.jpg" alt="" data-image="images/userImages/single_2.jpg"></li>
-									<li><img src="images/userImages/single_3_thumb.jpg" alt="" data-image="images/userImages/single_3.jpg"></li>
+									<li><img src="images/userImages/single_1_thumb.jpg" alt="" data-image="images/userImages/<%=product.subImages[0]%>"></li>
+									<li class="active"><img src="images/userImages/single_2_thumb.jpg" alt="" data-image="images/userImages/<%=product.subImages[1]%>"></li>
+									<li><img src="images/userImages/single_3_thumb.jpg" alt="" data-image="images/userImages/<%=product.subImages[2]%>"></li>
 								</ul>
 							</div>
 						</div>
 						<div class="col-lg-9 image_col order-lg-2 order-1">
 							<div class="single_product_image">
-								<div class="single_product_image_background" style="background-image:url(images/userImages/single_2.jpg)"></div>
+								<div class="single_product_image_background" style="background-image:url(images/userImages/<%=product.subImages[1]%>)"></div>
 							</div>
 						</div>
 					</div>
@@ -42,14 +42,14 @@
 			<div class="col-lg-5">
 				<div class="product_details">
 					<div class="product_details_title">
-						<h2>Trendy Fab Men's Woollen Wear</h2>
-						<p>Introducing our latest addition to winter sophistication – the Trendsetter's Golden Brown Woolen Warmth. Elevate your winter style with this meticulously crafted full sleeves sweater.</p>
+						<h2><%=product.name%></h2>
+						<p><%=product.description%></p>
 					</div>
 					<div class="free_delivery d-flex flex-row align-items-center justify-content-center">
 						<span class="ti-truck"></span><span>free delivery</span>
 					</div>
-					<div class="original_price"><span class="rupee">₹</span>3000.00</div>
-					<div class="product_prices"><span class="rupeereal">₹</span>1010.00</div>
+					<div class="original_price"><span class="rupee">₹</span></div>
+					<div class="product_prices"><span class="rupeereal">₹</span><%=product.price%></div>
 					<ul class="star_rating">
 						<li><i class="fa fa-star" aria-hidden="true"></i></li>
 						<li><i class="fa fa-star" aria-hidden="true"></i></li>

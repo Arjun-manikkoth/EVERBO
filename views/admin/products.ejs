@@ -10,51 +10,42 @@
 					<button class="btn btn-dark category"><a href="/admin/add_Products" class="category-add">+Product</a></button>
 				</div>
 				</div>
-      	   
-						<div class="container">
-							<div class="row">
-									<div class="col">
-											<table class="table table-hover table-responsive">
-													<thead>
-														<tr>
-															<th class="col-2" scope="col">Id</th>
-															<th class="col-1" scope="col">Product</th>
-															<th class="col-2" scope="col">Image</th>
-															<th class="col-1" scope="col">Category</th>
-															<th class="col-2" scope="col">Description</th>
-															<th class="col-1" scope="col">Quantity</th>
-															<th class="col-1" scope="col">Price</th>
-															<th class="col-2" scope="col">Actions</th>
-														</tr>
-													</thead>
-													<%product.forEach((prod)=>{%>
-														<tr> 
-																	<%if(prod.is_deleted==0){%>
-																	<td><%=prod._id%></td>
-																	<td><%=prod.name%></td>
-																	<td><img src="/images/userImages/<%=prod.image%>" width="120px" alt="<%=prod.image%>"></td>
-																	<td><%=prod.category%></td>
-																	<td><%=prod.description%></td>
-																	<td><%=prod.quantity%></td>
-																	<td><%=prod.price%></td>
-
-																	<td>
-																		<div class="categ-edit">
-																			<button type="button" class="btn btn-success btn-sm"> <a href="/admin/edit_products?id=<%=prod._id%>" class=" categ-edit ">Edit</a></button>
-																			<button type="button" class="btn btn-danger btn-sm ms-2 "><a href="/admin/delete_products?id=<%=prod._id%>" class=" categ-edit ">Delete</a> </button>
-																		</div>
-																	</td>
-																	<%}%>				
-														</tr>
-														<%})%>
-											</table>
-									</div>
-							</div>
-					</div>
-						
-          </tbody>
-        </table>
-
+      	   	
+				<table class="table table-hover table-responsive">
+					<thead>
+						<tr>
+							<th class="col-1" scope="col">Id</th>
+							<th class="col-1" scope="col">Product</th>
+							<th class="col-2" scope="col">Image</th>
+							<th class="col-1" scope="col">Category</th>
+							<th class="col-2" scope="col">Description</th>
+							<th class="col-1" scope="col">Quantity</th>
+							<th class="col-1" scope="col">Price</th>
+							<th class="col-3" scope="col">Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+					<%product.forEach((prod)=>{%>
+						<tr> 
+									<%if(prod.is_deleted==0){%>
+									<td><%=prod._id%></td>
+									<td><%=prod.name%></td>
+									<td><img src="/images/userImages/<%=prod.image%>" width="120px" alt="<%=prod.image%>"></td>
+									<td><%=prod.category%></td>
+									<td><%=prod.description%></td>
+									<td><%=prod.quantity%></td>
+									<td><%=prod.price%></td>
+									<td>
+										<div class="categ-edit">
+											<button type="button" class="btn btn-success btn-sm"> <a href="/admin/edit_products?id=<%=prod._id%>" class=" categ-edit ">Edit</a></button>
+											<button type="button" class="btn btn-danger btn-sm ms-2 "><a href="/admin/delete_products?id=<%=prod._id%>" class=" categ-edit ">Delete</a> </button>
+										</div>
+									</td>
+									<%}%>				
+						</tr>
+						<%})%>
+					</tbody>
+			</table>
 	 </div> 
 
 

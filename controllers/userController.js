@@ -6,28 +6,12 @@ const Category = require("../models/categoryModel")
 
 
 //user passwordhash
-const securepassword = async (password) => { 
-  try { 
-    
+const securePassword = async (password) => { 
+  try {   
    return await bcrypt.hash(password, 10); 
   }
   catch (error) { 
     console.log(error.message);
-  }
-}
-
-//setup new password to db
-const passwordReset = async (req, res)=>{
-  const Id = req.query.Id;
-  const newpassword = await securepassword(req.body.password);
-  const userData = await User.updateOne({ _id: Id }, { $set: { password: newpassword } });
-  console.log(userData)
-
-  if (userData) {
-    res.render("reset_password", { message_resetpassword: "Please login with your new password", id: Id })
-  }
-  else { 
-  res.render("reset_password", { message_resetpassword: "Password reset failed" ,id:Id})
   }
 }
 
@@ -63,19 +47,11 @@ const sentOtpVerificationMail = async (email,id) => {
     const otp = generate_otp.toString();
     const otpHash = await bcrypt.hash(otp,10);
     const data=await User.updateOne({ _id: id },
-      { $set: { otp_verify: { otp: otpHash, createdAt: Date.now(), expiresAt: Date.now() + 60000 } } })
-    
-    if (data) {
-      console.log(" Succesfully updated data to db");
-    }
-    else { 
-      console.log("Failed to send data to db")
-    }
+      { $set: { otp_verify: { otp: otpHash, createdAt: Date.now(), expiresAt: Date.now() + 60000 } } }) 
   }
   catch (error) { 
    console.log(error.message)
   }
-
 }
 
 //reset password mail
@@ -111,7 +87,101 @@ const sentResetPasswordMail = async (email,id) => {
   catch (error) { 
    console.log(error.message)
   }
+}
 
+//load landing page 
+const loadLanding = async (req, res) => {
+  try {
+    const category = await Category.find({})
+    const product=await Product.find({})
+    res.render("landing",{product,category})
+  }
+  catch (error) { 
+    console.log(error.message);
+  }
+}
+
+//load login page
+const loadLogin = async (req,res) => { 
+  try {
+    res.render("entry")
+  }
+  catch(error) { 
+    console.log(error.message)
+  }  
+}
+
+//verify usercredentials
+const verifyLogin = async (req,res) => { 
+  try {
+    const Email = req.body.email
+    const Password = req.body.password
+    
+    const userData = await User.findOne({ email: Email });
+     
+    if (userData) {
+      if (userData.is_blocked == 1) {
+        res.render("entry", { message_signin: "Access Denied" })
+      } else { 
+      
+        const passwordMatch=await bcrypt.compare(Password,userData.password)
+        if (passwordMatch) { 
+          req.session.user_Id = userData.id;
+          res.redirect("/shop")
+        }
+        else { 
+          res.render("entry",{message_signin:"Invalid username/password"})
+         }
+      }     
+      }
+      else { 
+        res.render("entry",{message_signin:"Account doesnot exist"})
+      }   
+      
+  }
+  catch(error) { 
+    console.log(error.message);
+  }
+}
+
+//user signup to db
+const insertUser = async (req, res) => { 
+  try {
+    const signedIn = await User.findOne({ email: req.body.email })
+    if (signedIn) {
+      if (signedIn.is_verified == 1) { 
+       
+        res.render("entry",{message_signup:"Already a user"})
+      } 
+      else {
+        await sentOtpVerificationMail(req.body.email, signedIn._id);
+        res.render("otp_verification", {timer:true});
+      }
+    }
+    else { 
+      const hPassword = await securePassword(req.body.password);
+        const user = new User({
+        name: req.body.name,
+        email: req.body.email,
+        mobile_no:req.body.mobileno,
+        password: hPassword
+     
+      })
+      const userData = await user.save();
+
+      if (userData) {      
+        await sentOtpVerificationMail(req.body.email, userData._id);
+        req.session.user_Id = userData._id;
+        res.render("otp_verification",{timer:true})
+      }  
+      else { 
+        res.render("entry", {message_signup:"Registration failed"})
+      }
+    }  
+  }
+  catch(error) { 
+    console.log(error.message);
+  }
 }
 
 //user signup otp verification
@@ -121,14 +191,13 @@ const otpVerifySignUp = async (req, res) => {
     const userId = req.session.user_Id;
     const userData = await User.findById({ _id: userId });
     if (userData.otp_verify.expiresAt < Date.now()) {
-
       await User.updateOne({ _id: userId }, { $set: { "otp_verify.otp": "" } });
       res.render("otp_verification", {message_otpverification:"OTP expired"})
     }
     else { 
 
-       const otphash = await bcrypt.compare(otp, userData.otp_verify.otp)
-       if (otphash) {
+       const otpCheck = await bcrypt.compare(otp, userData.otp_verify.otp)
+       if (otpCheck) {
          await User.updateOne({ _id: userId }, { $set: { is_verified: 1 } });
          res.redirect("/shop")
        }
@@ -142,11 +211,22 @@ const otpVerifySignUp = async (req, res) => {
   }
 }
 
-//password reset page load
-const loadReset = async (req, res) => { 
+//resend otp
+const otpResend = async (req, res) => {
   try {
-    const Id= req.query.userId
-    res.render("Reset_password", {id:Id})
+   const userData= await User.findById({ _id: req.session.user_Id })
+    await sentOtpVerificationMail(userData.email, req.session.user_Id);
+    res.render("otp_verification", {timer:true});
+  }
+  catch (error) {
+    console.log(error.message)  
+  }
+}
+
+//load forgot password page
+const forgotLoad = async (req, res) => { 
+  try {
+     res.render("forgot_password")
   }
   catch (error) { 
     console.log(error.message)
@@ -171,25 +251,34 @@ const forgotVerify = async (req, res) => {
   }
 }
 
-//load forgot password page
-const forgotLoad = async (req, res) => { 
+//password reset page load
+const loadReset = async (req, res) => { 
   try {
-     res.render("forgot_password")
+    const Id= req.query.userId
+    res.render("Reset_password", {id:Id})
   }
   catch (error) { 
     console.log(error.message)
   }
 }
 
-//load landing page 
-const loadLanding = async (req, res) => {
+//setup new password to db
+const passwordReset = async (req, res) => {
   try {
-    const category = await Category.find({})
-    const product=await Product.find({})
-    res.render("landing",{product,category})
+    const Id = req.query.Id;
+    const newPassword = await securePassword(req.body.password);
+    const userData = await User.updateOne({ _id: Id }, { $set: { password: newPassword } });
+    console.log(userData)
+
+    if (userData) {
+      res.render("reset_password", { message_resetpassword: "Please login with your new password", id: Id })
+    }
+    else {
+      res.render("reset_password", { message_resetpassword: "Password reset failed", id: Id })
+    }
   }
-  catch (error) { 
-    console.log(error.message);
+  catch (error) {
+    console.log(error.message)
   }
 }
 
@@ -205,95 +294,11 @@ const loadShop = async (req, res) => {
   }
 }
 
-//load login page
-const loadLogin = async (req,res) => { 
-  try {
-    res.render("entry")
-  }
-  catch(error) { 
-    console.log(error.message)
-  }  
-}
-
-//verify usercredentials
-const verifyLogin = async (req,res) => { 
-  try {
-    const Email = req.body.email
-    const Password = req.body.password
-    
-    const userData = await User.findOne({ email: Email });
-    
-   
-    if (userData) {
-      if (userData.is_blocked == 1) {
-        res.render("entry", { message_signin: "Access Denied" })
-      } else { 
-      
-        const passwordMatch=await bcrypt.compare(Password,userData.password)
-        if (passwordMatch) { 
-          req.session.user_Id = userData.id;
-          res.redirect("/shop")
-        }
-        else { 
-          res.render("entry",{message_signin:"Invalid username/password"})
-         }
-      }
-        
-      }
-      else { 
-        res.render("entry",{message_signin:"Account doesnot exist"})
-      }   
-     
-   
-  }
-  catch(error) { 
-    console.log(error.message);
-  }
-}
-
-//user signup to db
-const insertUser = async (req, res) => { 
-  try {
-    const signedin = await User.findOne({ email: req.body.email })
-    if (signedin) {
-      if (signedin.is_verified == 1) { 
-       
-        res.render("entry",{message_signup:"Already a user"})
-      } 
-      else {
-        res.render("otp_verification");
-      }
-    }
-    else { 
-      const hpassword = await securepassword(req.body.password);
-        const user = new User({
-        name: req.body.name,
-        email: req.body.email,
-        mobile_no:req.body.mobileno,
-        password: hpassword
-     
-      })
-      const userData = await user.save();
-
-      if (userData) {      
-        await sentOtpVerificationMail(req.body.email, userData._id);
-        req.session.user_Id = userData._id;
-        res.render("otp_verification")
-      }  
-      else { 
-        res.render("entry", {message_signup:"Registration failed"})
-      }
-    }  
-  }
-  catch(error) { 
-    console.log(error.message);
-  }
-}
-
 //individual product page 
 const loadProduct = async (req, res) => {
   try { 
-    res.render("product")
+    const product = await Product.findOne({_id:req.query.prodId})
+    res.render("product",{product})
   }
   catch (error) {
     
@@ -301,8 +306,8 @@ const loadProduct = async (req, res) => {
   }
 }
 
+//logout
 const userLogout = async (req,res) => {
-
   try {
     req.session.destroy();
     res.redirect("/");
@@ -313,16 +318,7 @@ const userLogout = async (req,res) => {
 }
 
 
-const otpResend = async (req, res) => {
-  try {
-   const userData= await User.findById({ _id: req.session.user_Id })
-    await sentOtpVerificationMail(userData.email, req.session.user_Id);
-    res.render("otp_verification");
-  }
-  catch (error) {
-    console.log(error.message)  
-  }
-}
+
 
 module.exports = {
   verifyLogin,

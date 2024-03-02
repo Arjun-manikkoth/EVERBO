@@ -43,12 +43,12 @@
         <div class="row">
           <div class="form-group col-md-6">
             <label for="quantity">Quantity</label>
-            <input type="number" class="form-control" name="quantity" id="quantity" placeholder="Quantity of product">
-            <span id="quanity-error"></span>
+            <input type="text" class="form-control" name="quantity" id="quantity" placeholder="Quantity of product">
+            <span id="quantity-error"></span>
           </div>
           <div class="form-group col-md-6">
             <label for="price">Price</label>
-            <input type="number" class="form-control" name="price" id="price" placeholder="Price of product">
+            <input type="text" class="form-control" name="price" id="price" placeholder="Price of product">
             <span id="price-error"></span>
           </div>
         </div>
@@ -58,10 +58,8 @@
             <label for="image">Image</label>
             <input type="file" class="image" name="image" id="image" accept='image/*' multiple>
             <span id="image-error"></span>
-         
-
           </div>
-           
+                    
           <div class="form-group col-md-6">
             <label for="categoryName">Category</label>
             <select class="form-select" aria-label="Default select example" id="categoryName" name="category">
@@ -71,24 +69,14 @@
              <option value="<%=categ.name%>"><%=categ.name%></option>
              <%}%>	
              <%})%>
-
            </select>
           </div>
         </div>
-        
-
-
-
        <div class="categoryadd">
         <button type="submit" class="btn btn-dark confirm-categ">Add Product</button>
        </div>
-       
-  
-    
     </form>
   </div>
-  
-
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 <script src="/scripts/adminScripts/script.js"></script>
 </body>

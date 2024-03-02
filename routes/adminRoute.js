@@ -2,6 +2,8 @@ const express = require("express");
 const admin_route = express();
 const session=require("express-session")
 const adminController = require("../controllers/adminController")
+const productController = require("../controllers/productController")
+const categoryController = require("../controllers/categoryController")
 const auth = require("../middlewares/adminAuth")
 const upload=require('../multer')
 
@@ -36,40 +38,46 @@ admin_route.get("/users",auth.isLogin,adminController.usersLoad)
 admin_route.get("/block",auth.isLogin, adminController.userBlock)
 
 //Admin products page load
-admin_route.get("/products",auth.isLogin, adminController.productsLoad)
+admin_route.get("/products",auth.isLogin, productController.productsLoad)
 
 //Add products page load
-admin_route.get("/add_products",auth.isLogin, adminController.addProductLoad)
+admin_route.get("/add_products",auth.isLogin, productController.addProductLoad)
 
 //add product to db
-admin_route.post("/add_products", upload.array('image',3), adminController.addProduct)
+admin_route.post("/add_products", upload.array('image', 3), productController.addProduct)
+
+//add product to db
+//admin_route.post("/add_products", upload.array('image', 3), productController.addProduct)
 
 //Edit product page load
-admin_route.get("/edit_products",auth.isLogin, adminController.editProductLoad)
+admin_route.get("/edit_products",auth.isLogin, productController.editProductLoad)
         
 //update product to db
-admin_route.post("/update_product", upload.array('image',3), adminController.updateProduct)
+admin_route.post("/update_product", upload.array('image', 3), productController.updateProduct)
+
+//update product thumbnail to db
+admin_route.post("/update_product_thumb", upload.single('image'), productController.updateProductThumb)
 
 //delete product
-admin_route.get("/delete_products",auth.isLogin,adminController.deleteProduct)
+admin_route.get("/delete_products",auth.isLogin,productController.deleteProduct)
 
 //Admin category page load
-admin_route.get("/categories",auth.isLogin, adminController.categoriesLoad)
+admin_route.get("/categories",auth.isLogin, categoryController.categoriesLoad)
 
 //Add category page load
-admin_route.get("/add_category",auth.isLogin,adminController.addCategoryLoad)
+admin_route.get("/add_category",auth.isLogin,categoryController.addCategoryLoad)
 
 //add category to db
-admin_route.post("/add_category", upload.single('image'), adminController.addCategory)
+admin_route.post("/add_category", upload.single('image'), categoryController.addCategory)
 
 //Edit category page load
-admin_route.get("/edit_category",auth.isLogin, adminController.editCategoryLoad)
+admin_route.get("/edit_category",auth.isLogin, categoryController.editCategoryLoad)
 
 //Update category to db
-admin_route.post("/update_category", upload.single('image'), adminController.updateCategory)
+admin_route.post("/update_category", upload.single('image'), categoryController.updateCategory)
 
 //delete category
-admin_route.get("/delete_category",auth.isLogin,adminController.deleteCategory)
+admin_route.get("/delete_category",auth.isLogin,categoryController.deleteCategory)
 
 
 

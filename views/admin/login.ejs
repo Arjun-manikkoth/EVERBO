@@ -22,7 +22,7 @@
 			<div class="form-container">
 	
 				 <div class="form-inner">
-						<form action="/admin" class="login" method="post" onsubmit="return validatelogin()">
+						<form action="/admin" class="login" method="post" onsubmit="return validateLogin()">
 	
 								<% if(locals.message_signin) {%>
 									<div class="error">
@@ -31,7 +31,7 @@
 										 <%}%>
 						
 							 <div class="field">
-									<input type="text" name="email" placeholder="Email Address" id="email-login" oninput="clear_error('signin-error')">			
+									<input type="text" name="email" placeholder="Email Address" id="email-login" oninput="clearError('signin-error')">			
 							 </div>
 							 <span id="email-error-login"></span>
 	

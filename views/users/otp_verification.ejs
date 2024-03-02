@@ -34,10 +34,11 @@
             </div>
        
 						 <span id="email-error-login"></span>
+						 <%if(locals.timer){%>
              <div class="otpspan-div">
 							<p id="otpspan">OTP expires in <span id="countdowntimer">60 </span> Seconds</p>
 						 </div>
-					
+					    <%}%>
 
 						 <div class="otpverify-button">
               <div class="field btns">

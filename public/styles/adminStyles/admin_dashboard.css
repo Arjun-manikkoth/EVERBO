@@ -263,6 +263,7 @@ background-color: #ffffff;
 border-radius: 15px; 
 box-shadow: 3px 3px 10px rgb(188, 188, 188); 
 padding: 0px 20px 20px 20px; 
+overflow-x: auto;
 } 
 .report-header { 
 height: 80px; 
@@ -381,9 +382,9 @@ border-radius: 4px;
 }
 table 
 {  border-collapse: collapse;
-    table-layout:fixed;
+    
     width: auto;
-		overflow-wrap: anywhere
+
 		
 }
 .title-container{

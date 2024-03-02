@@ -103,11 +103,25 @@
     width: 550px; 
   } 
   } 
-  
+  @media screen and (max-width:470px){
+   .table-title{
+    font-size: 22px;
+    padding-top: 10px;
+    margin-left: -15px;
+   }
+   .category-add{
+    font-size: 13px;
+   }
+   .btn_add_categories{
+    margin-right: -20px;
+   }
+  }
   @media screen and (max-width: 400px) { 
   .recent-Articles { 
     font-size: 17px; 
   } 
+
+  
   .view { 
     width: 60px; 
     font-size: 10px; 
@@ -126,6 +140,9 @@
   .recent-Articles { 
     font-size: 12px; 
   } 
+  .table-title{
+    font-size: 17px;
+  }
   .view { 
     width: 50px; 
     font-size: 8px; 

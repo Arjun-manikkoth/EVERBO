@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AddCategory</title>
+  <title>EditProduct</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
     <link rel="stylesheet" href="/styles/adminStyles/adminstyles.css">
@@ -14,7 +14,7 @@
   <div class="form-box container">
     <div class="title-container">
       <div class="table-title">
-        Add Product
+        Edit Product
       </div> 
     </div>
     <% if(locals.message) {%>
@@ -22,14 +22,14 @@
         <span class="message" id="error-message"><%=message%></span>
       </div>
          <%}%>
-    <form  action="/admin/update_product?id=<%=product._id%>" method="post" enctype="multipart/form-data" >
+    <form  action="/admin/update_product?id=<%=product._id%>" method="post" onsubmit="return validateEditProduct()">
     
   
         <div class="row">
            <div class="form-group col-md-12">
              <label for="categoryName">Product Name</label>
-             <input type="text" class="form-control" name="name" id="categoryName" placeholder="Name of the product" value="<%=product.name%>">
-             <span id="category-error"></span>
+             <input type="text" class="form-control" name="name" id="productName" placeholder="Name of the product" value="<%=product.name%>">
+             <span id="product-error"></span>
            </div>
         </div>
          
@@ -43,28 +43,18 @@
         
         <div class="row">
           <div class="form-group col-md-6">
-            <label for="categoryName">Quantity</label>
-            <input type="number" class="form-control" name="quantity" id="categoryName" placeholder="Quantity of product" value="<%=product.quantity%>">
-            <span id="category-error"></span>
+            <label for="quantity">Quantity</label>
+            <input type="text" class="form-control" name="quantity" id="quantity" placeholder="Quantity of product" value="<%=product.quantity%>">
+            <span id="quantity-error"></span>
           </div>
           <div class="form-group col-md-6">
             <label for="price">Price</label>
-            <input type="number" class="form-control" name="price" id="price" placeholder="Price of product" value="<%=product.price%>">
+            <input type="text" class="form-control" name="price" id="price" placeholder="Price of product" value="<%=product.price%>">
+            <span id="price-error"></span>
           </div>
         </div>
 
         <div class="row">
-          <div class="form-group col-md-6">
-            <label for="image">Image</label>
-            <input type="file" class="image" name="image" id="image" accept='image/*' multiple>
-            <span id="image-error"></span>
-            <%product.subImages.forEach((prod)=>{%>
-              <div class="categ-image-div">
-                <img src="/images/userImages/<%=prod%>" width="80px" alt="<%=prod%>">
-              </div>
-            
-            <%})%>
-          </div>
            
           <div class="form-group col-md-6">
             <label for="categoryName">Category</label>
@@ -72,7 +62,7 @@
               
              <%category.forEach((categ)=>{%>
               <%if(categ.is_deleted==0){%>
-             <option value="<%=categ.name%>"><%=categ.name%></option>
+             <option ><%=categ.name%></option>
              <%}%>	
              <%})%>
 
@@ -90,6 +80,46 @@
   
     
     </form>
+    <form  action="/admin/update_product?id=<%=product._id%>" method="post" enctype="multipart/form-data" onsubmit="return validateEditImages()" >
+      
+      <div class="form-group col-md-6">
+        <label for="image">Image</label>
+        <input type="file" class="image" name="image" id="image" accept='image/*' multiple>
+        <span id="image-error"></span>
+        <%product.subImages.forEach((prod)=>{%>
+          <div class="categ-image-div">
+            <img src="/images/userImages/<%=prod%>" width="80px" alt="<%=prod%>">
+          </div>
+        
+        <%})%>
+      </div>
+      
+
+      <div class="categoryadd ">
+        <button type="submit" class="btn btn-dark  confirm-categ">Edit Images</button>
+       </div> 
+    </form>
+
+    <form  action="/admin/update_product_thumb?id=<%=product._id%>" method="post" enctype="multipart/form-data" onsubmit="return validateEditImage()" >
+      
+      <div class="form-group col-md-6">
+        <label for="image">Image</label>
+        <input type="file" class="image" name="image" id="single-image" accept='image/*'>
+        <span id="single-image-error"></span>
+        
+          <div class="categ-image-div">
+            <img src="/images/userImages/<%=product.image%>" width="80px" alt="<%=product.image%>">
+          </div>
+        
+      </div>
+      
+
+      <div class="categoryadd ">
+        <button type="submit" class="btn btn-dark  confirm-categ">Edit thumbnail</button>
+       </div>
+         
+    </form>
+
   </div>
   
 

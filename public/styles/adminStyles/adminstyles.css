@@ -48,7 +48,7 @@
   padding-top: 1px;
 }
 #category-error,#description-error,#product-error,
-#quantity-error,#price-error,#image-error,#error-message{
+#quantity-error,#price-error,#image-error,#error-message,#single-image-error{
   color: red;
   font-size: 15px;
 }
