@@ -956,6 +956,7 @@ section
 .single_product_thumbnails ul li img
 {
 	width: 100%;
+	height: 136px;
 }
 .image_col
 {
@@ -1597,4 +1598,7 @@ section
 .footer_social ul li a:hover
 {
 	color: #fe4c50;
+}
+.image-square{
+object-fit: cover;
 }

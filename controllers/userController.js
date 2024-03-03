@@ -319,6 +319,17 @@ const userLogout = async (req,res) => {
 
 
 
+//cart load
+const cartLoad = async (req, res) => {
+  try {
+    res.render("cart")
+  }
+  catch (error) {
+    console.log(error.message)
+  }
+}
+
+
 
 module.exports = {
   verifyLogin,
@@ -327,6 +338,7 @@ module.exports = {
   loadLanding,
   loadProduct,
   loadShop,
+  cartLoad,
   forgotLoad,
   forgotVerify,
   loadReset,

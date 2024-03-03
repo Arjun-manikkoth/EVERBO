@@ -1,0 +1,30 @@
+.checkout-btn{
+    background-color: #fe4c50;
+    border-color: #fe4c50;
+}
+.cart-span{
+  text-decoration: none;
+  color: white;
+}
+.fs-wishlist,.fs-remove{
+  background-color: white;
+  border-color: black;
+}
+a:hover{
+  color: white;
+}
+.qty-btn{
+  height: 38px;
+  background-color: white;
+  border-color: rgba(165, 164, 164, 0.664);
+  border-width: -3px;
+}
+#form1,#form2{
+  width:60px;
+  text-align: center;
+}
+
+input.qty-form::-webkit-outer-spin-button,
+input.qty-form::-webkit-inner-spin-button {
+   -webkit-appearance: none;
+}

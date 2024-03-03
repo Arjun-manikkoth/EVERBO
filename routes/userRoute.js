@@ -34,6 +34,9 @@ user_route.get("/product",auth.isLogin, userController.loadProduct);
 //user shop page
 user_route.get("/shop", auth.isLogin, userController.loadShop);
 
+//load cart page
+user_route.get("/cart", auth.isLogin, userController.cartLoad);
+
 //user shop page
 user_route.get("/logout",auth.isLogin, userController.userLogout);
 

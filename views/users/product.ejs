@@ -25,9 +25,9 @@
 						<div class="col-lg-3 thumbnails_col order-lg-1 order-2">
 							<div class="single_product_thumbnails">
 								<ul>
-									<li><img src="images/userImages/single_1_thumb.jpg" alt="" data-image="images/userImages/<%=product.subImages[0]%>"></li>
-									<li class="active"><img src="images/userImages/single_2_thumb.jpg" alt="" data-image="images/userImages/<%=product.subImages[1]%>"></li>
-									<li><img src="images/userImages/single_3_thumb.jpg" alt="" data-image="images/userImages/<%=product.subImages[2]%>"></li>
+									<li><img class="image-square" src="images/userImages/<%=product.subImages[0]%>" alt="" data-image="images/userImages/<%=product.subImages[0]%>"></li>
+									<li class="active"><img class="image-square" src="images/userImages/<%=product.subImages[1]%>" alt="" data-image="images/userImages/<%=product.subImages[1]%>"></li>
+									<li><img class="image-square" src="images/userImages/<%=product.subImages[2]%>" alt="" data-image="images/userImages/<%=product.subImages[2]%>"></li>
 								</ul>
 							</div>
 						</div>
@@ -48,7 +48,7 @@
 					<div class="free_delivery d-flex flex-row align-items-center justify-content-center">
 						<span class="ti-truck"></span><span>free delivery</span>
 					</div>
-					<div class="original_price"><span class="rupee">₹</span></div>
+					<div class="original_price"><span class="rupee"></span></div>
 					<div class="product_prices"><span class="rupeereal">₹</span><%=product.price%></div>
 					<ul class="star_rating">
 						<li><i class="fa fa-star" aria-hidden="true"></i></li>
