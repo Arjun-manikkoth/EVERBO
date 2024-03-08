@@ -93,8 +93,8 @@ const sentResetPasswordMail = async (email,id) => {
 const loadLanding = async (req, res) => {
   try {
     const category = await Category.find({})
-    const product=await Product.find({})
-    res.render("landing",{product,category})
+    const product=await Product.find({}).limit(5)
+    res.render("landing",{product,category,loggedIn:"false"})
   }
   catch (error) { 
     console.log(error.message);
@@ -328,6 +328,15 @@ const cartLoad = async (req, res) => {
     console.log(error.message)
   }
 }
+//user profile load
+const loadProfile = async (req, res) => {
+  try {
+    res.render("profile")
+  }
+  catch (error) { 
+    console.log(error.message);
+  }
+}
 
 
 
@@ -345,5 +354,6 @@ module.exports = {
   otpVerifySignUp,
   passwordReset,
   userLogout,
-  otpResend
+  otpResend,
+  loadProfile
 }

@@ -23,6 +23,11 @@ a:hover{
   width:60px;
   text-align: center;
 }
+#prod-form{
+  text-align: center;
+  width:40px;
+  height: 100%;
+}
 
 input.qty-form::-webkit-outer-spin-button,
 input.qty-form::-webkit-inner-spin-button {

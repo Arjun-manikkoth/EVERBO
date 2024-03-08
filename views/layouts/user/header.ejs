@@ -89,11 +89,21 @@
 									</ul>
 									<ul class="navbar_user">
 										<li><a href="#"><i class="fa fa-search" aria-hidden="true"></i></a></li>
+										<%if(locals.loggedIn){%>
 										<li><a href="/entry"><i class="fa fa-user" aria-hidden="true"></i></a></li>
+                    <%}else{%>
+											<li><a href="/profile"><i class="fa fa-user" aria-hidden="true"></i></a></li>
+										<%}%>
 										<li class="checkout">
-											<a href="#">
+											<%if(locals.loggedIn){%>
+											<a href="/entry">
 												<i class="fa fa-shopping-cart" aria-hidden="true"></i>
 											</a>
+											<%}else{%>
+												<a href="/cart">
+													<i class="fa fa-shopping-cart" aria-hidden="true"></i>
+												</a>
+											<%}%>
 										</li>
 									</ul>
 									<div class="hamburger_container">

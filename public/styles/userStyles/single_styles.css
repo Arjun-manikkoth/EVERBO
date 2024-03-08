@@ -1091,7 +1091,6 @@ section
 	align-items: center;
 	width: 132px;
 	height: 100%;
-	border: solid 1px #e5e5e5;
 	margin-left: 29px;
 }
 .quantity_selector span
@@ -1601,4 +1600,8 @@ section
 }
 .image-square{
 object-fit: cover;
+}
+.addtocart-btn{
+	border: none;
+	color: white;
 }

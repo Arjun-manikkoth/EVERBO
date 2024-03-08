@@ -1693,3 +1693,24 @@ section
 .rupee,.rupeereal{
 	font-family: sans-serif;
 }
+.content{
+	height: 600px;
+	background-color: white;
+	box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+}
+.navbar-user{
+	width: 250px !important;
+	box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+	background-color: white;
+	display: flex;
+	flex-direction: column;
+}
+.navbar-outer{
+	display: flex;
+	text-align: center;
+}
+.nav-options{
+	height: 60px;
+	align-items: center;
+
+}
