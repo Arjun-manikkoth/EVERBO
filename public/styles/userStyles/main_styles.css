@@ -178,10 +178,7 @@ h6::selection
 	font-weight: 500;
 	color: #777777 !important;
 }
-.form-control
-{
-	color: #db5246;
-}
+
 section
 {
 	display: block;
@@ -1694,23 +1691,52 @@ section
 	font-family: sans-serif;
 }
 .content{
-	height: 600px;
 	background-color: white;
 	box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 }
 .navbar-user{
 	width: 250px !important;
-	box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 2px;
 	background-color: white;
 	display: flex;
 	flex-direction: column;
+	height: fit-content;
 }
 .navbar-outer{
 	display: flex;
-	text-align: center;
+	text-align: start;
+	flex-direction: row;
+  gap: 30px;
 }
 .nav-options{
-	height: 60px;
-	align-items: center;
+	height: 55px;
+	font-size: 16px;
+	font-weight: 400;
+	line-height: 55px;
+	padding-left: 30px;
+	padding-right: 30px;
+}
+.nav-options:hover{
+	box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+}
 
+.form-control:focus {
+	box-shadow: none;
+	border-color:#fe4c4fec
+}
+
+.back:hover {
+	color: black;
+	cursor: pointer
+}
+
+.labels {
+	font-size: 11px
+}
+
+.add-experience:hover {
+	background: #BA68C8;
+	color: #fff;
+	cursor: pointer;
+	border: solid 1px #BA68C8
 }

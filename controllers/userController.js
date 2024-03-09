@@ -322,6 +322,7 @@ const userLogout = async (req,res) => {
 //cart load
 const cartLoad = async (req, res) => {
   try {
+    
     res.render("cart")
   }
   catch (error) {
@@ -331,14 +332,20 @@ const cartLoad = async (req, res) => {
 //user profile load
 const loadProfile = async (req, res) => {
   try {
-    res.render("profile")
+    console.log(req.session.user_Id)
+    const userData = await User.findOne({ _id: req.session.user_Id })
+    console.log(userData)
+    if (userData!=[]) {
+      res.render("profile", {userData})
+    }
+    else {
+      console.log("no profile data")
+    }
   }
   catch (error) { 
     console.log(error.message);
   }
 }
-
-
 
 module.exports = {
   verifyLogin,

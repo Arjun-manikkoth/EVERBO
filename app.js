@@ -9,7 +9,7 @@ app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 
 //morgan middleware
-app.use(logger("dev"))
+//app.use(logger("dev"))
 
 //static file path
 app.use(express.static("public"));

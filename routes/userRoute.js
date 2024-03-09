@@ -59,6 +59,6 @@ user_route.get("/reset_password",auth.isLogout, userController.loadReset);
 user_route.post("/reset_password", userController.passwordReset);
 
 //user profile page
-user_route.get("/profile",auth.isLogout, userController.loadProfile)
+user_route.get("/profile",auth.isLogin, userController.loadProfile)
 
 module.exports = user_route;

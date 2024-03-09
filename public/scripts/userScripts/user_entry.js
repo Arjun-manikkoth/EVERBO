@@ -1,3 +1,4 @@
+
 //entry form slider
 window.onload = function () {
 	const loginText = document.querySelector(".title-text .login");
@@ -242,4 +243,7 @@ var timeleft = 60;
     document.getElementById("countdowntimer").textContent = timeleft;
     if(timeleft <= 0)
         clearInterval(downloadTimer);
-    },1000);
+		}, 1000);
+		
+
+	
