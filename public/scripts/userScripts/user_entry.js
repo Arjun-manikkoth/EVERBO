@@ -6,21 +6,20 @@ window.onload = function () {
 	const loginBtn = document.querySelector("label.login");
 	const signupBtn = document.querySelector("label.signup");
 	const signupLink = document.querySelector("form .signup-link a");
-
-
-	signupBtn.onclick = (() => {
-		loginForm.style.marginLeft = "-50%";
-		loginText.style.marginLeft = "-50%";
-	});
-	loginBtn.onclick = (() => {
-		loginForm.style.marginLeft = "0%";
-		loginText.style.marginLeft = "0%";
-	});
-	signupLink.onclick = (() => {
-		signupBtn.click();
-		return false;
-	});
-
+	if (signupBtn) {
+		signupBtn.onclick = (() => {
+			loginForm.style.marginLeft = "-50%";
+			loginText.style.marginLeft = "-50%";
+		});
+		loginBtn.onclick = (() => {
+			loginForm.style.marginLeft = "0%";
+			loginText.style.marginLeft = "0%";
+		});
+		signupLink.onclick = (() => {
+			signupBtn.click();
+			return false;
+		});
+}
 }
 
 function validatelogin() {
@@ -157,9 +156,14 @@ function validateforgot() {
 	else
 		true
 }
-function clear_error(id) { 
-	document.getElementById(id).innerHTML = "";
-}
+  
+function clear_error(id) {
+	  const el = document.getElementById("signup-error");
+	if (el) {
+		document.getElementById(id).innerHTML = "";
+		}
+	}
+
 function validatereset() { 
 	var passwordspan = document.getElementById("password-error-signup")
 	var newpasswordspan = document.getElementById("newpassword-error-signup")
@@ -193,7 +197,8 @@ function validatereset() {
 
 // script
 
-	const inputs = document.getElementById("inputs");
+const inputs = document.getElementById("inputs");
+if (inputs) {
 	inputs.addEventListener("input", function (e) {
 		const target = e.target;
 		const val = target.value;
@@ -224,6 +229,16 @@ function validatereset() {
 			return;
 		}
 	});
+	var timeleft = 60;
+	var downloadTimer = setInterval(function () {
+		timeleft--;
+		document.getElementById("countdowntimer").textContent = timeleft;
+		if (timeleft <= 0)
+			clearInterval(downloadTimer);
+	}, 1000);
+}
+	
+
 
 	
 function validateotp() {
@@ -236,14 +251,8 @@ function validateotp() {
 		return false;
 	}
 }
+
 	
-var timeleft = 60;
-    var downloadTimer = setInterval(function(){
-    timeleft--;
-    document.getElementById("countdowntimer").textContent = timeleft;
-    if(timeleft <= 0)
-        clearInterval(downloadTimer);
-		}, 1000);
-		
+
 
 	
