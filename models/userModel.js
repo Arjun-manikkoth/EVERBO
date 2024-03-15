@@ -3,20 +3,16 @@ const mongoose = require("mongoose");
 const userSchema=mongoose.Schema({
   
   name: {
-    type: String,
-    required: true
+    type: String
   },
   email: {
-    type: String,
-    required: true
+    type: String
   },
   mobile_no: {
-    type: String,
-    required: true
+    type: String
   },
   password: {
-    type: String,
-    required: true
+    type: String
   },
   is_verified: {
     type:Number,
@@ -31,7 +27,20 @@ const userSchema=mongoose.Schema({
     otp: {type:String},
     createdAt: {type:Date},
     expiresAt: {type:Date}
-  }
-});
+  },
+  address:
+    [
+      { type: mongoose.Types.ObjectId, ref: "address" }
+    ],
+  cart:
+    [
+      {
+        productId: { type: mongoose.Types.ObjectId, ref: "product" },
+        productQuantity: { type: Number,min:1},
+        pricePerProduct: {type: Number},
+        totalPrice: {type:Number}
+      }
+    ]
+}, {timestamps:true});
 
 module.exports = mongoose.model("user", userSchema);

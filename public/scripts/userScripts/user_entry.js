@@ -238,9 +238,6 @@ if (inputs) {
 	}, 1000);
 }
 	
-
-
-	
 function validateotp() {
 		
 	var input1 = document.getElementById("input1").value
@@ -252,7 +249,139 @@ function validateotp() {
 	}
 }
 
-	
+function validateEditProfile() {
+	flag = 1;
+	var namespan = document.getElementById("name-error")
+	var mobile_nospan=document.getElementById("mobile-error")
 
+	var name= document.getElementById("name").value
+	var mobileno = document.getElementById("mobile-no").value
 
+	var mobile_regex = /^(\+\d{1,3}[- ]?)?\d{10}$/;
+	if (name == "" || name == null) {
+		namespan.innerHTML = "&#x1F6C8; Name is a required field"
+		document.getElementById("name").focus();
+		flag = 0;
+	} else {
+		namespan.innerHTML = ""
+	}
+	if (mobileno == "" || mobileno == null) {
+		mobile_nospan.innerHTML = "&#x1F6C8; Mobile no is a required field"
+		document.getElementById("mobile-no").focus();
+		flag = 0;
+	}
+	else if ((mobileno.match(mobile_regex)==null)) {
+		mobile_nospan.innerHTML = "&#x1F6C8; Mobile no should be numbers"
+		flag = 0;
+	} 
+	else { 
+		mobile_nospan.innerHTML = "";
+	}
 	
+	if (flag == 0)
+	return false
+	else
+	return true
+}	
+
+function validateChangePassword() { 
+	var passwordspan = document.getElementById("password1-error")
+	var newpasswordspan = document.getElementById("password2-error")
+	var password = document.getElementById("password1").value
+	var newpassword = document.getElementById("password2").value
+	var flag = 1;
+
+	if (password == "" || password == null) {
+			passwordspan.innerHTML = "&#x1F6C8; Password is a required field"
+			document.getElementById("password1").focus();
+			flag = 0;
+		} else {
+			passwordspan.innerHTML = ""
+		}
+		if (newpassword == "" || newpassword == null) {
+			newpasswordspan.innerHTML = "&#x1F6C8; Confirm password is a required field"
+			document.getElementById("password2").focus();
+			flag = 0;
+		} else if (password!= newpassword) {
+			newpasswordspan.innerHTML = "&#x1F6C8; Passwords doesnot match"
+			document.getElementById("password1").focus();
+			document.getElementById("password2").focus();
+			flag = 0;
+		}
+		else {
+			newpasswordspan.innerHTML = "";
+		}
+		if (flag == 0)
+			return false
+		else
+			return true
+}
+	
+function validateAddAddress() {
+	flag = 1;
+	var house_nospan = document.getElementById("house-error")
+	var landmarkspan = document.getElementById("landmark-error")
+	var pincodespan = document.getElementById("pincode-error")
+	var statespan = document.getElementById("state-error")
+	var districtspan=document.getElementById("district-error")
+	var streetspan = document.getElementById("street-error")
+	
+	var houseno = document.getElementById("house-no").value
+	var state = document.getElementById("state").value
+	var street = document.getElementById("street").value
+	var pincode = document.getElementById("pincode").value
+	var landmark = document.getElementById("landmark").value
+	var district = document.getElementById("district").value
+
+		if (houseno == "" || houseno == null) {
+			house_nospan.innerHTML = "&#x1F6C8; House no is a required field"
+			document.getElementById("house-no").focus();
+			flag = 0;
+		} else {
+			house_nospan.innerHTML = ""
+		}
+		if (street == "" || street == null) {
+			streetspan.innerHTML = "&#x1F6C8; Street name is a required field"
+			document.getElementById("street").focus();
+			flag = 0;
+		}
+		else {
+			streetspan.innerHTML = "";
+	}
+	if (district == "" || district == null) {
+		districtspan.innerHTML = "&#x1F6C8; District is a required field"
+		document.getElementById("district").focus();
+		flag = 0;
+	}
+	else {
+		districtspan.innerHTML = "";
+	}
+	if (state == "" || state == null) {
+		statespan.innerHTML = "&#x1F6C8; State is a required field"
+		document.getElementById("state").focus();
+		flag = 0;
+	}
+	else {
+		statespan.innerHTML = "";
+}
+if (landmark == "" || landmark == null) {
+	landmarkspan.innerHTML = "&#x1F6C8; Landmark is a required field"
+	document.getElementById("landmark").focus();
+	flag = 0;
+}
+else {
+	landmarkspan.innerHTML = "";
+}
+if (pincode == "" || pincode == null) {
+	pincodespan.innerHTML = "&#x1F6C8; Pincode is a required field"
+	document.getElementById("pincode").focus();
+	flag = 0;
+}
+else {
+	pincodespan.innerHTML = "";
+	}
+	if (flag == 0)
+	return false
+	else
+	return true
+}	

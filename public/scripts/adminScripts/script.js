@@ -36,7 +36,7 @@ function validateLogin() {
 		flag = 0;
 	}
 	else { 
-		passwordspan.innerHTML = "";
+		passwordSpan.innerHTML = "";
 	}
 	if (flag == 0)
 		return false

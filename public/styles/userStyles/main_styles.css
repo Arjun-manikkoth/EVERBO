@@ -1718,6 +1718,7 @@ section
 }
 .nav-options:hover{
 	box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+	background-color: rgba(245, 245, 245, 0.838);
 }
 
 .form-control:focus {
@@ -1739,4 +1740,45 @@ section
 	color: #fff;
 	cursor: pointer;
 	border: solid 1px #BA68C8
+}
+.profile-button{
+	background-color: #FB5531;
+	color: white;
+}
+.navbar-user a{
+	color: black;
+}
+.address-box{
+	min-height: 150px;
+	margin-top: 30px;
+}
+.address-msg{
+	text-align: center;
+	font-size: 20px;
+	font-weight: 500;
+}
+.address-box{
+	display: block;
+}
+.address{
+	display: block;
+	font-size: 16px;
+}
+.button-box{
+align-items: flex-end;
+}
+.address-outerdiv{
+justify-content: space-between;
+margin-bottom: 40px;
+}
+.address-div{
+	min-width: 300px;
+}
+.delete-btn{
+	border: 1px solid #FB5531;
+	background-color: white;
+}
+.delete-btn:hover{
+	background-color: #FB5531;
+	color: white;
 }

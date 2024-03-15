@@ -1,6 +1,7 @@
 .checkout-btn{
     background-color: #fe4c50;
     border-color: #fe4c50;
+		color: white;
 }
 .cart-span{
   text-decoration: none;
@@ -10,9 +11,7 @@
   background-color: white;
   border-color: black;
 }
-a:hover{
-  color: white;
-}
+
 .qty-btn{
   height: 38px;
   background-color: white;
@@ -28,8 +27,49 @@ a:hover{
   width:40px;
   height: 100%;
 }
-
 input.qty-form::-webkit-outer-spin-button,
 input.qty-form::-webkit-inner-spin-button {
    -webkit-appearance: none;
+}
+.mt-100{
+	margin-top:100px;
+}
+.card1 {
+	 margin-bottom: 30px;
+	 border: 0;
+	 -webkit-transition: all .3s ease;
+	 transition: all .3s ease;
+	 letter-spacing: .5px;
+	 border-radius: 8px;
+	 -webkit-box-shadow: 1px 5px 24px 0 rgba(68,102,242,.05);
+	 box-shadow: 1px 5px 24px 0 rgba(68,102,242,.05);
+}
+.card1 .card-header {
+	 background-color: #fff;
+	 border-bottom: none;
+	 padding: 24px;
+	 border-bottom: 1px solid #f6f7fb;
+	 border-top-left-radius: 8px;
+	 border-top-right-radius: 8px;
+}
+.card-header:first-child {
+	 border-radius: calc(.25rem - 1px) calc(.25rem - 1px) 0 0;
+}
+.card1 .card-body1 {
+	 padding: 30px;
+	 background-color: transparent;
+   padding-bottom: 150px !important;
+   padding-top: 90px !important;
+}
+.btn-primary, .btn-primary.disabled, .btn-primary:disabled {
+	 background-color: #4466f2!important;
+	 border-color: #4466f2!important;
+}
+.empty-box{
+  margin-top: 80px;
+}
+.cart-div,.checkout-div{
+	background-color: white;
+	box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+	border: none;
 }

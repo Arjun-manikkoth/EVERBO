@@ -66,29 +66,14 @@
 						</ul>
 					</div>
 
-					<form  action="/addToCart?id=<%=product._id%>" method="post" >
-
-					<div class="quantity d-flex flex-column flex-sm-row align-items-sm-center">
-						<span>Qty:</span>
-						<div class="quantity_selector">
-							<button class="btn qty-btn px-3 me-2"
-							onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
-							<i class="fa fa-minus"></i>
-						</button>
-             
-						<div class="form-outline">
-							<input id="prod-form" min="1" name="quantity" value="1" type="number" class="form-control qty-form" />
+					
+					<div class="quantity d-flex flex-column flex-sm-row add-buttons">
+				    <div>
+              <a href="/add_to_cart?prodId=<%=product._id%>"><button type="submit" class="red_buttons add_to_cart_buttons addtocart-btn">Add To Cart</button></a>
 						</div>
-
-						<button class="btn qty-btn px-3 ms-2"
-							onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
-							<i class="fa fa-plus"></i>
-						</button>
-						</div>
-						<button type="submit" class="red_buttons add_to_cart_buttons addtocart-btn"  >Add To Cart</button>
 						<div class="product_favorite d-flex flex-column align-items-center justify-content-center"></div>
 					</div>
-				</form>
+	
 				</div>
 			</div>
 		</div>

@@ -1,0 +1,54 @@
+<%-include("../layouts/user/header.ejs")-%>
+<div class="containerbox">
+  <div class="navbar-outer container">
+    <div class="navbar-user">
+      <a href="/profile"><div class="nav-options" ><i class="fa fa-user-circle mx-3" aria-hidden="true"></i>Profile</div></a>
+      <a href="/address"><div class="nav-options" ><i class="fa fa-address-card-o mx-3" aria-hidden="true"></i>My Address</div></a>
+      <a href="/order"><div class="nav-options" ><i class="fa fa-cart-plus mx-3" aria-hidden="true"></i>My Orders</div></a>
+      <a href="/change_password"><div class="nav-options" ><i class="fa fa-lock mx-3" aria-hidden="true"></i>Change Password</div></a>
+      <a href="/logout"><div class="nav-options" ><i class="fa fa-sign-out mx-3" aria-hidden="true"></i>Logout</div></a>
+    </div>
+     <div class="col-lg-8 profile-box">
+          <div class=" rounded bg-white mb-5 content">
+              <div class="border-right">
+                  <div class="p-3">
+                      <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="text-right">My Address</h4>
+                      </div>
+                      <div class="container address-box">
+                        <%if(locals.addressData){%>
+                          <%if(addressData.forEach((data)=>{%>
+                          <div class="d-flex address-outerdiv">
+                           <ul class="">&#11044</ul>
+                           <div class="ml-5 address-div">
+                            <span class="address"><%=data.house_no%>,<%=data.street%>,</span >
+                              <span class="address"><%=data.pincode%>,<%=data.landmark%>,</span>
+                              <span class="address"><%=data.district%>,<%=data.state%></span>
+                           </div> 
+                           <div class="button-box d-flex">
+                            <div class="text-center">
+                              <a href="/edit_address?id=<%=data._id%>"><button class="btn profile-button btn-sm mx-2" type="button">Edit
+                              </button></a>
+                            </div>
+                             <div class="text-center">
+                              <a href="/delete_address?id=<%=data._id%>"><button class="btn  btn-sm mx-2 delete-btn" type="button">Delete</button></a>
+                            </div>  
+                           </div>     
+                          </div>
+                          <%}))%>
+                          <%}else if(locals.msg){%>
+                            <div class="address-msg">
+                              <%=msg%>
+                            </div>
+                          <%}%>
+                      </div>
+                      <div class="mt-5 mb-3 text-center">
+                        <a href="/add_address"><button class="btn profile-button" type="button">Add Address</button></a>
+                      </div> 
+                      </div>                                                         
+                   </div>
+              </div>
+          </div>
+      </div>
+</div>
+<%-include("../layouts/user/footer.ejs")-%>

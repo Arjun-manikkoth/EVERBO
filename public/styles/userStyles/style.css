@@ -185,10 +185,7 @@ form .btns input[type="submit"]{
 .signup-error{
   padding-top: 15px;
 }
-#email-error-login,#password-error-login,
-#name-error-signup,#email-error-signup,
-#password-error-signup,#newpassword-error-signup,
-#mobile_no-error-signup{
+.error-msg{
   font-size: 13px;
   color: red;
 }

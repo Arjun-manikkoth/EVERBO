@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt")
 const nodemailer = require("nodemailer")
 const Product = require("../models/productModel")
 const Category = require("../models/categoryModel")
+const Address = require("../models/addressModel")
 
 
 //user passwordhash
@@ -317,24 +318,10 @@ const userLogout = async (req,res) => {
   }
 }
 
-
-
-//cart load
-const cartLoad = async (req, res) => {
-  try {
-    
-    res.render("cart")
-  }
-  catch (error) {
-    console.log(error.message)
-  }
-}
 //user profile load
 const loadProfile = async (req, res) => {
   try {
-    console.log(req.session.user_Id)
     const userData = await User.findOne({ _id: req.session.user_Id })
-    console.log(userData)
     if (userData!=[]) {
       res.render("profile", {userData})
     }
@@ -347,6 +334,159 @@ const loadProfile = async (req, res) => {
   }
 }
 
+//edit profile to db
+const editProfile = async (req, res) => {
+  try {
+    await User.findOneAndUpdate({ _id: req.query.id }, { $set: { name: req.body.name, mobile_no: req.body.mobileno } }).then(
+      res.redirect("/profile")
+    ).catch(
+      console.log("Couldnt update user data")
+    )
+  }
+  catch (error) {
+    console.log(error.message)
+  }
+}
+
+//load address page
+const loadAddress = async (req, res) => {
+  try {
+    const addressData = await Address.find({ user_id: req.session.user_Id,is_deleted:{$ne:1} }).limit(3).sort({updatedAt:-1})
+    if (addressData!="") {
+      res.render("address",{ addressData })
+    }
+    else (
+      res.render("address", {msg:"Address not added"})
+    )
+  }   
+  catch (error) { 
+    console.log(error.message);
+  }
+}
+
+//load address page
+const addAddress = async (req, res) => {
+  try {
+      res.render("add_address")
+  }
+  catch (error) { 
+    console.log(error.message);
+  }
+}
+
+//save address page
+const saveAddress = async (req, res) => {
+  try {
+    const exists = await Address.findOne({ pincode: req.body.pincode,user_id:req.session.user_Id })
+    if (exists) {
+      res.render("add_address",{msg:"Address already added"})
+    }
+    else {
+      const address = new Address({
+        user_id:req.session.user_Id,
+        house_no: req.body.houseNo,
+        street: req.body.street,
+        pincode: req.body.pincode,
+        landmark: req.body.landmark,
+        district: req.body.district,
+        state:req.body.state
+      })
+      
+      await address.save()
+        const userData=await Address.findOne({house_no:req.body.houseNo})
+      await User.findOneAndUpdate({ _id: req.session.user_Id }, { $push: { address: userData._id } })
+      res.redirect("/address") 
+    }
+  }
+  catch (error) { 
+    console.log(error.message);
+  }
+}
+
+//load edit address page
+const editAddress = async (req, res) => {
+  try { 
+    const userData = await Address.findOne({ _id: req.query.id })
+    if (userData) { 
+      res.render("edit_address",{userData})
+    }
+  }
+  catch (error) { 
+    console.log(error.message);
+  }
+}
+
+//edit address page to db 
+const updateAddress = async (req, res) => {
+  try { 
+    const userData = await Address.findOneAndUpdate({ _id: req.query.id },
+      { $set: { house_no: req.body.houseNo,
+                street: req.body.street,
+                pincode: req.body.pincode,
+                landmark: req.body.landmark,
+                district: req.body.district,
+                state: req.body.state
+      }
+      }, { new: true })
+    
+    if (userData) { 
+      res.redirect("/address")
+    } else {
+      res.render("edit_address",{msg:"Address already exists",userData})
+    }
+  }
+  catch (error) { 
+    console.log(error.message);
+  }
+}
+
+//load orders page
+const deleteAddress = async (req, res) => {
+  try { 
+    const data = await Address.findOneAndUpdate({ _id: req.query.id }, { $set: { is_deleted: 1 } })
+    if (data) { 
+      res.redirect("/address")
+    }
+  }
+  catch (error) { 
+    console.log(error.message);
+  }
+}
+
+
+//load orders page
+const loadOrders = async (req, res) => {
+  try { 
+      res.render("order")
+  }
+  catch (error) { 
+    console.log(error.message);
+  }
+}
+
+//load change password page
+const loadChangePassword = async (req, res) => {
+  try {
+      res.render("change_password")
+  }
+  catch (error) { 
+    console.log(error.message);
+  }
+}
+
+const changePassword = async (req, res) => {
+  try {
+    const hpassword = await securePassword(req.body.password)
+    await User.updateOne({ _id: req.session.user_Id }, { $set: { password: hpassword } }).then(
+      res.redirect("/logout")
+    ).catch(console.log("Cannot change password"))
+  }
+  catch (error) { 
+    console.log(error.message);
+  }
+}
+
+
 module.exports = {
   verifyLogin,
   insertUser,
@@ -354,7 +494,6 @@ module.exports = {
   loadLanding,
   loadProduct,
   loadShop,
-  cartLoad,
   forgotLoad,
   forgotVerify,
   loadReset,
@@ -362,5 +501,15 @@ module.exports = {
   passwordReset,
   userLogout,
   otpResend,
-  loadProfile
+  loadProfile,
+  editProfile,
+  loadAddress,
+  addAddress,
+  saveAddress,
+  editAddress,
+  updateAddress,
+  deleteAddress,
+  loadOrders,
+  loadChangePassword,
+  changePassword
 }
