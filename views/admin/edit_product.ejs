@@ -53,35 +53,24 @@
             <span id="price-error"></span>
           </div>
         </div>
-
-        <div class="row">
-           
+        <div class="row">        
           <div class="form-group col-md-6">
             <label for="categoryName">Category</label>
-            <select class="form-select" aria-label="Default select example" id="categoryName" name="category">
-              
-             <%category.forEach((categ)=>{%>
-              <%if(categ.is_deleted==0){%>
-             <option ><%=categ.name%></option>
-             <%}%>	
+            <select class="form-select" aria-label="Default select example" id="categoryName" name="category"> 
+              <option value="<%=product.category._id%>" selected ><%=product.category.name%></option>            
+             <%category.forEach((categ)=>{%> 
+              <%if(product.category._id!=categ._id.toString()){%>
+                <option value="<%=categ._id%>" ><%=categ.name%></option>	
+             <%}%>        
              <%})%>
-
            </select>
           </div>
         </div>
-        
-
-
-
        <div class="categoryadd">
         <button type="submit" class="btn btn-dark confirm-categ">Edit Product</button>
-       </div>
-       
-  
-    
+       </div> 
     </form>
-    <form  action="/admin/update_product?id=<%=product._id%>" method="post" enctype="multipart/form-data" onsubmit="return validateEditImages()" >
-      
+    <form action="/admin/update_product?id=<%=product._id%>" method="post" enctype="multipart/form-data" onsubmit="return validateEditImages()" > 
       <div class="form-group col-md-6">
         <label for="image">Image</label>
         <input type="file" class="image" name="image" id="image" accept='image/*' multiple>
@@ -89,12 +78,9 @@
         <%product.subImages.forEach((prod)=>{%>
           <div class="categ-image-div">
             <img src="/images/userImages/<%=prod%>" width="80px" alt="<%=prod%>">
-          </div>
-        
+          </div>   
         <%})%>
-      </div>
-      
-
+      </div>      
       <div class="categoryadd ">
         <button type="submit" class="btn btn-dark  confirm-categ">Edit Images</button>
        </div> 

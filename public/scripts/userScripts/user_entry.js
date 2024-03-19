@@ -284,7 +284,7 @@ function validateEditProfile() {
 	return true
 }	
 
-function validateChangePassword() { 
+function validateNewPassword() { 
 	var passwordspan = document.getElementById("password1-error")
 	var newpasswordspan = document.getElementById("password2-error")
 	var password = document.getElementById("password1").value
@@ -317,6 +317,24 @@ function validateChangePassword() {
 			return true
 }
 	
+function validateConfirmPassword() { 
+	var passwordspan = document.getElementById("password-error")
+	var password = document.getElementById("password").value
+	var flag = 1;
+
+	if (password == "" || password == null) {
+			passwordspan.innerHTML = "&#x1F6C8; Password is a required field"
+			document.getElementById("password").focus();
+			flag = 0;
+		} else {
+			passwordspan.innerHTML = ""
+		}
+		if (flag == 0)
+			return false
+		else
+			return true
+}
+
 function validateAddAddress() {
 	flag = 1;
 	var house_nospan = document.getElementById("house-error")
@@ -385,3 +403,28 @@ else {
 	else
 	return true
 }	
+
+window.onload = function () { 
+	const nl = document.querySelectorAll(".cart-price")
+	let priceList = Array.from(nl)
+	if (nl) { 
+		var totalAmount = priceList.reduce((total, value) => { 
+			var price = parseInt(value.innerHTML)
+			return total += price;
+		},0)
+	}
+	var el = document.getElementById("totalPrice")
+	var checkOutPrice = document.getElementById("priceCheckOut")
+	if (el) { 
+		el.innerHTML = totalAmount;
+		var deliveryCharge = document.getElementById("deliveryFee")
+		if (totalAmount >= 3000) { 
+			deliveryCharge.innerHTML = "Free"
+			checkOutPrice.innerHTML = totalAmount;
+		}
+		else {
+			deliveryCharge.innerHTML = "Rs.90"
+			checkOutPrice.innerHTML = totalAmount + 90;
+		}
+	}
+}

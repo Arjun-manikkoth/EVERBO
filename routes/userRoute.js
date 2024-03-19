@@ -35,12 +35,6 @@ user_route.get("/product",auth.isLogin, userController.loadProduct);
 //user shop page
 user_route.get("/shop", auth.isLogin, userController.loadShop);
 
-//load cart page
-user_route.get("/add_to_cart", auth.isLogin, cartController.addToCart);
-
-//load cart page
-user_route.get("/cart", auth.isLogin, cartController.cartLoad);
-
 //user shop page
 user_route.get("/logout",auth.isLogin, userController.userLogout);
 
@@ -90,11 +84,24 @@ user_route.post("/edit_address", auth.isLogin, userController.updateAddress)
 user_route.get("/order", auth.isLogin, userController.loadOrders)
 
 //change password page
-user_route.get("/change_password", auth.isLogin, userController.loadChangePassword)
+user_route.get("/change_password", auth.isLogin, userController.confirmPasswordLoad)
 
-//change password to db
-user_route.post("/change_password", auth.isLogin, userController.changePassword)
+//confirm password 
+user_route.post("/confirm_password", auth.isLogin, userController.confirmPassword)
 
+//new password page
+user_route.get("/new_password", auth.isLogin, userController.newPasswordLoad)
 
+//new password 
+user_route.post("/new_password", auth.isLogin, userController.newPassword)
+
+//add to cart page
+user_route.get("/add_to_cart", auth.isLogin, cartController.addToCart);
+
+//load cart page
+user_route.get("/cart", auth.isLogin, cartController.cartLoad);
+
+//remove cart product page
+user_route.get("/remove_cart/:prodId", auth.isLogin, cartController.removeCart)
 
 module.exports = user_route;

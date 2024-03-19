@@ -4,7 +4,7 @@ const Category = require("../models/categoryModel")
 //view products page
 const productsLoad = async (req, res) => {
   try {
-   const product= await Product.find({})
+    const product = await Product.find({}).populate("category")
     res.render("products", {product})
   }
   catch (error) {
@@ -35,14 +35,12 @@ const addProduct = async (req, res) => {
       res.render("add_product", { message: "Product already added",category})
     }
     else {
-      
       const product = new Product({
         name: req.body.name,
         category:req.body.category,
         description: req.body.description,
         price: req.body.price,
         quantity: req.body.quantity
-        //image:req.file.image1
       })
       const productData = await product.save();
       const  data =await Product.findOne({name:req.body.name})
@@ -50,8 +48,8 @@ const addProduct = async (req, res) => {
        const subImagesArray = req.files.map((file) => {
       return file.filename;
        })
-      const daeta=await Product.findByIdAndUpdate({_id:data._id},{$set:{subImages:subImagesArray}})
-        res.redirect("/admin/products")
+        const productData = await Product.findByIdAndUpdate({ _id: data._id }, { $set: { subImages: subImagesArray } })
+          res.redirect("/admin/products")
       }
       else {
         res.render("add_product",{message:"Failed to add product",category})
@@ -86,8 +84,8 @@ const addProduct = async (req, res) => {
 //       if (req.files) {
 //         const subImagesArray = req.files.map((file) => {
 //           return file.filename
-//         })   
-//         const datas = await Product.findByIdAndUpdate(productId, { $set: { subImages:subImagesArray } })    
+//         })
+//         const datas = await Product.findByIdAndUpdate(productId, { $set: { subImages:subImagesArray } })
 //         if (datas) {
 //           res.redirect("/admin/products")
 //         }
@@ -112,7 +110,7 @@ const addProduct = async (req, res) => {
 //           else {
 //             res.render("edit_product",{message:"Couldn't update product"})
 //           }
-//       } 
+//       }
 //     const productData = await Product.create(req.body)
 //     const productId = productData._id
 //     const subImagesArray = req.files.map((file) => {
@@ -135,6 +133,25 @@ const addProduct = async (req, res) => {
 //    }
 // }
 
+//edit category load
+const editProductLoad = async (req, res) =>
+{
+  try {
+    const id = req.query.id;
+    const product = await Product.findOne({ _id: id, is_deleted: { $ne: 1 } }).populate("category");
+    console.log(product)
+    const category = await Category.find({})
+    if (product) {
+      res.render("edit_product", {product,category});
+    }
+    else {
+      res.redirect("/admin/products")
+    }   
+  }
+  catch (error) {
+    console.log(error.message);
+  }
+}
  
 //update product
 const updateProduct= async (req, res) =>
@@ -181,9 +198,7 @@ const updateProduct= async (req, res) =>
 const updateProductThumb= async (req, res) =>
 {  
   try {       
-    console.log(req.query.id)
     const datas = await Product.findByIdAndUpdate(req.query.id, { $set: { image: req.file.filename } })
-    console.log(datas)
     
       if (datas) {
         res.redirect("/admin/products")
@@ -210,24 +225,7 @@ const deleteProduct = async (req, res) =>
   }
 }
  
-//edit category load
-const editProductLoad = async (req, res) =>
-{
-  try {
-    const id = req.query.id;
-    const product = await Product.findOne({ _id: id });
-    const category = await Category.find({})
-    if (product) {
-      res.render("edit_product", {product,category});
-    }
-    else {
-      res.redirect("/admin/products")
-    }   
-  }
-  catch (error) {
-    console.log(error.message);
-  }
-}
+
  
 module.exports = {
   productsLoad,

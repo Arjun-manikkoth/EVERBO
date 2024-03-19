@@ -79,7 +79,7 @@
 						<!-- Products -->
 						<%product.forEach((prod)=>{%>
 
-						<div class="product-items <%=prod.category%>">
+						<div class="product-items <%=prod.category.name%>">
 							<div class="product discount product_filter">
 								<div class="product_image">
 									<img src="images/userImages/<%=prod.image%>" alt="">
@@ -87,11 +87,11 @@
 								<div class="favorite "></div>
 								
 								<div class="product_info">
-									<h6 class="product_name"><a href="#"><%=prod.name%></a></h6>
+									<h6 class="product_name"><a href="/product"><%=prod.name%></a></h6>
 									<div class="product_price">Rs.<%=prod.price%></div>
 								</div>
 							</div>
-							<div class="red_button1 add_to_cart_button"><a href="#">add to cart</a></div>
+							<div class="red_button1 add_to_cart_button"><a href="/add_to_cart">add to cart</a></div>
 						</div>
 
          <%})%>
@@ -169,7 +169,7 @@
 										</div>
 										<div class="favorite"></div>
 										<div class="product_info">
-											<h6 class="product_name"><a href="single.html"><%=prod.name%></a></h6>
+											<h6 class="product_name"><a href="/product"><%=prod.name%></a></h6>
 											<div class="product_price">Rs.<%=prod.price%></div>
 										</div>
 									</div>
@@ -204,7 +204,7 @@
 						<div class="benefit_icon"><i class="fa fa-truck" aria-hidden="true"></i></div>
 						<div class="benefit_content">
 							<h6>free shipping</h6>
-							<p>On Order's Above 2000</p>
+							<p>On Order's Above 3000</p>
 						</div>
 					</div>
 				</div>
@@ -213,7 +213,7 @@
 						<div class="benefit_icon"><i class="fa fa-money" aria-hidden="true"></i></div>
 						<div class="benefit_content">
 							<h6>Cash On Delivery</h6>
-							<p>For Order's Under 4000</p>
+							<p>For Order's Under 1500</p>
 						</div>
 					</div>
 				</div>

@@ -41,6 +41,6 @@ const userSchema=mongoose.Schema({
         totalPrice: {type:Number}
       }
     ]
-}, {timestamps:true});
+}, {timestamps:true,strictPopulate:false});
 
 module.exports = mongoose.model("user", userSchema);

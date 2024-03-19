@@ -25,8 +25,9 @@ const addCategoryLoad = async (req, res) => {
 //add category to db
 const addCategory = async (req, res) => {
   try {
-   
-    const exists = await Category.findOne({ name: req.body.name });
+   const categoryName=req.body.name.toString()
+    const exists = await Category.findOne({ name: { $regex: new RegExp("^"+categoryName+"$","i") } });
+    console.log(exists)
 
     if (exists) {
       res.render("add_category", { message: "Category already added" })

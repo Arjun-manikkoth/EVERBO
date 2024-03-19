@@ -464,8 +464,36 @@ const loadOrders = async (req, res) => {
   }
 }
 
-//load change password page
-const loadChangePassword = async (req, res) => {
+//load confirm Password page
+const confirmPasswordLoad = async (req, res) => {
+  try {
+      res.render("confirm_password")
+  }
+  catch (error) { 
+    console.log(error.message);
+  }
+}
+
+//confirm password check
+const confirmPassword = async (req, res) => {
+  try {
+
+    const userData = await User.findOne({ _id: req.session.user_Id })
+    const success = await bcrypt.compare(req.body.password, userData.password)
+    if (success) { 
+      res.redirect("/new_password")
+    }
+    else {
+      res.render("confirm_password", {msg:"Please Check the password"})
+    }
+  }
+  catch (error) { 
+    console.log(error.message);
+  }
+}
+
+//load new password page
+const newPasswordLoad = async (req, res) => {
   try {
       res.render("change_password")
   }
@@ -474,12 +502,17 @@ const loadChangePassword = async (req, res) => {
   }
 }
 
-const changePassword = async (req, res) => {
+//new password to db
+const newPassword = async (req, res) => {
   try {
     const hpassword = await securePassword(req.body.password)
-    await User.updateOne({ _id: req.session.user_Id }, { $set: { password: hpassword } }).then(
-      res.redirect("/logout")
-    ).catch(console.log("Cannot change password"))
+    const success=await User.updateOne({ _id: req.session.user_Id }, { $set: { password: hpassword } })
+    if (success) {     
+      res.redirect("/logout") 
+    }
+    else {
+      console.log("Couldnt update password")
+    }
   }
   catch (error) { 
     console.log(error.message);
@@ -510,6 +543,8 @@ module.exports = {
   updateAddress,
   deleteAddress,
   loadOrders,
-  loadChangePassword,
-  changePassword
+  confirmPasswordLoad,
+  confirmPassword,
+  newPasswordLoad,
+  newPassword
 }
