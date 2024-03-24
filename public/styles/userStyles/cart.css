@@ -1,6 +1,6 @@
 .checkout-btn{
-    background-color: #fe4c50;
-    border-color: #fe4c50;
+    background-color: #FB5531;
+    border-color:#FB5531;
 		color: white;
 }
 .cart-span{
@@ -18,7 +18,7 @@
   border-color: rgba(165, 164, 164, 0.664);
   border-width: -3px;
 }
-#form1,#form2{
+.form1{
   width:60px;
   text-align: center;
 }
@@ -72,4 +72,88 @@ input.qty-form::-webkit-inner-spin-button {
 	background-color: white;
 	box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 	border: none;
+}
+.shipping-add,.payment-div{
+	background-color: #fd6442f8;
+	padding-top: 12px;
+	padding-bottom: 12px;
+}
+.shipping-add h5,.payment-div h5{
+	color: white;
+}
+.label-radio{
+	font-size: 16px;
+	margin-left: 40px;
+	margin-top: -25px;
+}
+.order-confirm-btn{
+	margin-top: 30px;
+	padding-bottom: 15px;
+}
+#paymentBox {
+  max-height: 0px;
+  overflow: hidden;
+  transition: all .3s ease;
+	background-color: white;
+	box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+}
+.expand {
+  max-height: fit-content !important;
+}
+.address-options,.payment-options{
+	margin-left: 20px;
+}
+.eachTotal{
+	display: none;
+}
+.address-edit-btn{
+	margin-top: 30px;
+	text-align: right;
+}
+#newAddressBox {
+  max-height: 0px;
+  overflow: hidden;
+  transition: all .3s ease;
+	background-color: white;
+	box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+}
+.cont-box{
+margin-top: 30px;
+padding-left: 200px;
+padding-right: 200px;
+}
+.span-cursor:hover{
+	cursor: pointer;
+}
+.success-div{
+	background-color: white;
+	box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+	max-width: 575px;
+}
+.success-btns{
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+  padding-bottom: 48px;
+	margin-top: 28px;
+}
+.tick-img{
+	width: auto;
+	height: 105px;
+}
+.img-div{
+	text-align: center;
+	padding-top: 50px;
+	padding-bottom: 50px;
+}
+.success-div h4{
+	text-align: center;
+}
+.success-div p{
+	text-align: center;
+	margin-top: 20px;
+}
+.quan-list{
+	color: black;
+	font-weight: 500;
 }

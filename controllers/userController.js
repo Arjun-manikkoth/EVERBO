@@ -3,7 +3,8 @@ const bcrypt = require("bcrypt")
 const nodemailer = require("nodemailer")
 const Product = require("../models/productModel")
 const Category = require("../models/categoryModel")
-const Address = require("../models/addressModel")
+const Address = require("../models/addressModel");
+const Order = require("../models/orderModel");
 
 
 //user passwordhash
@@ -419,20 +420,31 @@ const editAddress = async (req, res) => {
 //edit address page to db 
 const updateAddress = async (req, res) => {
   try { 
-    const userData = await Address.findOneAndUpdate({ _id: req.query.id },
-      { $set: { house_no: req.body.houseNo,
-                street: req.body.street,
-                pincode: req.body.pincode,
-                landmark: req.body.landmark,
-                district: req.body.district,
-                state: req.body.state
-      }
-      }, { new: true })
-    
-    if (userData) { 
-      res.redirect("/address")
+    const exists = await Address.findOne({
+      pincode: req.body.pincode,
+      house_no:  { $regex :new RegExp("^" + req.body.houseNo + "$", "i") },
+      user_id: req.session.user_Id,
+      _id: { $ne: req.query.id }
+    })
+    const  userData = await Address.findOne({ user_id: req.session.user_Id, _id:req.query.id})
+    if (exists) {
+      res.render("edit_address", { msg: "Address already exists", userData })
     } else {
-      res.render("edit_address",{msg:"Address already exists",userData})
+      const data = await Address.findOneAndUpdate({ _id: req.query.id },
+        {
+          $set: {
+            house_no: req.body.houseNo,
+            street: req.body.street,
+            pincode: req.body.pincode,
+            landmark: req.body.landmark,
+            district: req.body.district,
+            state: req.body.state
+          }
+        }, { new: true })
+      
+      if (data) {
+        res.redirect("/address")
+      }
     }
   }
   catch (error) { 
@@ -457,7 +469,30 @@ const deleteAddress = async (req, res) => {
 //load orders page
 const loadOrders = async (req, res) => {
   try { 
-      res.render("order")
+    const orderData = await Order.find({ userId: req.session.user_Id }).populate("addressChosen")
+    if (orderData) {
+      res.render("order",{orderData})
+    }
+    else {
+      res.render("order",{msg:"No Orders were Made"})
+    }   
+  }
+  catch (error) { 
+    console.log(error.message);
+  }
+}
+
+//load order detial page
+const orderDetail = async (req, res) => {
+  try { 
+    const orderData = await Order.findOne({ _id: req.query.id }).populate("addressChosen").populate("userId").populate("cartData.productId")
+    console.log(orderData)
+    if (orderData) {
+      res.render("order_detail",{orderData})
+    }
+    else {
+      res.render("order",{msg:"Couldnt find Order"})
+    }   
   }
   catch (error) { 
     console.log(error.message);
@@ -519,6 +554,30 @@ const newPassword = async (req, res) => {
   }
 }
 
+//load shop page with products view
+const priceLowToHigh = async (req, res) => {
+  try {
+    const category = await Category.find({})
+    const product = await Product.find({}).sort({ price: -1 })
+    res.render("shop", {product,category})
+  }
+  catch (error) { 
+    console.log(error.message);
+  }
+}
+
+//load shop page with products view
+const priceHighToLow = async (req, res) => {
+  try {
+    const category = await Category.find({})
+    const product = await Product.find({}).sort({ price: 1 })
+    res.render("shop", {product,category})
+  }
+  catch (error) { 
+    console.log(error.message);
+  }
+}
+
 
 module.exports = {
   verifyLogin,
@@ -543,8 +602,12 @@ module.exports = {
   updateAddress,
   deleteAddress,
   loadOrders,
+  orderDetail,
   confirmPasswordLoad,
   confirmPassword,
   newPasswordLoad,
-  newPassword
+  newPassword,
+  priceLowToHigh,
+  priceHighToLow
+
 }

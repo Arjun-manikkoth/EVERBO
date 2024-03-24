@@ -5,7 +5,13 @@ const Category = require("../models/categoryModel")
 const productsLoad = async (req, res) => {
   try {
     const product = await Product.find({}).populate("category")
-    res.render("products", {product})
+    if (product) {
+      res.render("products", {product})
+    }
+    else {
+      res.render("products", {msg:"No Products Added"})
+    }
+    
   }
   catch (error) {
     console.log(error.message);

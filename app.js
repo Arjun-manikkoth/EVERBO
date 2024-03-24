@@ -4,6 +4,7 @@ const logger = require("morgan")
 const nocache = require("nocache")
 const db = require("./database/db");
 
+
 //parse data
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))

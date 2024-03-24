@@ -6,6 +6,7 @@ window.onload = function () {
 	const loginBtn = document.querySelector("label.login");
 	const signupBtn = document.querySelector("label.signup");
 	const signupLink = document.querySelector("form .signup-link a");
+
 	if (signupBtn) {
 		signupBtn.onclick = (() => {
 			loginForm.style.marginLeft = "-50%";
@@ -404,15 +405,14 @@ else {
 	return true
 }	
 
-window.onload = function () { 
-	const nl = document.querySelectorAll(".cart-price")
-	let priceList = Array.from(nl)
-	if (nl) { 
+const nl = document.querySelectorAll(".cart-price")
+	if (nl) {
+		var priceList = Array.from(nl)
 		var totalAmount = priceList.reduce((total, value) => { 
 			var price = parseInt(value.innerHTML)
 			return total += price;
-		},0)
-	}
+		}, 0)
+}
 	var el = document.getElementById("totalPrice")
 	var checkOutPrice = document.getElementById("priceCheckOut")
 	if (el) { 
@@ -420,11 +420,178 @@ window.onload = function () {
 		var deliveryCharge = document.getElementById("deliveryFee")
 		if (totalAmount >= 3000) { 
 			deliveryCharge.innerHTML = "Free"
-			checkOutPrice.innerHTML = totalAmount;
+			if (checkOutPrice) {
+				checkOutPrice.innerHTML = totalAmount;
+			}
 		}
 		else {
 			deliveryCharge.innerHTML = "Rs.90"
-			checkOutPrice.innerHTML = totalAmount + 90;
+
+				if (checkOutPrice) {
+				checkOutPrice.innerHTML = totalAmount+90;
+			}
 		}
+		var grandTotal = document.getElementById("sumTot")
+    if (grandTotal) {
+			grandTotal.value = checkOutPrice.innerHTML;
+     }
+}
+
+
+function decQty(prodId) {
+	var quantity = document.getElementById("qtyNo" + prodId)
+	var productPrice = document.getElementById("price" + prodId)
+	var totalAmount = document.getElementById("totalPrice")
+	var checkOutAmount = document.getElementById("priceCheckOut")
+	var deliveryFee = document.getElementById("deliveryFee")
+	if (quantity.value > 1) {
+		quantity.value = parseInt(quantity.value) - 1;
+
+		fetch("/dec_qty/" + prodId, { method: 'PUT' })
+			.then((response) => {
+				if (!response.ok) {
+					throw new Error('Network response was not ok.');
+				}
+				return response.json();
+			})
+			.then((newData) => {
+				productPrice.innerHTML = newData.totalPrice
+				const nl = document.querySelectorAll(".cart-price")
+				let priceList = Array.from(nl)
+				if (nl) {
+					var checkOutPrice = priceList.reduce((total, value) => {
+						var price = parseInt(value.innerHTML)
+						return total += price;
+					}, 0)
+				}
+				totalAmount.innerHTML = checkOutPrice
+				if (checkOutPrice >= 3000) {
+					deliveryFee.innerHTML = "Free"
+					checkOutAmount.innerHTML = checkOutPrice
+				}
+				else {
+					deliveryFee.innerHTML = "Rs.90"
+					checkOutAmount.innerHTML = checkOutPrice + 90;
+				}			
+			})	
+	}
+	else if(quantity.value==1) {
+		swal({
+		icon: "error",
+		title: "Minimum One Quantity",
+		text: "Please select atleast one quantity",
+		});		 
+	}	
+}
+function incQty(prodId) {
+	var quantity = document.getElementById("qtyNo" + prodId)
+	var productPrice = document.getElementById("price" + prodId)
+	var totalAmount = document.getElementById("totalPrice")
+	var checkOutAmount= document.getElementById("priceCheckOut")
+	var deliveryFee = document.getElementById("deliveryFee")
+  
+	var quantityVal = parseInt(document.getElementById("qtyNo" + prodId).value)
+	var stockVal = parseInt(document.getElementById("productStock" + prodId).value)
+
+	 if(quantityVal >= 10) {
+		swal({
+			title: "Product Limit Reached",
+			text: "You can only add 10 No's per product",
+			timer: 4000
+		});
+	 } else {
+		 
+		 if (quantityVal < stockVal) {
+			quantity.value = parseInt(quantity.value) + 1;
+	
+			fetch("/inc_qty/" + prodId, { method: 'PUT' })
+				.then((response) => {
+				
+				if (!response.ok) {
+					throw new Error('Network response was not ok.');
+				}
+				return response.json();
+			})
+			.then((newData) => {
+				var checkOutPrice = 0;
+				productPrice.innerHTML = newData.totalPrice
+				const nl = document.querySelectorAll(".cart-price")
+				let priceList = Array.from(nl)
+				if (nl) {
+						checkOutPrice = priceList.reduce((total, value) => {
+						var price = parseInt(value.innerHTML)
+						return total += price;
+					}, 0)
+				}
+					totalAmount.innerHTML =checkOutPrice
+					if (checkOutPrice >= 3000) { 
+						deliveryFee.innerHTML = "Free"
+						checkOutAmount.innerHTML = checkOutPrice
+					}
+					else {
+						deliveryFee.innerHTML = "Rs.90"
+						checkOutAmount.innerHTML = checkOutPrice + 90;
+					}			
+			})
+			.catch((error) => {
+	
+				console.log('Error:', error.message);
+			});
+		 }
+		 else {
+			swal({
+				title: "Product Out Of Stock",
+				text: "Cannot add more quantity",
+				timer: 3000
+			});
+		}		
 	}
 }
+
+
+const form1 =document.getElementById("addressForm")
+if (form1) {
+	form1.addEventListener('submit', paymentExpand);
+}
+function paymentExpand(e) {
+	e.preventDefault();
+	
+	const formData = new FormData(form1);
+	const plainFormData = Object.fromEntries(formData.entries());
+	const formDataJsonString = JSON.stringify(plainFormData);
+
+  fetch('/delivery_address', {
+		method: 'POST',
+		headers: {
+			"Content-Type": "application/json",
+			 Accept:"application/json"
+		},
+	body: formDataJsonString
+	}).then((response) => {
+	   return	response.json()
+  })
+		.then((data) => {
+			var target = document.getElementById("paymentBox").classList.add("expand")
+	}); 
+}
+
+function addAddressExpand() {
+	var target = document.getElementById("newAddressBox").classList.toggle("expand")
+	
+}
+
+function cancelOrder(id) {
+
+	fetch("/cancel_order?id=" + id, { method: 'PUT' })
+	.then((response) => {
+	
+	if (!response.ok) {
+		throw new Error('Network response was not ok.');
+		}
+		return response
+	}).then((data) => {
+		window.location.href = "/order";
+	})
+}
+
+

@@ -1,0 +1,50 @@
+<%-include("../layouts/user/header.ejs")-%>
+<div class="containerbox container">
+  <div class="cont-box">
+    <h3>Edit Address</h3>
+    <form action="/edit_check_out?id=<%=addressData._id%>" method="post" onsubmit="return validateAddAddress()">
+      <%if(locals.msg){%>
+        <span class="error-msg ml-4"><%=msg%></span>
+        <%}%>
+      <div class="row">                       
+        <div class="col-md-6 mt-3">
+          <label class="labels">House no</label>
+          <input type="text" class="form-control" id="house-no" name="houseNo" placeholder="Enter house no" value="<%=addressData.house_no%>">
+          <span id="house-error" class="mt-2 error-msg"></span>
+        </div>
+        <div class="col-md-6 mt-3">
+          <label class="labels">Street</label>
+          <input type="text" class="form-control" id="street" name="street" placeholder="Enter street name" value="<%=addressData.street%>">
+          <span id="street-error" class="mt-2 error-msg"></span>
+        </div>                         
+        <div class="col-md-6 mt-3">
+          <label class="labels">Pincode</label>
+          <input type="text" class="form-control" id="pincode" name="pincode" placeholder="Enter pincode" value="<%=addressData.pincode%>">
+          <span id="pincode-error" class="mt-2 error-msg"></span>
+        </div>
+        <div class="col-md-6 mt-3">
+          <label class="labels">Landmark</label>
+          <input type="text" class="form-control" id="landmark" name="landmark" placeholder="Enter landmark" value="<%=addressData.landmark%>">
+          <span id="landmark-error" class="mt-2 error-msg"></span>
+        </div>                         
+        <div class="col-md-6 mt-3">
+          <label class="labels">District</label>
+          <input type="text" class="form-control" id="district" name="district" placeholder="Enter district" value="<%=addressData.district%>">
+          <span id="district-error" class="mt-2 error-msg"></span>
+        </div>
+        <div class="col-md-6 mt-3">
+          <label class="labels">State/Region</label>
+          <input type="text" class="form-control" id="state" name="state" placeholder="state" value="<%=addressData.state%>">
+          <span id="state-error" class="mt-2 error-msg"></span>
+        </div>
+      </div>
+    <div class="mt-5 mb-3 text-center">
+      <button class="btn  profile-button" type="submit">Save Address
+      </button>
+    </div>
+    </form>
+  </div>
+  
+</div>
+
+<%-include("../layouts/user/footer.ejs")-%>

@@ -20,7 +20,7 @@
                 <div class="col-lg-3 col-md-12 mb-4 mb-lg-0">
                   <!-- Image -->
                   <div class="bg-image hover-overlay hover-zoom ripple rounded" data-mdb-ripple-color="light">
-                    <img src="images/userImages/<%=prod.productId.image%>"
+                    <img src="/images/userImages/<%=prod.productId.image%>"
                       class="w-100" alt="product image" />
                     <a href="#!">
                       <div class="mask" style="background-color: rgba(251, 251, 251, 0.2)"></div>
@@ -47,21 +47,21 @@
                   <!-- Quantity -->
                   <div class="d-flex mb-4" style="max-width: 300px">
                     <button class="btn qty-btn btn-sm px-3 me-2" id="stepup-down"
-                      onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
+                      onclick="decQty('<%=prod.productId._id%>')">
                       <i class="fa fa-minus"></i>
                     </button>
                     <div class="form-outline">
-                      <input id="form1" min="1" name="quantity" value="<%=prod.productQuantity%>" type="number" class="form-control qty-form" />
+                      <input min="1" name="quantity" value="<%=prod.productQuantity%>"id="qtyNo<%=prod.productId._id%>" type="number" class="form-control qty-form form1" />
                       <label class="form-label" for="form1">Quantity</label>
                     </div>
   
                     <button class="btn qty-btn btn-sm px-3 ms-2"
-                      onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
+                      onclick="incQty('<%=prod.productId._id%>')">
                       <i class="fa fa-plus"></i>
                     </button>
                   </div>
                   <!-- Quantity -->
-  
+                   <input type="hidden" id="productStock<%=prod.productId._id%>" value="<%=prod.productId.quantity%>">
                   <!-- Price -->
                   <div class="d-flex">
                    <span>Rs.</span>
@@ -90,14 +90,8 @@
                 src="https://mdbcdn.b-cdn.net/wp-content/plugins/woocommerce-gateway-stripe/assets/images/visa.svg"
                 alt="Visa" />
               <img class="me-2" width="45px"
-                src="https://mdbcdn.b-cdn.net/wp-content/plugins/woocommerce-gateway-stripe/assets/images/amex.svg"
-                alt="American Express" />
-              <img class="me-2" width="45px"
                 src="https://mdbcdn.b-cdn.net/wp-content/plugins/woocommerce-gateway-stripe/assets/images/mastercard.svg"
                 alt="Mastercard" />
-              <img class="me-2" width="45px"
-                src="https://mdbcdn.b-cdn.net/wp-content/plugins/woocommerce/includes/gateways/paypal/assets/images/paypal.webp"
-                alt="PayPal acceptance mark" />
             </div>
           </div>
         </div>
@@ -114,22 +108,22 @@
                   <div>Rs. <span id="totalPrice"></span></div>
                 </li>
                 <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-                  Shipping
-                  <span id="deliveryFee">Free</span>
+                  Shipping Charges
+                  <span id="deliveryFee">Fee</span>
                 </li>
                 <li
                   class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
                   <div>
-                    <strong>Total amount</strong>
+                    <strong>Total Payable</strong>
                     <strong>
-                      <p class="mb-0">(including VAT)</p>
+                      <p class="mb-0">(including Taxes)</p>
                     </strong>
                   </div>
                   <span>Rs. <strong id="priceCheckOut"></strong></span>
                 </li>
               </ul>
   
-              <a href="" class="cart-span"><button type="button" class="btn checkout-btn btn-lg btn-block">Go to checkout</button></a>
+              <a href="/check_out" class="cart-span"><button type="button" class="btn checkout-btn btn-lg btn-block">Go to checkout</button></a>
             </div>
           </div>
         </div>

@@ -65,13 +65,13 @@ user_route.post("/editProfile", auth.isLogin, userController.editProfile)
 //address page
 user_route.get("/address", auth.isLogin, userController.loadAddress)
 
-//address page
+//add address page
 user_route.get("/add_address", auth.isLogin, userController.addAddress)
 
 //delete address page
 user_route.get("/delete_address", auth.isLogin, userController.deleteAddress)
 
-//address page
+//save address page
 user_route.post("/add_address", auth.isLogin, userController.saveAddress)
 
 //edit address page
@@ -82,6 +82,12 @@ user_route.post("/edit_address", auth.isLogin, userController.updateAddress)
 
 //orders page
 user_route.get("/order", auth.isLogin, userController.loadOrders)
+
+//orders detail page
+user_route.get("/order_detail", auth.isLogin, userController.orderDetail)
+
+//orders detail page
+user_route.put("/cancel_order", auth.isLogin, cartController.cancelOrder)
 
 //change password page
 user_route.get("/change_password", auth.isLogin, userController.confirmPasswordLoad)
@@ -101,7 +107,38 @@ user_route.get("/add_to_cart", auth.isLogin, cartController.addToCart);
 //load cart page
 user_route.get("/cart", auth.isLogin, cartController.cartLoad);
 
+//decrease quantity
+user_route.put("/dec_qty/:id", auth.isLogin, cartController.decQuantity);
+
+//increase quantity
+user_route.put("/inc_qty/:id", auth.isLogin, cartController.incQuantity);
+
 //remove cart product page
 user_route.get("/remove_cart/:prodId", auth.isLogin, cartController.removeCart)
+
+//load checkout page
+user_route.get("/check_out", auth.isLogin, cartController.loadCheckOut)
+
+//add address checkout page
+user_route.post("/add_checkout_address", auth.isLogin, cartController.saveAddressCheckout)
+
+//load edit address checkout page
+user_route.get("/edit_check_out", auth.isLogin, cartController.loadEditCheckout)
+
+//update address checkout page
+user_route.post("/edit_check_out", auth.isLogin, cartController.updateAddress)
+
+//delivery address
+user_route.post("/delivery_address", auth.isLogin, cartController.chooseCheckoutAddress)
+
+//confirm order
+user_route.post("/confirm_order", auth.isLogin, cartController.confirmOrder)
+
+//price low to high filter
+user_route.get("/price_low_high", auth.isLogin, userController.priceLowToHigh)
+
+//price low to high filter
+user_route.get("/price_high_low", auth.isLogin, userController.priceHighToLow)
+
 
 module.exports = user_route;

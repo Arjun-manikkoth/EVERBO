@@ -1605,3 +1605,7 @@ object-fit: cover;
 .add-buttons{
 justify-content: flex-start;
 }
+.stock-div{
+	padding-top: 20px;
+	padding-bottom: 10px;
+}

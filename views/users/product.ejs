@@ -48,7 +48,11 @@
 					<div class="free_delivery d-flex flex-row align-items-center justify-content-center">
 						<span class="ti-truck"></span><span>free delivery</span>
 					</div>
-					<div class="original_price"><span class="rupee"></span></div>
+					<%if(product.quantity>=1){%>
+						<div class="stock-div"><span>Stocks left: </span><span id="stocks"><%=product.quantity%></span></div>
+					<%}else{%>
+						<div class="stock-div"><span>Out Of Stock</span></div>
+					<%}%>
 					<div class="product_prices"><span class="rupeereal">₹</span><%=product.price%></div>
 					<ul class="star_rating">
 						<li><i class="fa fa-star" aria-hidden="true"></i></li>
@@ -67,11 +71,13 @@
 					</div>
 
 					
-					<div class="quantity d-flex flex-column flex-sm-row add-buttons">
+					<div class="quantity d-flex  flex-sm-row add-buttons">
 				    <div>
-              <a href="/add_to_cart?prodId=<%=product._id%>"><button type="submit" class="red_buttons add_to_cart_buttons addtocart-btn">Add To Cart</button></a>
+              <a href="/add_to_cart?prodId=<%=product._id%>"><button type="button" class="red_buttons add_to_cart_buttons addtocart-btn">Add To Cart</button></a>
 						</div>
-						<div class="product_favorite d-flex flex-column align-items-center justify-content-center"></div>
+						<div>
+              <a href=""><button type="button" class="red_buttons add_to_cart_buttons addtocart-btn">Add To Wishlist</button></a>
+						</div>
 					</div>
 	
 				</div>

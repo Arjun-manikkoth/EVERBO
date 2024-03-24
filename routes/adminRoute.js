@@ -4,6 +4,7 @@ const session=require("express-session")
 const adminController = require("../controllers/adminController")
 const productController = require("../controllers/productController")
 const categoryController = require("../controllers/categoryController")
+const orderController = require("../controllers/orderController")
 const auth = require("../middlewares/adminAuth")
 const upload=require('../multer')
 
@@ -77,7 +78,16 @@ admin_route.get("/edit_category",auth.isLogin, categoryController.editCategoryLo
 admin_route.post("/update_category", upload.single('image'), categoryController.updateCategory)
 
 //delete category
-admin_route.get("/delete_category",auth.isLogin,categoryController.deleteCategory)
+admin_route.get("/delete_category", auth.isLogin, categoryController.deleteCategory)
+
+//Admin order page load
+admin_route.get("/orders", auth.isLogin, orderController.orderLoad)
+
+//Admin order detail page load
+admin_route.get("/order_detail", auth.isLogin, orderController.orderDetailLoad)
+
+//Admin order edit page load
+admin_route.post("/order_edit",auth.isLogin, orderController.updateOrder)
 
 
 

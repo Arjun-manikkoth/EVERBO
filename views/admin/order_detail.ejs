@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AddCategory</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+    <link rel="stylesheet" href="/styles/adminStyles/adminstyles.css">
+</head>
+<body>
+  <div class="form-box container">
+    <div class="title-container">
+      <div class="table-title">
+        Order Details
+      </div> 
+    </div>
+    <form  action="/admin/order_edit?id=<%=orderData._id%>" method="post">
+        <div class="row">
+           <div class="form-group col-md-6">
+             <label for="name">User Name</label>
+             <input type="text" class="form-control" name="userName" id="name" placeholder="<%=orderData.userId.name%>">
+           </div>
+           <div class="form-group col-md-6">
+            <label for="total">Total Amount</label>
+            <input type="text" class="form-control" name="totalCost" id="total" placeholder="<%=orderData.grandTotalCost%>">
+          </div>
+      </div>
+        <div class="row">    
+          <div class="form-group col-md-6">
+            <label for="date">Order Date</label>
+            <input type="text" class="form-control" name="orderDate" id="date" placeholder="<%=orderData.orderDate%>">
+          </div>
+          <div class="form-group col-md-6">
+            <label for="status">Order Status</label>
+            <select class="form-select" aria-label="Default select example" id="status" name="orderStatus">  
+              <option value="<%=orderData.orderStatus%>" selected ><%=orderData.orderStatus%></option> 
+              <%if(orderData.orderStatus==="Cancelled"){%> 
+                <option value="Delivered">Delivered</option>
+                <option value="Pending">Pending</option>
+                <option value="Shipped">Shipped</option>
+                <%}else if(orderData.orderStatus==="Delivered"){%>
+                  <option value="Cancelled">Cancelled</option>
+                  <option value="Pending">Pending</option>
+                  <option value="Shipped">Shipped</option>
+                  <%}else{%>
+                    <option value="Cancelled">Cancelled</option>
+                    <option value="Delivered">Delivered</option>
+                    <option value="Pending">Pending</option>
+                    <%}%>         
+           </select>
+          </div>
+        </div>
+        <div class="row">                          
+          <div class="form-group col-md-12">
+            <label for="orderId">Order Id</label>
+            <input type="text" class="form-control" name="id" id="orderId" placeholder="<%=orderData._id%>">
+          </div>
+        </div>
+       <div class="categoryadd">
+        <button type="submit" class="btn btn-dark confirm-categ">Update Order</button>
+       </div>
+    </form>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script src="/scripts/adminScripts/script.js"></script>
+</body>
+</html>

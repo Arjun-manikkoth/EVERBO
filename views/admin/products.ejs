@@ -25,9 +25,9 @@
 						</tr>
 					</thead>
 					<tbody>
+					<%if(locals.product){%>
 					<%product.forEach((prod)=>{%>
 						<tr> 
-									<%if(prod.is_deleted==0){%>
 									<td><%=prod._id%></td>
 									<td><%=prod.name%></td>
 									<td><img src="/images/userImages/<%=prod.image%>" width="120px" alt="<%=prod.image%>"></td>
@@ -40,10 +40,14 @@
 											<button type="button" class="btn btn-success btn-sm"> <a href="/admin/edit_products?id=<%=prod._id%>" class=" categ-edit ">Edit</a></button>
 											<button type="button" class="btn btn-danger btn-sm ms-2 "><a href="/admin/delete_products?id=<%=prod._id%>" class=" categ-edit ">Delete</a> </button>
 										</div>
-									</td>
-									<%}%>				
+									</td>			
 						</tr>
 						<%})%>
+						<%}else{%>
+							<div class="address-msg">
+								<%=msg%>
+							</div>
+							<%}%>
 					</tbody>
 			</table>
 	 </div> 

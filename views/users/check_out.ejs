@@ -1,0 +1,202 @@
+<%-include("../layouts/user/header.ejs")-%>
+<div class="containerbox">
+
+  <section class="h-100 gradient-custom">
+    <div class="container py-3">
+      <div class="row d-flex justify-content-center my-4">
+        <div class="col-md-8">
+          <div class="card mb-4 cart-div">
+            <div class="shipping-add">
+              <h5 class="mb-0 ml-4">Shipping Address</h5>
+            </div>
+            <div class="card-body">
+              <!-- Single item -->
+       <%if(locals.userData){%>
+           <%if(userData.cart.forEach((prod)=>{%>
+           <div class="cart-price eachTotal"><%=prod.totalPrice%></div>
+           <%}))%>
+         <form action="" method="post" id="addressForm">
+                <div class="address-options">
+            <%if(addressData.forEach((add)=>{%>
+             <div class="row">
+               <div class="col-md-6">
+                 <br>           
+                 <input type="radio" id="cod" name="address" value="<%=add._id%>">
+                 <label class="label-radio" for="cod">
+                   <ul>
+                     <li><%=add.house_no%>,<%=add.street%>,<%=add.landmark%></li>
+                     <li><%=add.pincode%>,<%=add.district%>,<%=add.state%></li>
+                   </ul>
+                 </label>
+               </div>
+                 <div class="address-edit-btn col-md-6">
+                   <a href="/edit_check_out?id=<%=add._id%>"><button class="profile-button btn btn-sm" type="button">Edit</button></a>
+                  </div>
+             </div>          
+              <hr class="my-4" />
+            <%}))%>
+            <span onclick="addAddressExpand()" class="span-cursor">+Add Address</span>
+              <div class="order-confirm-btn">
+                <button class="profile-button btn" type="submit" >Deliver Here</button>
+               </div>
+              </div>
+          </form>
+              <!-- Single item -->
+         <%}else{%>
+  <form action="/add_checkout_address" method="post" onsubmit="return validateAddAddress()">
+    <%if(locals.msg){%>
+   <span class="error-msg ml-4"><%=msg%></span>
+   <%}%>
+   <div class="row">                       
+     <div class="col-md-6 mt-3">
+       <label class="labels">House no</label>
+       <input type="text" class="form-control" id="house-no" name="houseNo" placeholder="Enter house no" value="">
+       <span id="house-error" class="mt-2 error-msg"></span>
+     </div>
+     <div class="col-md-6 mt-3">
+       <label class="labels">Street</label>
+       <input type="text" class="form-control" id="street" name="street" placeholder="Enter street name" value="">
+       <span id="street-error" class="mt-2 error-msg"></span>
+     </div>                         
+     <div class="col-md-6 mt-3">
+       <label class="labels">Pincode</label>
+       <input type="text" class="form-control" id="pincode" name="pincode" placeholder="Enter pincode" value="">
+       <span id="pincode-error" class="mt-2 error-msg"></span>
+     </div>
+     <div class="col-md-6 mt-3">
+       <label class="labels">Landmark</label>
+       <input type="text" class="form-control" id="landmark" name="landmark" placeholder="Enter landmark" value="">
+       <span id="landmark-error" class="mt-2 error-msg"></span>
+     </div>                         
+     <div class="col-md-6 mt-3">
+       <label class="labels">District</label>
+       <input type="text" class="form-control" id="district" name="district" placeholder="Enter district" value="">
+       <span id="district-error" class="mt-2 error-msg"></span>
+     </div>
+     <div class="col-md-6 mt-3">
+       <label class="labels">State/Region</label>
+       <input type="text" class="form-control" id="state" name="state" placeholder="state">
+       <span id="state-error" class="mt-2 error-msg"></span>
+     </div>
+   </div>
+ <div class="mt-5 mb-3 text-center">
+   <button class="btn  profile-button" type="submit">Save Address
+   </button>
+ </div>
+</form>
+        <%}%>
+            </div>
+          </div>
+          <div  class="card mb-4">
+            <div class="payment-div">
+              <h5 class="mb-0 ml-4">Add New Address</h5>
+            </div>
+            <div id="newAddressBox" >
+              <div class="card-body">
+                <form action="/add_checkout_address" method="post" onsubmit="return validateAddAddress()">
+                 <div class="row">                       
+                   <div class="col-md-6 mt-3">
+                     <label class="labels">House no</label>
+                     <input type="text" class="form-control" id="house-no" name="houseNo" placeholder="Enter house no" value="">
+                     <span id="house-error" class="mt-2 error-msg"></span>
+                   </div>
+                   <div class="col-md-6 mt-3">
+                     <label class="labels">Street</label>
+                     <input type="text" class="form-control" id="street" name="street" placeholder="Enter street name" value="">
+                     <span id="street-error" class="mt-2 error-msg"></span>
+                   </div>                         
+                   <div class="col-md-6 mt-3">
+                     <label class="labels">Pincode</label>
+                     <input type="text" class="form-control" id="pincode" name="pincode" placeholder="Enter pincode" value="">
+                     <span id="pincode-error" class="mt-2 error-msg"></span>
+                   </div>
+                   <div class="col-md-6 mt-3">
+                     <label class="labels">Landmark</label>
+                     <input type="text" class="form-control" id="landmark" name="landmark" placeholder="Enter landmark" value="">
+                     <span id="landmark-error" class="mt-2 error-msg"></span>
+                   </div>                         
+                   <div class="col-md-6 mt-3">
+                     <label class="labels">District</label>
+                     <input type="text" class="form-control" id="district" name="district" placeholder="Enter district" value="">
+                     <span id="district-error" class="mt-2 error-msg"></span>
+                   </div>
+                   <div class="col-md-6 mt-3">
+                     <label class="labels">State/Region</label>
+                     <input type="text" class="form-control" id="state" name="state" placeholder="state">
+                     <span id="state-error" class="mt-2 error-msg"></span>
+                   </div>
+                 </div>
+               <div class="mt-5 mb-3 text-center">
+                 <button class="btn  profile-button" type="submit">Save Address
+                 </button>
+               </div>
+              </form>
+              </div>
+            </div>
+          </div>
+
+          <div  class="card mb-4 mb-lg-0">
+            <div class="payment-div">
+              <h5 class="mb-0 ml-4">Choose Payment</h5>
+            </div>
+            <div id="paymentBox" >
+              <div class="card-body">
+                <form action="/confirm_order" method="post">
+                  <div  class="payment-options">
+                    <br>           
+                    <input type="radio" id="cod" name="payment" value="COD" checked>
+                    <label class="label-radio" for="cod">Cash On Delivery</label>
+                    <br>
+                    <br>
+                    <input type="radio" id="upi" name="payment" value="UPI"> 
+                    <label class="label-radio" for="upi">UPI</label>
+                    <br>
+                    <br>
+                    <input type="radio" id="card" name="payment" value="Card">
+                    <label class="label-radio" for="card">Credit / Debit / ATM Card</label>
+                    <br>
+                    <div class="order-confirm-btn">
+                     <button type="submit" class="profile-button btn">Confirm Order</button>
+                    </div> 
+                  </div>  
+                  <input type="hidden" id="sumTot" name="total" value="">       
+                </form>        
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card mb-4 checkout-div">
+            <div class="card-header py-3">
+              <h5 class="mb-0">Order Summary</h5>
+            </div>
+            <div class="card-body">
+              <ul class="list-group list-group-flush">
+                <li
+                  class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
+                  Products Total
+                  <div>Rs. <span id="totalPrice"></span></div>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                  Shipping Charges
+                  <span id="deliveryFee">Free</span>
+                </li>
+                <li
+                  class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
+                  <div>
+                    <strong>Total Payable</strong>
+                    <strong>
+                      <p class="mb-0">(including Taxes)</p>
+                    </strong>
+                  </div>
+                  <span>Rs. <strong id="priceCheckOut"></strong></span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+<%-include("../layouts/user/footer.ejs")-%>
