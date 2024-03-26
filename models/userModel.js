@@ -40,7 +40,14 @@ const userSchema=mongoose.Schema({
         pricePerProduct: {type: Number},
         totalPrice: {type:Number}
       }
-    ]
+    ],
+  wishlist: [
+    {
+      productId: {
+        type: mongoose.Types.ObjectId,ref:"product"
+      }
+    }
+  ]
 }, {timestamps:true,strictPopulate:false});
 
 module.exports = mongoose.model("user", userSchema);

@@ -19,24 +19,35 @@ admin_route.use(session({
   saveUninitialized:false
 }));
 
+//---------------------------------Admin Login-------------------------------------------------
 
 //Admin login page load
 admin_route.get("/",auth.isLogout,adminController.loadLogin)
 
 //Admin login verify
-admin_route.post("/", adminController.verifyLogin)
+admin_route.post("/",auth.isLogout,adminController.verifyLogin)
 
 //Admin logout
-admin_route.get("/logout",auth.isLogin, adminController.logout)
+admin_route.get("/logout", auth.isLogin, adminController.logout)
+
+
+//-----------------------------------Dashboard----------------------------------------------
 
 //Admin dashboard load
-admin_route.get("/dashboard",auth.isLogin, adminController.loadDashboard)
+admin_route.get("/dashboard", auth.isLogin, adminController.loadDashboard)
+
+
+//-----------------------------------User Management----------------------------------------
 
 //Admin users page load
 admin_route.get("/users",auth.isLogin,adminController.usersLoad)
 
 //block users
-admin_route.get("/block",auth.isLogin, adminController.userBlock)
+admin_route.get("/block", auth.isLogin, adminController.userBlock)
+
+
+//-----------------------------------Products Management------------------------------------
+
 
 //Admin products page load
 admin_route.get("/products",auth.isLogin, productController.productsLoad)
@@ -46,9 +57,6 @@ admin_route.get("/add_products",auth.isLogin, productController.addProductLoad)
 
 //add product to db
 admin_route.post("/add_products", upload.array('image', 3), productController.addProduct)
-
-//add product to db
-//admin_route.post("/add_products", upload.array('image', 3), productController.addProduct)
 
 //Edit product page load
 admin_route.get("/edit_products",auth.isLogin, productController.editProductLoad)
@@ -60,7 +68,10 @@ admin_route.post("/update_product", upload.array('image', 3), productController.
 admin_route.post("/update_product_thumb", upload.single('image'), productController.updateProductThumb)
 
 //delete product
-admin_route.get("/delete_products",auth.isLogin,productController.deleteProduct)
+admin_route.get("/delete_products", auth.isLogin, productController.deleteProduct)
+
+
+//-----------------------------------Category Management-----------------------------------
 
 //Admin category page load
 admin_route.get("/categories",auth.isLogin, categoryController.categoriesLoad)
@@ -79,6 +90,9 @@ admin_route.post("/update_category", upload.single('image'), categoryController.
 
 //delete category
 admin_route.get("/delete_category", auth.isLogin, categoryController.deleteCategory)
+
+
+//-----------------------------------Order Management-----------------------------------
 
 //Admin order page load
 admin_route.get("/orders", auth.isLogin, orderController.orderLoad)

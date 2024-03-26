@@ -1,10 +1,10 @@
 const User = require("../models/userModel");
 const bcrypt = require("bcrypt")
 const nodemailer = require("nodemailer")
-const Product = require("../models/productModel")
-const Category = require("../models/categoryModel")
-const Address = require("../models/addressModel");
 const Order = require("../models/orderModel");
+
+ 
+// ---------------------------------------------User Account Management-------------------------------------------------
 
 
 //user passwordhash
@@ -91,17 +91,6 @@ const sentResetPasswordMail = async (email,id) => {
   }
 }
 
-//load landing page 
-const loadLanding = async (req, res) => {
-  try {
-    const category = await Category.find({})
-    const product=await Product.find({}).limit(5)
-    res.render("landing",{product,category,loggedIn:"false"})
-  }
-  catch (error) { 
-    console.log(error.message);
-  }
-}
 
 //load login page
 const loadLogin = async (req,res) => { 
@@ -284,30 +273,6 @@ const passwordReset = async (req, res) => {
   }
 }
 
-//load shop page with products view
-const loadShop = async (req, res) => {
-  try {
-    const category = await Category.find({})
-    const product=await Product.find({})
-    res.render("shop", {product,category})
-  }
-  catch (error) { 
-    console.log(error.message);
-  }
-}
-
-//individual product page 
-const loadProduct = async (req, res) => {
-  try { 
-    const product = await Product.findOne({_id:req.query.prodId})
-    res.render("product",{product})
-  }
-  catch (error) {
-    
-    console.log(error.message)
-  }
-}
-
 //logout
 const userLogout = async (req,res) => {
   try {
@@ -318,6 +283,10 @@ const userLogout = async (req,res) => {
     console.log(error.message)
   }
 }
+
+
+// ---------------------------------------------User Profile Data -------------------------------------------------
+
 
 //user profile load
 const loadProfile = async (req, res) => {
@@ -348,123 +317,6 @@ const editProfile = async (req, res) => {
     console.log(error.message)
   }
 }
-
-//load address page
-const loadAddress = async (req, res) => {
-  try {
-    const addressData = await Address.find({ user_id: req.session.user_Id,is_deleted:{$ne:1} }).limit(3).sort({updatedAt:-1})
-    if (addressData!="") {
-      res.render("address",{ addressData })
-    }
-    else (
-      res.render("address", {msg:"Address not added"})
-    )
-  }   
-  catch (error) { 
-    console.log(error.message);
-  }
-}
-
-//load address page
-const addAddress = async (req, res) => {
-  try {
-      res.render("add_address")
-  }
-  catch (error) { 
-    console.log(error.message);
-  }
-}
-
-//save address page
-const saveAddress = async (req, res) => {
-  try {
-    const exists = await Address.findOne({ pincode: req.body.pincode,user_id:req.session.user_Id })
-    if (exists) {
-      res.render("add_address",{msg:"Address already added"})
-    }
-    else {
-      const address = new Address({
-        user_id:req.session.user_Id,
-        house_no: req.body.houseNo,
-        street: req.body.street,
-        pincode: req.body.pincode,
-        landmark: req.body.landmark,
-        district: req.body.district,
-        state:req.body.state
-      })
-      
-      await address.save()
-        const userData=await Address.findOne({house_no:req.body.houseNo})
-      await User.findOneAndUpdate({ _id: req.session.user_Id }, { $push: { address: userData._id } })
-      res.redirect("/address") 
-    }
-  }
-  catch (error) { 
-    console.log(error.message);
-  }
-}
-
-//load edit address page
-const editAddress = async (req, res) => {
-  try { 
-    const userData = await Address.findOne({ _id: req.query.id })
-    if (userData) { 
-      res.render("edit_address",{userData})
-    }
-  }
-  catch (error) { 
-    console.log(error.message);
-  }
-}
-
-//edit address page to db 
-const updateAddress = async (req, res) => {
-  try { 
-    const exists = await Address.findOne({
-      pincode: req.body.pincode,
-      house_no:  { $regex :new RegExp("^" + req.body.houseNo + "$", "i") },
-      user_id: req.session.user_Id,
-      _id: { $ne: req.query.id }
-    })
-    const  userData = await Address.findOne({ user_id: req.session.user_Id, _id:req.query.id})
-    if (exists) {
-      res.render("edit_address", { msg: "Address already exists", userData })
-    } else {
-      const data = await Address.findOneAndUpdate({ _id: req.query.id },
-        {
-          $set: {
-            house_no: req.body.houseNo,
-            street: req.body.street,
-            pincode: req.body.pincode,
-            landmark: req.body.landmark,
-            district: req.body.district,
-            state: req.body.state
-          }
-        }, { new: true })
-      
-      if (data) {
-        res.redirect("/address")
-      }
-    }
-  }
-  catch (error) { 
-    console.log(error.message);
-  }
-}
-
-//load orders page
-const deleteAddress = async (req, res) => {
-  try { 
-    const data = await Address.findOneAndUpdate({ _id: req.query.id }, { $set: { is_deleted: 1 } })
-    if (data) { 
-      res.redirect("/address")
-    }
-  }
-  catch (error) { 
-    console.log(error.message);
-  }
-}
-
 
 //load orders page
 const loadOrders = async (req, res) => {
@@ -554,38 +406,12 @@ const newPassword = async (req, res) => {
   }
 }
 
-//load shop page with products view
-const priceLowToHigh = async (req, res) => {
-  try {
-    const category = await Category.find({})
-    const product = await Product.find({}).sort({ price: -1 })
-    res.render("shop", {product,category})
-  }
-  catch (error) { 
-    console.log(error.message);
-  }
-}
-
-//load shop page with products view
-const priceHighToLow = async (req, res) => {
-  try {
-    const category = await Category.find({})
-    const product = await Product.find({}).sort({ price: 1 })
-    res.render("shop", {product,category})
-  }
-  catch (error) { 
-    console.log(error.message);
-  }
-}
 
 
 module.exports = {
   verifyLogin,
   insertUser,
   loadLogin,
-  loadLanding,
-  loadProduct,
-  loadShop,
   forgotLoad,
   forgotVerify,
   loadReset,
@@ -595,19 +421,10 @@ module.exports = {
   otpResend,
   loadProfile,
   editProfile,
-  loadAddress,
-  addAddress,
-  saveAddress,
-  editAddress,
-  updateAddress,
-  deleteAddress,
   loadOrders,
   orderDetail,
   confirmPasswordLoad,
   confirmPassword,
   newPasswordLoad,
-  newPassword,
-  priceLowToHigh,
-  priceHighToLow
-
+  newPassword
 }
