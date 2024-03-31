@@ -9,7 +9,6 @@ const orderLoad = async (req, res) => {
   try {
 
     const orderData = await Order.find({}).populate("addressChosen").populate("userId").populate("cartData.productId")
-    console.log(orderData)
     if (orderData) {
       res.render("orders", { orderData })
     }

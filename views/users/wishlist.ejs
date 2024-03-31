@@ -1,26 +1,22 @@
 <%-include("../layouts/user/header.ejs")-%>
-
-<%if(locals.cartData){%>
-
+<%if(locals.data){%>
 <div class="containerbox">
-
   <section class="h-100 gradient-custom">
     <div class="container py-3">
       <div class="row d-flex justify-content-center my-4">
         <div class="col-md-8">
           <div class="card mb-4 cart-div">
             <div class="card-header py-3">
-              <h3 class="mb-0">Cart</h3>
+              <h3 class="mb-0">Wishlist</h3>
             </div>
             <div class="card-body">
               <!-- Single item -->
-
-               <%cartData.cart.forEach((prod)=>{%>
+               <%data.wishlist.forEach((prod)=>{%>
               <div class="row">
                 <div class="col-lg-3 col-md-12 mb-4 mb-lg-0">
                   <!-- Image -->
                   <div class="bg-image hover-overlay hover-zoom ripple rounded" data-mdb-ripple-color="light">
-                    <img src="/images/userImages/<%=prod.productId.image%>"
+                    <img  src="/images/userImages/<%=prod.productId.image%>"
                       class="w-100" alt="product image" />
                     <a href="#!">
                       <div class="mask" style="background-color: rgba(251, 251, 251, 0.2)"></div>
@@ -33,46 +29,34 @@
                   <p><h6><%=prod.productId.name%></h6></p>
                   <p>Color: blue</p>
                   <p>Size: M</p>
-                  <a href="/remove_cart/<%=prod.productId._id%>"><button type="button" class="btn fs-remove btn-sm me-1 mb-2" data-mdb-toggle="tooltip"
+                  <button type="button" class="btn fs-remove btn-sm me-1 mb-2" onclick="removeWishlist('<%=prod.productId._id%>')" data-mdb-toggle="tooltip"
                     title="Remove item">
                     <i class="fa fa-trash"></i>
-                  </button></a>
-                  <a href=""><button type="button" class="btn fs-wishlist btn-sm mb-2" data-mdb-toggle="tooltip"
-                    title="Move to the wishlist">
-                    <i class="fa fa-heart"></i>
+                  </button>
+                  <a href="/add_to_cart?prodId=<%=prod.productId._id%>"><button type="button" class="btn fs-wishlist btn-sm mb-2" data-mdb-toggle="tooltip"
+                    title="Move to the cart">
+                    +<i class="fa fa-shopping-cart"></i>
                   </button></a>
                   <!-- Data -->
                 </div> 
-                <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
-                  <!-- Quantity -->
-                  <div class="d-flex mb-4" style="max-width: 300px">
-                    <button class="btn qty-btn btn-sm px-3 me-2" id="stepup-down"
-                      onclick="decQty('<%=prod.productId._id%>')">
-                      <i class="fa fa-minus"></i>
-                    </button>
-                    <div class="form-outline">
-                      <input min="1" name="quantity" value="<%=prod.productQuantity%>"id="qtyNo<%=prod.productId._id%>" type="number" class="form-control qty-form form1" />
-                      <label class="form-label" for="form1">Quantity</label>
-                    </div>
-  
-                    <button class="btn qty-btn btn-sm px-3 ms-2"
-                      onclick="incQty('<%=prod.productId._id%>')">
-                      <i class="fa fa-plus"></i>
-                    </button>
-                  </div>
-                  <!-- Quantity -->
-                   <input type="hidden" id="productStock<%=prod.productId._id%>" value="<%=prod.productId.quantity%>">
+                <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">             
                   <!-- Price -->
-                  <div class="d-flex">
+                  <div class="d-flex mt-3">
                    <span>Rs.</span>
-                   <div id="price<%=prod.productId._id%>" class="cart-price"><%=prod.totalPrice%></div>
+                   <div class="cart-price"><%=prod.productId.price%></div>
                   </div>
                   <!-- Price -->
+                  <div id="stockStatus"  class="mt-3">
+                    <%if(prod.productId.quantity>0){%>
+                     In Stock
+                    <%}else{%>
+                       Out Of Stock
+                   <%}%>
+                  </div>
                 </div>
               </div>
               <hr class="my-4" />
                <%})%>
-
               <!-- Single item -->
             </div>
           </div>
@@ -83,19 +67,7 @@
               </div> 
             </div>
           </div>
-          <div class="card mb-4 mb-lg-0">
-            <div class="card-body">
-              <p><strong>We accept</strong></p>
-              <img class="me-2" width="45px"
-                src="https://mdbcdn.b-cdn.net/wp-content/plugins/woocommerce-gateway-stripe/assets/images/visa.svg"
-                alt="Visa" />
-              <img class="me-2" width="45px"
-                src="https://mdbcdn.b-cdn.net/wp-content/plugins/woocommerce-gateway-stripe/assets/images/mastercard.svg"
-                alt="Mastercard" />
-            </div>
-          </div>
         </div>
-      
       </div>
     </div>
   </section>
@@ -110,12 +82,12 @@
          </div>
           <div class="card-body1 cart">
              <div class="col-sm-12 empty-cart-cls text-center">
-               <img src="https://i.imgur.com/dCdflKN.png" width="130" height="130" class="img-fluid mb-4 mr-3">
-               <h4><strong>Your Cart is Empty</strong></h4>
+               <img src="https://static-assets-web.flixcart.com/fk-p-linchpin-web/fk-cp-zion/img/mywishlist-empty_39f7a5.png" width="130" height="130" class="img-fluid mb-4 ">
+               <h4><strong>Your Wishlist is Empty</strong></h4>
                <%if(locals.msg){%>
                 <h5 class="error-msg"><%=msg%></h5>
                 <%}else{%>
-               <h5>Add something to make me happy :)</h5>
+               <h5 class="mt-3">You haven't wishlisted anything yet :)</h5>
                <%}%>
                <a href="/shop"><button class="btn profile-button my-3" type="button">Continue Shopping</button></a>
              </div>

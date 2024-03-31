@@ -27,8 +27,9 @@ const addToCart = async (req, res) => {
     console.log(cartData)
     if (Existing) { 
       res.redirect("/cart")
-    } else {
-        const data=await User.findByIdAndUpdate({ _id: req.session.user_Id }, {
+    } else { 
+     
+       const data = await User.findByIdAndUpdate({ _id: req.session.user_Id }, {
           $push: {
            cart: 
              {
@@ -110,7 +111,7 @@ const incQuantity = async (req, res) => {
 const removeCart = async (req, res) => {
   try {
     
-    const cartData = await User.updateOne({ _id: req.session.user_Id, "cart.productId": req.params.prodId },
+    const cartData = await User.findByIdAndUpdate({ _id: req.session.user_Id, "cart.productId": req.params.prodId },
       { $pull: { cart: { productId: req.params.prodId } } })
     if (cartData != "") {
       res.redirect("/cart")
@@ -123,6 +124,26 @@ const removeCart = async (req, res) => {
     console.log(error.message)
   }
 }
+
+// //checkout Load
+const checkStock = async (req, res) => {
+  try {
+    const cartData = await User.findOne({ _id: req.session.user_Id}).populate("cart.productId")
+    const data =cartData.cart.map((item) => {
+      if (item.productId.quantity < item.productQuantity) {
+        return false;
+      }
+      else {
+        return true;
+      }
+    })
+    res.json(data)
+  }
+  catch (error) {
+    console.log(error.message)
+  }
+}
+
 
 //checkout Load
 const loadCheckOut = async (req, res) => {
@@ -275,20 +296,6 @@ const confirmOrder = async (req, res) => {
   }
 }
 
-//confirm order
-const cancelOrder = async (req, res) => {
-  try {
-    const userData = await Order.findByIdAndUpdate({ _id: req.query.id }, { $set: { orderStatus: "Cancelled" } })
-    if (userData) {
-      res.json(userData)
-    }    
-  }
-  catch (error) { 
-    console.log(error.message);
-  }
-}
-
-
 
 module.exports = {
   cartLoad,
@@ -296,11 +303,11 @@ module.exports = {
   decQuantity,
   incQuantity,
   removeCart,
+  checkStock,
   loadCheckOut,
   saveAddressCheckout,
   loadEditCheckout,
   updateAddress,
   chooseCheckoutAddress,
-  confirmOrder,
-  cancelOrder
+  confirmOrder
 }

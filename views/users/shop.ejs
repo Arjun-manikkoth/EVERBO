@@ -11,7 +11,7 @@
 						<li><a href="/">Home</a></li>
 						<li class="active"><a href="/shop"><i class="fa fa-angle-right" aria-hidden="true"></i>Shop</a></li>
 					</ul>
-					<button class="btn btn-danger btn-sm" id="logoutbtn"><a href="/logout">Logout</a></button>
+					<a href="/logout"><button class="btn btn-danger btn-sm" id="logoutbtn">Logout</button></a>
 				</div>
 
 				<!-- Sidebar -->
@@ -112,7 +112,6 @@
 											<div class="product_image">
 												<img src="/images/userImages/<%=prod.image%>" alt="<%=prod.name%>">
 											</div>
-											<div class="favorite favorite_right"></div>
 											<div class="product_info">
 												<h6 class="product_name"><a href="/product?prodId=<%=prod._id%>"><%=prod.name%></a></h6>
 												<div class="product_price">Rs.<%=prod.price%>.00</div>

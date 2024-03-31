@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { stringify } = require("querystring");
 
 const productSchema=mongoose.Schema({
   
@@ -28,6 +29,9 @@ const productSchema=mongoose.Schema({
   },
   image: {
     type: String
+  },
+  is_listed: {
+    type:Boolean , default:true
   }
 },{timestamps:true});
 

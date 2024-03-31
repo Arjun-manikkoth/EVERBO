@@ -5,6 +5,7 @@ const userController = require("../controllers/userController")
 const cartController = require("../controllers/cartController")
 const addressController = require("../controllers/addressController")
 const shopController = require("../controllers/shopController")
+const wishlistController = require("../controllers/wishlistController")
 const auth=require("../middlewares/userAuth")
 
 //setting the path for the view engine
@@ -113,7 +114,7 @@ user_route.get("/order", auth.isLogin, userController.loadOrders)
 user_route.get("/order_detail", auth.isLogin, userController.orderDetail)
 
 //orders detail page
-user_route.put("/cancel_order", auth.isLogin, cartController.cancelOrder)
+user_route.put("/cancel_order", auth.isLogin, userController.cancelOrder)
 
 
 //---------------------------------Password Management-----------------------------------
@@ -148,6 +149,9 @@ user_route.put("/inc_qty/:id", auth.isLogin, cartController.incQuantity);
 //remove cart product page
 user_route.get("/remove_cart/:prodId", auth.isLogin, cartController.removeCart)
 
+//remove cart product page
+user_route.get("/check_stock", auth.isLogin, cartController.checkStock)
+
 
 //---------------------------------Checkout Management-----------------------------------
 
@@ -173,7 +177,12 @@ user_route.post("/confirm_order", auth.isLogin, cartController.confirmOrder)
 //---------------------------------Wishlist Management-----------------------------------
 
 //Wishlist load
-//user_route.get("/wishlist", auth.isLogin, userController.loadWishlist)
+user_route.get("/wishlist", auth.isLogin, wishlistController.loadWishlist)
 
+//add to wishlist
+user_route.get("/add_to_wishlist", auth.isLogin, wishlistController.wishlistAdd)
+
+//remove wishlist product 
+user_route.get("/remove_wishlist/:prodId", auth.isLogin, wishlistController.removeWishlist)
 
 module.exports = user_route;

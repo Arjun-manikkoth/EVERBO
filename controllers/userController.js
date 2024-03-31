@@ -322,7 +322,9 @@ const editProfile = async (req, res) => {
 const loadOrders = async (req, res) => {
   try { 
     const orderData = await Order.find({ userId: req.session.user_Id }).populate("addressChosen")
-    if (orderData) {
+    console.log(orderData)
+
+    if (orderData!="") {
       res.render("order",{orderData})
     }
     else {
@@ -345,6 +347,19 @@ const orderDetail = async (req, res) => {
     else {
       res.render("order",{msg:"Couldnt find Order"})
     }   
+  }
+  catch (error) { 
+    console.log(error.message);
+  }
+}
+
+//cancel order
+const cancelOrder = async (req, res) => {
+  try {
+    const userData = await Order.findByIdAndUpdate({ _id: req.query.id }, { $set: { orderStatus: "Cancelled" } })
+    if (userData) {
+      res.json(userData)
+    }    
   }
   catch (error) { 
     console.log(error.message);
@@ -423,6 +438,7 @@ module.exports = {
   editProfile,
   loadOrders,
   orderDetail,
+  cancelOrder,
   confirmPasswordLoad,
   confirmPassword,
   newPasswordLoad,

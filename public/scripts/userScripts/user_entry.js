@@ -159,7 +159,7 @@ function validateforgot() {
 }
   
 function clear_error(id) {
-	  const el = document.getElementById("signup-error");
+	  const el = document.getElementById(id);
 	if (el) {
 		document.getElementById(id).innerHTML = "";
 		}
@@ -444,6 +444,7 @@ function decQty(prodId) {
 	var totalAmount = document.getElementById("totalPrice")
 	var checkOutAmount = document.getElementById("priceCheckOut")
 	var deliveryFee = document.getElementById("deliveryFee")
+
 	if (quantity.value > 1) {
 		quantity.value = parseInt(quantity.value) - 1;
 
@@ -476,10 +477,10 @@ function decQty(prodId) {
 			})	
 	}
 	else if(quantity.value==1) {
-		swal({
-		icon: "error",
-		title: "Minimum One Quantity",
-		text: "Please select atleast one quantity",
+		Swal.fire({
+			icon: 'error',
+			title: 'Minimum One Quantity',
+			text: 'Please select at least one quantity',
 		});		 
 	}	
 }
@@ -494,11 +495,17 @@ function incQty(prodId) {
 	var stockVal = parseInt(document.getElementById("productStock" + prodId).value)
 
 	 if(quantityVal >= 10) {
-		swal({
-			title: "Product Limit Reached",
-			text: "You can only add 10 No's per product",
-			timer: 4000
+		Swal.fire({
+			title: 'Product Limit Reached',
+			text: 'You can only add 10 No\'s per product',
+			timer: 4000,
+			timerProgressBar: true,
+			allowOutsideClick: false,
+			allowEscapeKey: false,
+			allowEnterKey: false,
+			showConfirmButton: false
 		});
+		
 	 } else {
 		 
 		 if (quantityVal < stockVal) {
@@ -539,11 +546,16 @@ function incQty(prodId) {
 			});
 		 }
 		 else {
-			swal({
-				title: "Product Out Of Stock",
-				text: "Cannot add more quantity",
-				timer: 3000
-			});
+			Swal.fire({
+				title: 'Product Out Of Stock',
+				text: 'Cannot add more quantity',
+				timer: 3000,
+				timerProgressBar: true,
+				allowOutsideClick: false,
+				allowEscapeKey: false,
+				allowEnterKey: false,
+				showConfirmButton: false
+			});			
 		}		
 	}
 }
@@ -594,4 +606,82 @@ function cancelOrder(id) {
 	})
 }
 
+function removeCart(prodId) {
+	Swal.fire({
+		title: 'Remove Product',
+		text: 'Are you sure you want to remove this product from the cart?',
+		icon: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		confirmButtonText: 'Yes, remove it!',
+		cancelButtonText: 'No, keep it'
+	}).then((result) => {
+		if (result.isConfirmed) {
+			window.location.href = "/remove_cart/"+prodId;
+		}
+	});
+}
 
+function checkStock() {
+	fetch("/check_stock", { method: 'GET' })
+	.then((response) => {
+	
+	if (!response.ok) {
+		throw new Error('Network response was not ok.');
+		}
+		return response.json()
+	}).then((data) => {
+		if (data.find(item =>item===false)===false) {
+			Swal.fire({
+				title: 'Cart Item Out Of Stock',
+				text: 'Items you are trying to checkout is currently out of stock.Please review and try again later.',
+				timer: 5000,
+				timerProgressBar: true,
+				allowOutsideClick: false,
+				allowEscapeKey: false,
+				allowEnterKey: false,
+				showConfirmButton: false
+			});			
+		}
+		else {
+			window.location.href = "/check_out";
+		}
+	})
+}
+
+
+function deleteAddress(id) {
+	Swal.fire({
+		title: 'Delete Address',
+		text: 'Are you sure you want to remove this Address',
+		icon: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		confirmButtonText: 'Yes, remove it!',
+		cancelButtonText: 'No, keep it'
+	}).then((result) => {
+		if (result.isConfirmed) {
+			window.location.href = "/delete_address?id="+id;
+		}
+	});
+}
+
+
+function removeWishlist(prodId) {
+	Swal.fire({
+		title: 'Remove Product',
+		text: 'Are you sure you want to remove this product from the wishlist?',
+		icon: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		confirmButtonText: 'Yes, remove it!',
+		cancelButtonText: 'No, keep it'
+	}).then((result) => {
+		if (result.isConfirmed) {
+			window.location.href = "/remove_wishlist/"+prodId;
+		}
+	});
+}

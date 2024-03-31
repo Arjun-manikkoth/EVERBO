@@ -9,7 +9,7 @@ const Category = require("../models/categoryModel")
 const loadLanding = async (req, res) => {
   try {
     const category = await Category.find({})
-    const product=await Product.find({}).limit(5)
+    const product=await Product.find({is_listed:true}).limit(5)
     res.render("landing",{product,category,loggedIn:"false"})
   }
   catch (error) { 
@@ -22,7 +22,7 @@ const loadLanding = async (req, res) => {
 const loadShop = async (req, res) => {
   try {
     const category = await Category.find({})
-    const product=await Product.find({})
+    const product=await Product.find({is_listed:true})
     res.render("shop", {product,category})
   }
   catch (error) { 
