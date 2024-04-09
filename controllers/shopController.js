@@ -21,9 +21,42 @@ const loadLanding = async (req, res) => {
 //load shop page with products view
 const loadShop = async (req, res) => {
   try {
-    const category = await Category.find({})
-    const product=await Product.find({is_listed:true})
-    res.render("shop", {product,category})
+    let search = ''
+    if (req.query.search) {
+      search = req.query.search;
+    }
+
+    let page =1
+    if (req.query.page) {
+      page = req.query.page;
+    }
+    let limit = 8;
+    const product = await Product.find({
+      is_listed:true,
+      $or: [
+        { name: { $regex: ".*" +search+ ".*" ,$options:"i"} },
+        { description: { $regex: ".*" +search+ ".*",$options:"i" } }
+      ]
+    }).limit(limit).skip((page-1)*limit)
+    
+    const count = await Product.find({
+      is_listed:true,
+      $or: [
+        { name: { $regex: ".*" +search+ ".*" ,$options:"i"} },
+        { description: { $regex: ".*" +search+ ".*",$options:"i" } }
+      ]
+    }).countDocuments()
+
+    let totalPages = Math.ceil(count / limit)
+  
+    const category = await Category.find({is_listed:true})
+    res.render("shop", {
+      product,
+      category,
+      totalPages,
+      currentPage: page,
+      
+    })
   }
   catch (error) { 
     console.log(error.message);

@@ -6,7 +6,7 @@ const productController = require("../controllers/productController")
 const categoryController = require("../controllers/categoryController")
 const orderController = require("../controllers/orderController")
 const auth = require("../middlewares/adminAuth")
-const upload=require('../multer')
+const upload=require('../middlewares/multer')
 
 
 //setting the path for view engine
@@ -14,7 +14,7 @@ admin_route.set("views","./views/admin")
 
 //admin session  
 admin_route.use(session({
-  secret: 'secret',
+  secret: 'secretadmin',
   resave: true,
   saveUninitialized:false
 }));
@@ -58,6 +58,9 @@ admin_route.get("/add_products",auth.isLogin, productController.addProductLoad)
 //add product to db
 admin_route.post("/add_products", upload.array('image', 3), productController.addProduct)
 
+//product list unlist
+admin_route.get("/product_view",auth.isLogin, productController.productView)
+
 //Edit product page load
 admin_route.get("/edit_products",auth.isLogin, productController.editProductLoad)
         
@@ -81,6 +84,9 @@ admin_route.get("/add_category",auth.isLogin,categoryController.addCategoryLoad)
 
 //add category to db
 admin_route.post("/add_category", upload.single('image'), categoryController.addCategory)
+
+//category list unlist
+admin_route.get("/category_view", auth.isLogin, categoryController.categoryView)
 
 //Edit category page load
 admin_route.get("/edit_category",auth.isLogin, categoryController.editCategoryLoad)

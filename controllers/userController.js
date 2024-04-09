@@ -109,26 +109,31 @@ const verifyLogin = async (req,res) => {
     const Password = req.body.password
     
     const userData = await User.findOne({ email: Email });
-     
-    if (userData) {
-      if (userData.is_blocked == 1) {
-        res.render("entry", { message_signin: "Access Denied" })
-      } else { 
-      
-        const passwordMatch=await bcrypt.compare(Password,userData.password)
-        if (passwordMatch) { 
-          req.session.user_Id = userData.id;
-          res.redirect("/shop")
-        }
-        else { 
-          res.render("entry",{message_signin:"Invalid username/password"})
-         }
-      }     
+    
+    if (userData){
+      if (userData.is_verified == 1){
+            if (userData.is_blocked == 1) {
+              res.render("entry", { message_signin: "Access Denied" })
+            } else{ 
+             const passwordMatch=await bcrypt.compare(Password,userData.password)
+                if (passwordMatch) { 
+                 req.session.user_Id = userData.id;
+                 res.redirect("/shop")
+                }
+                else { 
+                 res.render("entry",{message_signin:"Invalid username/password"})
+                }
+           }
       }
-      else { 
-        res.render("entry",{message_signin:"Account doesnot exist"})
-      }   
-      
+      else {
+        res.redirect("/entry")
+      }
+    
+    }
+    else
+    { 
+       res.render("entry",{message_signin:"Account doesnot exist"})
+    }       
   }
   catch(error) { 
     console.log(error.message);
@@ -322,7 +327,6 @@ const editProfile = async (req, res) => {
 const loadOrders = async (req, res) => {
   try { 
     const orderData = await Order.find({ userId: req.session.user_Id }).populate("addressChosen")
-    console.log(orderData)
 
     if (orderData!="") {
       res.render("order",{orderData})
@@ -356,15 +360,37 @@ const orderDetail = async (req, res) => {
 //cancel order
 const cancelOrder = async (req, res) => {
   try {
-    const userData = await Order.findByIdAndUpdate({ _id: req.query.id }, { $set: { orderStatus: "Cancelled" } })
-    if (userData) {
-      res.json(userData)
+
+    const data = await Order.findByIdAndUpdate({ _id: req.body.id }, { $set: { reason :req.body.reason,orderStatus: "Cancelled" } })
+    if (data) {
+      res.json(data)
     }    
+    else {
+      console.log("Couldnt cancel order")
+    }
   }
   catch (error) { 
     console.log(error.message);
   }
 }
+
+
+//new return reason to db
+const orderReturn = async (req, res) => {
+  try {
+    const success = await Order.findByIdAndUpdate({ _id: req.body.id }, { $set: { reason: req.body.reason ,orderStatus:"Returned"} })
+    if (success) {     
+      res.json(success) 
+    }
+    else {
+      console.log("Couldnt return product")
+    }
+  }
+  catch (error) { 
+    console.log(error.message);
+  }
+}
+
 
 //load confirm Password page
 const confirmPasswordLoad = async (req, res) => {
@@ -439,6 +465,7 @@ module.exports = {
   loadOrders,
   orderDetail,
   cancelOrder,
+  orderReturn,
   confirmPasswordLoad,
   confirmPassword,
   newPasswordLoad,

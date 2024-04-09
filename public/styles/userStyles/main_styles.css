@@ -1782,3 +1782,42 @@ margin-bottom: 40px;
 	background-color: #FB5531;
 	color: white;
 }
+.search-bar{
+	height: 36px;
+	border: 0.1px;
+	border-radius: 2px;
+	margin-left: -20px;
+	padding-right: 2px;
+	padding-left: 20px;
+  background: #fff;
+  color: #383838;
+  border-radius: 4px;
+  border: 1px solid #d1d1d1;
+  box-shadow: inset 1px 2px 8px rgba(172, 172, 172, 0.07);
+  font-family: inherit;
+  font-size: 1em;
+  line-height: 1.45;
+  outline: none;
+}
+.search-icon{
+ line-height: 26px!important;
+ width: 30px;
+}
+.fa.search-icon{
+	color: white;
+}
+li {
+  list-style-type: none;
+}
+.anchor{
+	color:black;
+}
+.anchor-footer{
+	color: white;
+}
+.anchor-footer:hover{
+	color: white;
+}
+.anchor:hover{
+	color: black;
+}

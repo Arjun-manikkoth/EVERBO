@@ -4,8 +4,10 @@ if ( window.history.replaceState ) {
 }
 
 	 
- function clearError(id) { 
-	document.getElementById(id).innerHTML = "";
+function clearError(id) { 
+	if (document.getElementById(id)) {
+		document.getElementById(id).innerHTML = ""; 
+	 }
 }
 
 function validateLogin() {
@@ -278,3 +280,125 @@ function validateEditImage() {
  else
  return true
 }
+
+function unListProduct(prodId) {
+		Swal.fire({
+			title: 'Unlist Product',
+			text: 'Are you sure you want to Unlist this product',
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			confirmButtonText: 'Yes, Unlist it!',
+			cancelButtonText: 'No, keep it'
+		}).then((result) => {
+			if (result.isConfirmed) {
+				window.location.href = "/admin/product_view?id="+prodId;
+			}
+		});
+}
+
+function listProduct(prodId) {
+		Swal.fire({
+			title: 'List Product',
+			text: 'Are you sure you want to List this product',
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			confirmButtonText: 'Yes, List it!',
+			cancelButtonText: 'No, keep it'
+		}).then((result) => {
+			if (result.isConfirmed) {
+				window.location.href = "/admin/product_view?id="+prodId;
+			}
+		});
+}
+	
+
+
+function deleteProduct(prodId) {
+	Swal.fire({
+		title: 'Delete Product',
+		text: 'Are you sure you want to Delete this product',
+		icon: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		confirmButtonText: 'Yes',
+		cancelButtonText: 'No'
+	}).then((result) => {
+		if (result.isConfirmed) {
+			window.location.href = "/admin/delete_products?id="+prodId;
+		}
+	});
+}
+
+
+function userBlock(prodId) {
+	Swal.fire({
+		title: 'Block User',
+		text: 'Are you sure you want to Block this User',
+		icon: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		confirmButtonText: 'Yes',
+		cancelButtonText: 'No'
+	}).then((result) => {
+		if (result.isConfirmed) {
+			window.location.href = "/admin/block?id="+prodId;
+		}
+	});
+}
+
+function userUnblock(prodId) {
+	Swal.fire({
+		title: 'Unblock User',
+		text: 'Are you sure you want to Unblock this User',
+		icon: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		confirmButtonText: 'Yes',
+		cancelButtonText: 'No'
+	}).then((result) => {
+		if (result.isConfirmed) {
+			window.location.href = "/admin/block?id="+prodId;
+		}
+	});
+}
+
+function listCategory(prodId) {
+	Swal.fire({
+		title: 'List Category',
+		text: 'Are you sure you want to List this Category',
+		icon: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		confirmButtonText: 'Yes',
+		cancelButtonText: 'No'
+	}).then((result) => {
+		if (result.isConfirmed) {
+			window.location.href = "/admin/category_view?id=" + prodId;
+		}
+	});
+}
+
+	function unListCategory(prodId) {
+		Swal.fire({
+			title: 'UnList Category',
+			text: 'Are you sure you want to UnList this Category',
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			confirmButtonText: 'Yes',
+			cancelButtonText: 'No'
+		}).then((result) => {
+			if (result.isConfirmed) {
+				window.location.href = "/admin/category_view?id=" + prodId;
+			}
+		});
+	}

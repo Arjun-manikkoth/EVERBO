@@ -11,7 +11,15 @@
 						<li><a href="/">Home</a></li>
 						<li class="active"><a href="/shop"><i class="fa fa-angle-right" aria-hidden="true"></i>Shop</a></li>
 					</ul>
-					<a href="/logout"><button class="btn btn-danger btn-sm" id="logoutbtn">Logout</button></a>
+					<div class="mt-4">
+						<form method="get" action="/shop">
+							<div class="d-flex">
+							<input type="text" class="search-bar" name="search">
+							<button class="btn profile-button btn-sm"><i class="fa fa-search search-icon" aria-hidden="true"></i></button>
+							 </div>	
+						</form>	
+					</div>			
+				 <button class="btn btn-danger btn-sm" id="logoutbtn" onclick="confirmLogout()">Logout</button>
 				</div>
 
 				<!-- Sidebar -->
@@ -72,29 +80,20 @@
 												<li class="type_sorting_btn" ><span>Popularity</span></li>
 												<li class="type_sorting_btn" data-isotope-option='{ "sortBy": "name" }'><span>Product Name</span></li>
 											</ul>
-										</li>
-										<li>
-											<span>Show</span>
-											<span class="num_sorting_text">6</span>
-											<i class="fa fa-angle-down"></i>
-											<ul class="sorting_num">
-												<li class="num_sorting_btn"><span>6</span></li>
-												<li class="num_sorting_btn"><span>12</span></li>
-												<li class="num_sorting_btn"><span>24</span></li>
-											</ul>
-										</li>
+										</li>								
 									</ul>
 									<div class="pages d-flex flex-row align-items-center">
 										<div class="page_current">
-											<span>1</span>
+											<a href="" class="anchor"><li></li></a>
 											<ul class="page_selection">
-												<li><a href="#">1</a></li>
-												<li><a href="#">2</a></li>
-												<li><a href="#">3</a></li>
+												<%for(let i=2;i<=totalPages;i++){%>
+												<a href="?page=<%=i%>" class="anchor"><li><%=i%></li></a>
+												<%}%>
 											</ul>
 										</div>
-										<div class="page_total"><span>of</span> 3</div>
-										<div id="next_page" class="page_next"><a href="#"><i class="fa fa-long-arrow-right" aria-hidden="true"></i></a></div>
+									  <a href="?page=<%=totalPages%>" class="anchor"><div class="page_total"><span>of</span><%=totalPages%></div></a>
+
+										<div id="next_page" class="page_next"><a href=""><i class="fa fa-long-arrow-right" aria-hidden="true"></i></a></div>
 									</div>
 
 								</div>
@@ -127,15 +126,16 @@
 									
 									<div class="pages d-flex flex-row align-items-center">
 										<div class="page_current">
-											<span>1</span>
+											<a href="" class="anchor-footer"><li></li></a>
 											<ul class="page_selection">
-												<li><a href="#">1</a></li>
-												<li><a href="#">2</a></li>
-												<li><a href="#">3</a></li>
+												<%for(let i=2;i<=totalPages;i++){%>
+												<a href="?page=<%=i%>" class="anchor"><li><%=i%></li></a>
+												<%}%>
 											</ul>
 										</div>
-										<div class="page_total"><span>of</span> 3</div>
-										<div id="next_page_1" class="page_next"><a href="#"><i class="fa fa-long-arrow-right" aria-hidden="true"></i></a></div>
+									  <a href="?page=<%=totalPages%>" class="anchor"><div class="page_total"><span>of</span><%=totalPages%></div></a>
+
+										<div id="next_page" class="page_next"><a href=""><i class="fa fa-long-arrow-right" aria-hidden="true"></i></a></div>
 									</div>
 								</div>
 							</div>

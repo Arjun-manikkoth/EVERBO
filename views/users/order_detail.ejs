@@ -55,20 +55,28 @@
               <!-- Single item -->
             </div>
           </div>
-          
           <div class="card mb-4">
             <div class="card-body d-flex justify-content-end">
-               <div class="text-center">
-                <%if(orderData.orderStatus!="Cancelled"){%>
-                <button class="btn mx-3 profile-button" type="button" onclick="cancelOrder('<%=orderData._id%>')">Cancel Order</button>
-                <%}else{%>
-                  <h5 class="mr-5">Order Status : Cancelled<h5>
-                <%}%>
-
-              </div> 
+              <div class="text-center">
+                <% if (orderData.orderStatus === "Pending" || orderData.orderStatus === "Shipped") { %>
+                  <button class="btn mx-3 profile-button" type="button" onclick="cancelOrder('<%=orderData._id%>')">Cancel Order</button>
+                <% } else if (orderData.orderStatus === "Delivered") { %>
+                  <% const deliveryDate = new Date(orderData.updatedAt);
+                     const now = new Date();
+                     const fifteenDaysAgo = new Date(now.getTime() - (15 * 24 * 60 * 60 * 1000));
+                     if (deliveryDate <= fifteenDaysAgo) { %>
+                       <h5 class="mr-5">Order Status: Delivered</h5>
+                     <% } else { %>
+                       <button class="btn mx-3 profile-button" type="button" onclick="returnProduct('<%=orderData._id%>')">Return Product</button> 
+                       <% } %>
+                <% } else if(orderData.orderStatus==="Returned") { %>
+                  <h5 class="mr-5">Order Status : Returned<h5>
+                <% } else{%>
+                <h5 class="mr-5">Order Status : Cancelled<h5>
+                  <%}%>
+              </div>
             </div>
           </div>
-     
         </div>
         <div class="col-md-4">
           <div class="card mb-4 checkout-div">
@@ -112,4 +120,5 @@
     </div>
   </section>
 </div>
+
 <%-include("../layouts/user/footer.ejs")-%>

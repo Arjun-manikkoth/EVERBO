@@ -17,20 +17,36 @@
     </div>
     <form  action="/admin/order_edit?id=<%=orderData._id%>" method="post">
         <div class="row">
-           <div class="form-group col-md-6">
+           <div class="form-group col-md-12">
              <label for="name">User Name</label>
              <input type="text" class="form-control" name="userName" id="name" placeholder="<%=orderData.userId.name%>">
            </div>
-           <div class="form-group col-md-6">
-            <label for="total">Total Amount</label>
-            <input type="text" class="form-control" name="totalCost" id="total" placeholder="<%=orderData.grandTotalCost%>">
-          </div>
+        </div> 
+        <div class="row">
+        <div class="form-group col-md-12">
+          <label for="date">Order Date</label>
+          <input type="text" class="form-control" name="orderDate" id="date" placeholder="<%=orderData.orderDate%>">
+        </div>
       </div>
+        <div class="row">                          
+          <div class="form-group col-md-12">
+          <label for="orderId">Order Id</label>
+          <input type="text" class="form-control" name="id" id="orderId" placeholder="<%=orderData._id%>">
+        </div>
+       </div>
+        <%orderData.cartData.forEach((item)=>{%> 
+       <div class="row">                          
+         <div class="form-group col-md-10">
+         <label for="productName<%=item.productId._id%>">Product Name</label>
+         <input type="text" class="form-control" name="product" id="productName<%=item.productId._id%>" placeholder="<%=item.productId.name%>">
+        </div>
+        <div class="form-group col-md-2">
+          <label for="productQty<%=item.productId._id%>">Qty</label>
+          <input type="text" class="form-control" name="productQuantity" id="productQty<%=item.productId._id%>" placeholder="<%=item.productQuantity%>">
+         </div>
+       </div>
+       <%})%>
         <div class="row">    
-          <div class="form-group col-md-6">
-            <label for="date">Order Date</label>
-            <input type="text" class="form-control" name="orderDate" id="date" placeholder="<%=orderData.orderDate%>">
-          </div>
           <div class="form-group col-md-6">
             <label for="status">Order Status</label>
             <select class="form-select" aria-label="Default select example" id="status" name="orderStatus">  
@@ -39,26 +55,38 @@
                 <option value="Delivered">Delivered</option>
                 <option value="Pending">Pending</option>
                 <option value="Shipped">Shipped</option>
+                <option value="Returned">Returned</option>
                 <%}else if(orderData.orderStatus==="Delivered"){%>
                   <option value="Cancelled">Cancelled</option>
                   <option value="Pending">Pending</option>
                   <option value="Shipped">Shipped</option>
-                  <%}else{%>
+                  <option value="Returned">Returned</option>
+                  <%}else if(orderData.orderStatus==="Pending"){%>
                     <option value="Cancelled">Cancelled</option>
                     <option value="Delivered">Delivered</option>
-                    <option value="Pending">Pending</option>
-                    <%}%>         
+                    <option value="Shipped">Shipped</option>
+                    <option value="Returned">Returned</option>
+                    <%}else if(orderData.orderStatus==="Shipped"){%> 
+                      <option value="Cancelled">Cancelled</option>
+                      <option value="Delivered">Delivered</option>
+                      <option value="Pending">Pending</option>
+                      <option value="Returned">Returned</option>
+                      <%}else{%>
+                        <option value="Cancelled">Cancelled</option>
+                        <option value="Delivered">Delivered</option>
+                        <option value="Shipped">Shipped</option>
+                        <option value="Pending">Pending</option>
+                        <%}%>          
            </select>
           </div>
-        </div>
-        <div class="row">                          
-          <div class="form-group col-md-12">
-            <label for="orderId">Order Id</label>
-            <input type="text" class="form-control" name="id" id="orderId" placeholder="<%=orderData._id%>">
+          <div class="form-group col-md-6">
+            <label for="total">Total Amount</label>
+            <input type="text" class="form-control" name="totalCost" id="total" placeholder="<%=orderData.grandTotalCost%>">
           </div>
         </div>
+       
        <div class="categoryadd">
-        <button type="submit" class="btn btn-dark confirm-categ">Update Order</button>
+        <button type="submit" class="btn btn-dark confirm-categ">Change Status</button>
        </div>
     </form>
   </div>

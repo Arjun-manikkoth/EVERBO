@@ -54,6 +54,26 @@ const addCategory = async (req, res) => {
    }
 }
   
+//list unlist product
+const categoryView = async (req, res) =>
+{
+  try {
+    const id = req.query.id;
+    const data = await Category.findOne({ _id: id });
+    if (data.is_listed === true) {
+      await Category.updateOne({ _id: id },{$set:{is_listed:false}});
+    }
+    else {
+      await Category.updateOne({ _id: id }, { $set: { is_listed: true } });
+    }
+    res.redirect("/admin/categories");
+  }
+  catch (error) {
+    console.log(error.message);
+  }
+}
+
+
 //edit category load
 const editCategoryLoad = async (req, res) =>
 {
@@ -141,6 +161,7 @@ module.exports = {
   categoriesLoad,
   addCategoryLoad,
   addCategory,
+  categoryView,
   editCategoryLoad,
   deleteCategory,
   updateCategory

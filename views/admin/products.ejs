@@ -14,21 +14,20 @@
 				<table class="table table-hover table-responsive">
 					<thead>
 						<tr>
-							<th class="col-1" scope="col">Id</th>
-							<th class="col-1" scope="col">Product</th>
-							<th class="col-2" scope="col">Image</th>
+							<th class="col-3" scope="col">Product Name</th>
+							<th class="col-1" scope="col">Image</th>
 							<th class="col-1" scope="col">Category</th>
 							<th class="col-2" scope="col">Description</th>
 							<th class="col-1" scope="col">Quantity</th>
 							<th class="col-1" scope="col">Price</th>
-							<th class="col-3" scope="col">Actions</th>
+							<th class="col-1" scope="col">View</th>
+							<th class="col-2" scope="col">Actions</th>
 						</tr>
 					</thead>
 					<tbody>
 					<%if(locals.product){%>
 					<%product.forEach((prod)=>{%>
 						<tr> 
-									<td><%=prod._id%></td>
 									<td><%=prod.name%></td>
 									<td><img src="/images/userImages/<%=prod.image%>" width="120px" alt="<%=prod.image%>"></td>
 									<td><%=prod.category.name%></td>
@@ -36,9 +35,16 @@
 									<td><%=prod.quantity%></td>
 									<td><%=prod.price%></td>
 									<td>
+											<%if(prod.is_listed===false){%>
+							        <button type="button" class="btn btn-success btn-sm" onclick="listProduct('<%=prod.id%>')">List</button>
+											<%}else{%>
+											<button type="button" class="btn btn-danger btn-sm" onclick="unListProduct('<%=prod.id%>')">UnList</button>
+										  <%}%>
+									</td>
+									<td>
 										<div class="categ-edit">
 											<button type="button" class="btn btn-success btn-sm"> <a href="/admin/edit_products?id=<%=prod._id%>" class=" categ-edit ">Edit</a></button>
-											<button type="button" class="btn btn-danger btn-sm ms-2 "><a href="/admin/delete_products?id=<%=prod._id%>" class=" categ-edit ">Delete</a> </button>
+											<button type="button" class="btn btn-danger btn-sm ms-2 " onclick="deleteProduct('<%=prod._id%>')">Delete</button>
 										</div>
 									</td>			
 						</tr>

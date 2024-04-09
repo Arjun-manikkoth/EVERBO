@@ -14,8 +14,9 @@ const orderSchema= new mongoose.Schema({
         totalPrice: {type:Number}
       }],
     grandTotalCost: { type: Number},
-    paymentId: {type: String,}
-})
+    paymentId: { type: String, },
+    reason:{type:String}  
+},{timestamps:true})
 
 module.exports= mongoose.model( 'order', orderSchema )
 

@@ -405,6 +405,22 @@ else {
 	return true
 }	
 
+function confirmLogout() {
+	Swal.fire({
+		title: 'Are you sure?',
+		text: "You will be logged out!",
+		icon: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		confirmButtonText: 'Yes, logout!'
+	}).then((result) => {
+		if (result.isConfirmed) {
+		  window.location.href = "/logout";
+		}
+	});
+}
+
 const nl = document.querySelectorAll(".cart-price")
 	if (nl) {
 		var priceList = Array.from(nl)
@@ -606,6 +622,48 @@ function cancelOrder(id) {
 	})
 }
 
+function cancelOrder(orderId) {
+	Swal.fire({
+    title: 'Reason For Cancellation',
+    input: 'select',
+    inputOptions: {
+        'I changed my mind': 'I changed my mind',
+        'High shipping charges': 'High shipping charges',
+        'Long delivery time': 'Long delivery time',
+        'Found a better deal': 'Found a better deal'
+    },
+    inputPlaceholder: 'Choose a reason',
+    showCancelButton: true,
+    inputValidator: function(value) {
+        return new Promise(function(resolve, reject) {
+            if (value !== '') {
+                fetch("/cancel_order", {
+                    method: 'PUT',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ reason: value,id:orderId })
+                }).then((response) => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok.');
+                    }
+                    return response.json();
+                }).then((data) => {
+                    window.location.href = "/order";
+                    resolve();
+                }).catch((error) => {
+                    reject(error); 
+                });
+            } else {
+                reject('Please select a reason'); 
+            }
+        });
+    }
+});
+
+}
+
 function removeCart(prodId) {
 	Swal.fire({
 		title: 'Remove Product',
@@ -685,3 +743,47 @@ function removeWishlist(prodId) {
 		}
 	});
 }
+
+function returnProduct(orderId) {
+	Swal.fire({
+    title: 'Reason For Return',
+    input: 'select',
+    inputOptions: {
+        'Damaged Product': 'Damaged Product',
+        'Poor Quality': 'Poor Quality',
+        'Wrong Product': 'Wrong Product',
+        'I didnt like it': 'I didnt like it'
+    },
+    inputPlaceholder: 'Choose a reason',
+    showCancelButton: true,
+    inputValidator: function(value) {
+        return new Promise(function(resolve, reject) {
+            if (value !== '') {
+                fetch("/return_reason", {
+                    method: 'PUT',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ reason: value,id:orderId }) 
+                }).then((response) => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok.');
+                    }
+                    return response.json();
+                }).then((data) => {
+                    window.location.href = "/order";
+                    resolve();
+                }).catch((error) => {
+                    reject(error); 
+                });
+            } else {
+                reject('Please select a reason'); 
+            }
+        });
+    }
+});
+
+}
+
+
