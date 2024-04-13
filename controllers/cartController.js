@@ -133,6 +133,9 @@ const checkStock = async (req, res) => {
       if (item.productId.quantity < item.productQuantity) {
         return false;
       }
+      else if (item.productId.is_listed === false) {
+        return "unlisted";
+      }
       else {
         return true;
       }

@@ -48,8 +48,10 @@
 					<div class="free_delivery d-flex flex-row align-items-center justify-content-center">
 						<span class="ti-truck"></span><span>free delivery</span>
 					</div>
-					<%if(product.quantity>=1){%>
+					<%if(product.quantity>=1&&product.is_listed===true){%>
 						<div class="stock-div"><span>Stocks left: </span><span id="stocks"><%=product.quantity%></span></div>
+					<%}else if(product.is_listed===false){%>
+						<div class="stock-div"><span id="stocks">Currently Unavailable</span></div>
 					<%}else{%>
 						<div class="stock-div"><span>Out Of Stock</span></div>
 					<%}%>

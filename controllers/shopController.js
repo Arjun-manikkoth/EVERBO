@@ -21,23 +21,24 @@ const loadLanding = async (req, res) => {
 //load shop page with products view
 const loadShop = async (req, res) => {
   try {
-    let search = ''
-    if (req.query.search) {
-      search = req.query.search;
-    }
-
+     
     let page =1
     if (req.query.page) {
       page = req.query.page;
     }
-    let limit = 8;
+    let search = ''
+    if (req.query.search) {
+      search = req.query.search;
+    }
+    let limit = 4;
+    
     const product = await Product.find({
       is_listed:true,
       $or: [
         { name: { $regex: ".*" +search+ ".*" ,$options:"i"} },
         { description: { $regex: ".*" +search+ ".*",$options:"i" } }
       ]
-    }).limit(limit).skip((page-1)*limit)
+    }).skip((page - 1) * limit).limit(limit)
     
     const count = await Product.find({
       is_listed:true,
@@ -46,16 +47,17 @@ const loadShop = async (req, res) => {
         { description: { $regex: ".*" +search+ ".*",$options:"i" } }
       ]
     }).countDocuments()
+    
 
     let totalPages = Math.ceil(count / limit)
-  
+
     const category = await Category.find({is_listed:true})
+    
     res.render("shop", {
       product,
       category,
-      totalPages,
-      currentPage: page,
-      
+      currentPage:page,
+      totalPages
     })
   }
   catch (error) { 
@@ -66,7 +68,8 @@ const loadShop = async (req, res) => {
 //individual product page 
 const loadProduct = async (req, res) => {
   try { 
-    const product = await Product.findOne({_id:req.query.prodId})
+    const product = await Product.findOne({
+      _id: req.query.prodId})
     res.render("product",{product})
   }
   catch (error) {
@@ -76,35 +79,9 @@ const loadProduct = async (req, res) => {
 }
 
 
-//load shop page with products view
-const priceAscending = async (req, res) => {
-  try {
-    const category = await Category.find({})
-    const product = await Product.find({}).sort({ price: -1 })
-    res.render("shop", {product,category})
-  }
-  catch (error) { 
-    console.log(error.message);
-  }
-}
-
-//load shop page with products view
-const priceDescending = async (req, res) => {
-  try {
-    const category = await Category.find({})
-    const product = await Product.find({}).sort({ price: 1 })
-    res.render("shop", {product,category})
-  }
-  catch (error) { 
-    console.log(error.message);
-  }
-}
-
-
 module.exports = {
   loadLanding,
   loadProduct,
-  loadShop,
-  priceAscending,
-  priceDescending,
+  loadShop
 }
+

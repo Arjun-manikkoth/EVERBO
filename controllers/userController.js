@@ -298,7 +298,7 @@ const loadProfile = async (req, res) => {
   try {
     const userData = await User.findOne({ _id: req.session.user_Id })
     if (userData!=[]) {
-      res.render("profile", {userData})
+      res.render("profile", {userData,profile:true})
     }
     else {
       console.log("no profile data")
@@ -322,17 +322,16 @@ const editProfile = async (req, res) => {
     console.log(error.message)
   }
 }
-
 //load orders page
 const loadOrders = async (req, res) => {
   try { 
-    const orderData = await Order.find({ userId: req.session.user_Id }).populate("addressChosen")
+    const orderData = await Order.find({ userId: req.session.user_Id }).sort({orderDate:-1}).populate("addressChosen")
 
     if (orderData!="") {
-      res.render("order",{orderData})
+      res.render("order",{orderData,profile:true})
     }
     else {
-      res.render("order",{msg:"No Orders were Made"})
+      res.render("order",{msg:"No Orders were Made",profile:true})
     }   
   }
   catch (error) { 
@@ -360,13 +359,23 @@ const orderDetail = async (req, res) => {
 //cancel order
 const cancelOrder = async (req, res) => {
   try {
-
-    const data = await Order.findByIdAndUpdate({ _id: req.body.id }, { $set: { reason :req.body.reason,orderStatus: "Cancelled" } })
-    if (data) {
-      res.json(data)
-    }    
+    const orderData = await Order.findByIdAndUpdate({ _id: req.body.id }, { $set: { reason: req.body.reason, orderStatus: "Cancelled" } })
+    const data = await User.findByIdAndUpdate({ _id: req.session.user_Id }, {
+      $inc: {
+    "wallet.walletBalance": orderData.grandTotalCost
+      }, $push: {
+        "wallet.walletTransaction": {
+          transactionDate: Date(),
+          transactionAmount: orderData.grandTotalCost,
+          transactionType: orderData.paymentType
+        }
+      }
+    })
+    if (orderData) {     
+      res.json(orderData) 
+    }
     else {
-      console.log("Couldnt cancel order")
+      console.log("Couldnt Cancel product")
     }
   }
   catch (error) { 
@@ -378,12 +387,23 @@ const cancelOrder = async (req, res) => {
 //new return reason to db
 const orderReturn = async (req, res) => {
   try {
-    const success = await Order.findByIdAndUpdate({ _id: req.body.id }, { $set: { reason: req.body.reason ,orderStatus:"Returned"} })
-    if (success) {     
-      res.json(success) 
+    const orderData = await Order.findByIdAndUpdate({ _id: req.body.id }, { $set: { reason: req.body.reason, orderStatus: "Returned" } })
+    const data = await User.findByIdAndUpdate({ _id: req.session.user_Id }, {
+      $inc: {
+    "wallet.walletBalance": orderData.grandTotalCost
+      }, $push: {
+        "wallet.walletTransaction": {
+          transactionDate: Date(),
+          transactionAmount: orderData.grandTotalCost,
+          transactionType: orderData.paymentType
+        }
+      }
+    })
+    if (orderData) {     
+      res.json(orderData) 
     }
     else {
-      console.log("Couldnt return product")
+      console.log("Couldnt Return product")
     }
   }
   catch (error) { 
@@ -391,11 +411,22 @@ const orderReturn = async (req, res) => {
   }
 }
 
+//invoice
+const invoiceOrder = async (req, res) => {
+  try {
+    const data = await Order.findById({ _id: req.query.orderId, userId: req.session.user_Id }).populate("userId").populate("addressChosen").populate("cartData.productId")
+    console.log(data.userId.name,data.addressChosen.house_no,data.cartData)
+    res.json(data)
+  }
+  catch (error) { 
+    console.log(error.message);
+  }
+}
 
 //load confirm Password page
 const confirmPasswordLoad = async (req, res) => {
   try {
-      res.render("confirm_password")
+      res.render("confirm_password",{profile:true})
   }
   catch (error) { 
     console.log(error.message);
@@ -412,7 +443,7 @@ const confirmPassword = async (req, res) => {
       res.redirect("/new_password")
     }
     else {
-      res.render("confirm_password", {msg:"Please Check the password"})
+      res.render("confirm_password", {msg:"Please Check the password",profile:true})
     }
   }
   catch (error) { 
@@ -423,7 +454,7 @@ const confirmPassword = async (req, res) => {
 //load new password page
 const newPasswordLoad = async (req, res) => {
   try {
-      res.render("change_password")
+      res.render("change_password",{profile:true})
   }
   catch (error) { 
     console.log(error.message);
@@ -466,6 +497,7 @@ module.exports = {
   orderDetail,
   cancelOrder,
   orderReturn,
+  invoiceOrder,
   confirmPasswordLoad,
   confirmPassword,
   newPasswordLoad,

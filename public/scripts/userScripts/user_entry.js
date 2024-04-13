@@ -690,7 +690,7 @@ function checkStock() {
 		}
 		return response.json()
 	}).then((data) => {
-		if (data.find(item =>item===false)===false) {
+		if (data.find(item => item === false) === false) {
 			Swal.fire({
 				title: 'Cart Item Out Of Stock',
 				text: 'Items you are trying to checkout is currently out of stock.Please review and try again later.',
@@ -700,7 +700,19 @@ function checkStock() {
 				allowEscapeKey: false,
 				allowEnterKey: false,
 				showConfirmButton: false
-			});			
+			});
+		} else if (data.find(item=> item==="unlisted")==="unlisted") {
+			console.log("unlisted")
+			Swal.fire({
+				title: 'Cart Item Currently Unavailable',
+				text: 'Items you are trying to checkout is currently unavailable.Please review and try again later.',
+				timer: 5000,
+				timerProgressBar: true,
+				allowOutsideClick: false,
+				allowEscapeKey: false,
+				allowEnterKey: false,
+				showConfirmButton: false
+			})
 		}
 		else {
 			window.location.href = "/check_out";
@@ -786,4 +798,212 @@ function returnProduct(orderId) {
 
 }
 
+// document.addEventListener("DOMContentLoaded", function () {
+//   const prevButton = document.getElementById('prev');
+//   const nextButton = document.getElementById('next');
+//   const productCards = document.querySelectorAll('.product-item');
+//   const productsPerPage = 8;
+//   let currentPage = 0;
 
+//   function showPage(page) {
+//     productCards.forEach((card) => {
+//       card.style.display = 'none';
+// 		});
+		
+//     const startIndex = page * productsPerPage;
+//     const endIndex = Math.min(startIndex + productsPerPage, productCards.length);
+//     for (let i = startIndex; i < endIndex; i++) {
+//       productCards[i].style.display = 'block';
+//     }
+
+//     updatePaginationButtons(page);
+//   }
+
+// 	function updatePaginationButtons(page) {
+// 		if (prevButton || nextButton) {
+// 			prevButton.disabled = page === 0;
+// 			nextButton.disabled = (page + 1) * productsPerPage >= productCards.length;
+// 		}
+//   }
+
+//   function goToPrevPage() {
+//     if (currentPage > 0) {
+//       currentPage--;
+//       showPage(currentPage);
+//     }
+//   }
+
+//   function goToNextPage() {
+//     const nextPage = currentPage + 1;
+//     if (nextPage * productsPerPage < productCards.length) {
+//       currentPage = nextPage;
+//       showPage(currentPage);
+//     }
+//   }
+// 	if (prevButton||nextButton) {
+// 		prevButton.addEventListener('click', goToPrevPage);
+// 		nextButton.addEventListener('click', goToNextPage);
+// 	}
+//   showPage(currentPage);
+//   updatePaginationButtons(currentPage);
+// });
+
+
+// document.addEventListener("DOMContentLoaded", function() {
+//   const items = document.querySelectorAll('.items');
+  
+//   // Check if there is a selected item in localStorage
+//   const selectedItemId = localStorage.getItem('selectedItemId');
+//   if (selectedItemId) {
+//     const selectedItem = document.getElementById(selectedItemId);
+//     if (selectedItem) {
+//       selectedItem.classList.add('selected');
+//     }
+//   }
+
+//   // Add click event listener to each item
+//   items.forEach(item => {
+//     item.addEventListener('click', function() {
+//       // Remove selected class from all items
+//       items.forEach(item => {
+//         item.classList.remove('selected');
+//       });
+      
+//       // Add selected class to the clicked item
+//       this.classList.add('selected');
+      
+//       // Store the ID of the selected item in localStorage
+//       localStorage.setItem('selectedItemId', this.id);
+//     });
+//   });
+// });
+
+document.addEventListener("DOMContentLoaded", function() {
+  const items = document.querySelectorAll('.items');
+	const selectedRoute = localStorage.getItem('selectedRoute');
+	
+  const isCurrentRouteSelected = (route) => {
+    return window.location.pathname === route;
+	};
+	
+	const selectCurrentRoute = () => {
+				items.forEach(item => {
+				console.log(item.dataset.route)
+				if (item.dataset.route.split(',').some(isCurrentRouteSelected)) {
+					item.classList.add('selected');
+				} else {
+					item.classList.remove('selected');
+				}
+			});
+	};
+
+  selectCurrentRoute();
+
+  items.forEach(item => {
+    item.addEventListener('click', function() {
+      items.forEach(item => {
+        item.classList.remove('selected');
+			});
+			
+      this.classList.add('selected');
+      localStorage.setItem('selectedRoute', this.dataset.route.split(',')[0]); 
+    });
+  });
+});
+
+
+
+function fetchInvoiceData(orderId) {
+	return fetch('/invoice?orderId='+orderId)
+			.then(response => {
+					if (!response.ok) {
+							throw new Error('Network response was not ok');
+					}
+					return response.json();
+			});
+}
+
+function generatePDF(id) {
+	fetchInvoiceData(id)
+	.then(data => {
+			var pdf = new jsPDF({
+					orientation: 'p',
+					unit: 'mm',
+					format: 'a4'
+			});
+
+		  var y = 25;	
+      pdf.setFont("helvetica", "bold");
+      pdf.setFillColor(251, 85, 49); 
+      pdf.setTextColor(251, 85, 49); 
+      pdf.setFontSize(14);
+      pdf.text("EVER", 15, y);
+      pdf.setTextColor(0, 0, 0); 
+      pdf.text("BO", pdf.getTextWidth("EVER") + 15, y);
+		  pdf.setFont("helvetica", "normal");
+			pdf.setFontSize(24);
+		  pdf.text("Invoice", 95, y, { align: "center" });
+		  
+			const currentDate = new Date();
+			const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+			const formattedDate = currentDate.toLocaleDateString('en-IN', dateOptions);
+			
+			const timeOptions = { hour: '2-digit', minute: '2-digit', hour12: true, timeZone: 'Asia/Kolkata' };
+			const formattedTime = currentDate.toLocaleTimeString('en-IN', timeOptions);
+			
+			pdf.setFontSize(11);
+			pdf.text("Date: " + formattedDate, 160, y);
+			pdf.text("Time: " + formattedTime, 160, y +5);
+			y += 10;
+
+			let address = [
+					data.addressChosen.house_no,
+					`${data.addressChosen.street}, ${data.addressChosen.landmark}`,
+					`${data.addressChosen.pincode}, ${data.addressChosen.district}, ${data.addressChosen.state}`
+			].join('\n');
+			pdf.setFontSize(11); 
+		  pdf.text("Shipping Address:\n" + address, 15, y + 16);
+		
+			pdf.setFontSize(11);
+		  pdf.text("Customer Name : " + data.userId.name, 134, y + 16);
+		
+		  pdf.setFontSize(11);
+		  pdf.text("Order Id : " + data._id, 134, y + 21);
+		
+		  pdf.setFontSize(11);
+		  pdf.text("Payment : " + data.paymentType, 134, y+26);
+
+			y += 42; 
+			pdf.setFillColor(200, 200, 200);
+			pdf.rect(20, y, 170, 8, 'F');
+			pdf.setTextColor(0, 0, 0);
+			pdf.text("Product", 30, y + 5);
+			pdf.text("Quantity", 120, y + 5);
+			pdf.text("Price", 153, y + 5);
+			y += 18;
+		var cartTotal = 0;
+			data.cartData.forEach(item => {
+					pdf.text(item.productId.name, 25, y);
+					pdf.text(item.productQuantity.toString(), 125, y);
+					pdf.text( item.totalPrice.toFixed(2), 153, y);
+				  y += 10;
+				 cartTotal+=item.totalPrice
+			});
+		console.log(cartTotal)
+		var shippingCharges=0
+		if (data.grandTotalCost === cartTotal) {
+			pdf.text("Shipping Charges :  " + "Free", 118.5, 115);
+		} else {
+			shippingCharges=90
+			pdf.text("Shipping Charges : Rs." + shippingCharges.toFixed(2), 118.5, 115);
+		}
+		pdf.text("Total : ", 118.5, 128);
+		pdf.text("Rs."+data.grandTotalCost.toFixed(2), 147, 128)
+		
+			pdf.save('Invoice.pdf');
+	
+			})
+			.catch(error => {
+					console.error("Error fetching invoice data:", error);
+			});
+}

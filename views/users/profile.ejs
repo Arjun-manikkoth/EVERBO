@@ -1,14 +1,5 @@
 <%-include("../layouts/user/header.ejs")-%>
-<div class="containerbox">
-  <div class="navbar-outer container">
-   
-    <div class="navbar-user">
-      <a href="/profile"><div class="nav-options" ><i class="fa fa-user-circle mx-3" aria-hidden="true"></i>Profile</div></a>
-      <a href="/address"><div class="nav-options" ><i class="fa fa-address-card-o mx-3" aria-hidden="true"></i>My Address</div></a>
-      <a href="/order"><div class="nav-options" ><i class="fa fa-cart-plus mx-3" aria-hidden="true"></i>My Orders</div></a>
-      <a href="/change_password"><div class="nav-options" ><i class="fa fa-lock mx-3" aria-hidden="true"></i>Change Password</div></a>
-      <div class="nav-options" onclick="confirmLogout()" ><i class="fa fa-sign-out mx-3" aria-hidden="true" onclick="confirmLogout()"></i>Logout</div>
-    </div>
+
      <div class="col-lg-8 profile-box">
         <div class=" rounded bg-white mb-5 content">
               <div class="border-right">
@@ -16,7 +7,7 @@
                       <div class="d-flex justify-content-between align-items-center mb-3">
                           <h4 class="text-right">Profile Settings</h4>
                       </div>
-                      <form action="/editProfile?id=<%=userData._id%>" method="post" onsubmit="return validateEditProfile()">
+                      <form action="/edit_profile?id=<%=userData._id%>" method="post" onsubmit="return validateEditProfile()">
                       <div class="row mt-2 mx-2">
                           <div class="col-md-6 mt-3">
                             <label class="labels">Name</label>

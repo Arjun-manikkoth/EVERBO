@@ -47,7 +47,15 @@ const userSchema=mongoose.Schema({
         type: mongoose.Types.ObjectId,ref:"product"
       }
     }
-  ]
+  ],
+  wallet:{
+      walletBalance: { type: Number, default: 0 },
+      walletTransaction: [{
+        transactionDate: Date,
+        transactionAmount: Number,
+        transactionType: String
+      }]
+    }
 }, {timestamps:true,strictPopulate:false});
 
 module.exports = mongoose.model("user", userSchema);

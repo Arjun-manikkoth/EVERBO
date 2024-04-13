@@ -25,6 +25,7 @@
 <link rel="stylesheet" type="text/css" href="styles/userStyles/categories_responsive.css">
 <link rel="stylesheet" type="text/css" href="styles/userStyles/cart.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.7/dist/sweetalert2.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
 
 
 </head>
@@ -129,3 +130,14 @@
 				</div>
 
 	</header>
+	<%if(locals.profile){%>
+	<div class="containerbox">
+		<div class="navbar-outer container">
+			<div class="navbar-user">
+				<a href="/profile"  class="items" data-route="/profile,/edit_profile"><div class="nav-options" ><i class="fa fa-user-circle mx-3" aria-hidden="true"></i>Profile</div></a>
+				<a href="/address"  class="items" data-route="/address,/add_address,/edit_address"><div class="nav-options" ><i class="fa fa-address-card-o mx-3" aria-hidden="true"></i>My Address</div></a>
+				<a href="/order"   class="items" data-route="/order"><div class="nav-options"><i class="fa fa-cart-plus mx-3" aria-hidden="true"></i>My Orders</div></a>
+				<a href="/change_password" class="items" data-route="/change_password,/new_password,/confirm_password" ><div class="nav-options"  ><i class="fa fa-lock mx-3" aria-hidden="true"></i>Change Password</div></a>
+				<div class="nav-options" onclick="confirmLogout()"><i class="fa fa-sign-out mx-3" aria-hidden="true"></i>Logout</div>
+			</div>
+			<%}%>

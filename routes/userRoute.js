@@ -70,10 +70,11 @@ user_route.get("/shop", auth.isLogin, shopController.loadShop);
 user_route.get("/product",auth.isLogin, shopController.loadProduct);
 
 //price low to high filter
-user_route.get("/price_low_high", auth.isLogin, shopController.priceAscending)
+//user_route.get("/price_low_high", auth.isLogin, shopController.priceAscending)
 
 //price low to high filter
-user_route.get("/price_high_low", auth.isLogin, shopController.priceDescending)
+//user_route.get("/price_high_low", auth.isLogin, shopController.priceDescending)
+
 
 //---------------------------------Profile Management-----------------------------------
 
@@ -81,7 +82,23 @@ user_route.get("/price_high_low", auth.isLogin, shopController.priceDescending)
 user_route.get("/profile", auth.isLogin, userController.loadProfile)
 
 //edit profile to db
-user_route.post("/editProfile", auth.isLogin, userController.editProfile)
+user_route.post("/edit_profile", auth.isLogin, userController.editProfile)
+
+
+//---------------------------------Password Management-----------------------------------
+
+//change password page
+user_route.get("/change_password", auth.isLogin, userController.confirmPasswordLoad)
+
+//confirm password 
+user_route.post("/confirm_password", auth.isLogin, userController.confirmPassword)
+
+//new password page
+user_route.get("/new_password", auth.isLogin, userController.newPasswordLoad)
+
+//new password 
+user_route.post("/new_password", auth.isLogin, userController.newPassword)
+
 
 
 //---------------------------------Address Management-----------------------------------
@@ -119,21 +136,8 @@ user_route.put("/cancel_order", auth.isLogin, userController.cancelOrder)
 //orders cancellation reason
 user_route.put("/return_reason", auth.isLogin, userController.orderReturn)
 
-
-//---------------------------------Password Management-----------------------------------
-
-//change password page
-user_route.get("/change_password", auth.isLogin, userController.confirmPasswordLoad)
-
-//confirm password 
-user_route.post("/confirm_password", auth.isLogin, userController.confirmPassword)
-
-//new password page
-user_route.get("/new_password", auth.isLogin, userController.newPasswordLoad)
-
-//new password 
-user_route.post("/new_password", auth.isLogin, userController.newPassword)
-
+//invoice data
+user_route.get("/invoice", auth.isLogin, userController.invoiceOrder)
 
 //---------------------------------Cart Management---------------------------------------
 

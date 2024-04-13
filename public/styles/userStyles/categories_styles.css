@@ -990,12 +990,12 @@ section
 }
 .pages
 {
-	display: inline-block;
+	display: inline-block !important;
 	float: right;
 }
 .product_sorting_container_bottom .pages
 {
-	float: left;
+	float: right!important;
 }
 .page_current
 {
@@ -1084,7 +1084,6 @@ section
 .page_next
 {
 	display: inline-block;
-	line-height: 40px;
 	cursor: pointer;
 }
 .page_next:hover i
@@ -1300,7 +1299,6 @@ section
 .product-item
 {
 	width: 25%;
-	height: 380px;
 	cursor: pointer;
 }
 .product-item::after
@@ -1712,4 +1710,10 @@ section
 .footer_social ul li a:hover
 {
 	color: #fe4c50;
+}
+.pages{
+	align-items: flex-end !important;
+}
+.arrow,.fa-long-arrow-right,.fa-long-arrow-left{
+	color: white !important;
 }
