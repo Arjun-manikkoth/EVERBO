@@ -70,10 +70,10 @@ user_route.get("/shop", auth.isLogin, shopController.loadShop);
 user_route.get("/product",auth.isLogin, shopController.loadProduct);
 
 //price low to high filter
-//user_route.get("/price_low_high", auth.isLogin, shopController.priceAscending)
+user_route.get("/price_low_high", auth.isLogin, shopController.priceAscending)
 
 //price low to high filter
-//user_route.get("/price_high_low", auth.isLogin, shopController.priceDescending)
+user_route.get("/price_high_low", auth.isLogin, shopController.priceDescending)
 
 
 //---------------------------------Profile Management-----------------------------------
@@ -83,6 +83,9 @@ user_route.get("/profile", auth.isLogin, userController.loadProfile)
 
 //edit profile to db
 user_route.post("/edit_profile", auth.isLogin, userController.editProfile)
+
+//wallet page
+user_route.get("/wallet", auth.isLogin, userController.loadWallet)
 
 
 //---------------------------------Password Management-----------------------------------
@@ -180,6 +183,17 @@ user_route.post("/delivery_address", auth.isLogin, cartController.chooseCheckout
 //confirm order
 user_route.post("/confirm_order", auth.isLogin, cartController.confirmOrder)
 
+//confirm order
+user_route.get("/confirm_order", auth.isLogin, cartController.orderPlaced)
+
+//payment option cod check
+user_route.get("/check_cod", auth.isLogin, cartController.checkCod)
+
+//payment option wallet balance check
+user_route.get("/check_wallet", auth.isLogin, cartController.checkWallet)
+
+//razorpay status check
+user_route.post("/razorpay_status", auth.isLogin, cartController.razorPayStatus)
 
 //---------------------------------Wishlist Management-----------------------------------
 

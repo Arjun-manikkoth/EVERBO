@@ -50,7 +50,8 @@ const userSchema=mongoose.Schema({
   ],
   wallet:{
       walletBalance: { type: Number, default: 0 },
-      walletTransaction: [{
+        walletTransaction: [{
+        orderId:{type:mongoose.Types.ObjectId,ref:"order"},
         transactionDate: Date,
         transactionAmount: Number,
         transactionType: String

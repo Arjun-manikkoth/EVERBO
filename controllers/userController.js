@@ -95,7 +95,7 @@ const sentResetPasswordMail = async (email,id) => {
 //load login page
 const loadLogin = async (req,res) => { 
   try {
-    res.render("entry")
+    res.render("entry",{loggedIn:"false"})
   }
   catch(error) { 
     console.log(error.message)
@@ -113,7 +113,7 @@ const verifyLogin = async (req,res) => {
     if (userData){
       if (userData.is_verified == 1){
             if (userData.is_blocked == 1) {
-              res.render("entry", { message_signin: "Access Denied" })
+              res.render("entry", { message_signin: "Access Denied",loggedIn:"false"})
             } else{ 
              const passwordMatch=await bcrypt.compare(Password,userData.password)
                 if (passwordMatch) { 
@@ -121,7 +121,7 @@ const verifyLogin = async (req,res) => {
                  res.redirect("/shop")
                 }
                 else { 
-                 res.render("entry",{message_signin:"Invalid username/password"})
+                 res.render("entry",{message_signin:"Invalid username/password",loggedIn:"false"})
                 }
            }
       }
@@ -132,7 +132,7 @@ const verifyLogin = async (req,res) => {
     }
     else
     { 
-       res.render("entry",{message_signin:"Account doesnot exist"})
+       res.render("entry",{message_signin:"Account doesnot exist",loggedIn:"false"})
     }       
   }
   catch(error) { 
@@ -147,11 +147,11 @@ const insertUser = async (req, res) => {
     if (signedIn) {
       if (signedIn.is_verified == 1) { 
        
-        res.render("entry",{message_signup:"Already a user"})
+        res.render("entry",{message_signup:"Already a user",loggedIn:"false"})
       } 
       else {
         await sentOtpVerificationMail(req.body.email, signedIn._id);
-        res.render("otp_verification", {timer:true});
+        res.render("otp_verification", {timer:true,loggedIn:"false"});
       }
     }
     else { 
@@ -171,7 +171,7 @@ const insertUser = async (req, res) => {
         res.render("otp_verification",{timer:true})
       }  
       else { 
-        res.render("entry", {message_signup:"Registration failed"})
+        res.render("entry", {message_signup:"Registration failed",loggedIn:"false"})
       }
     }  
   }
@@ -188,7 +188,7 @@ const otpVerifySignUp = async (req, res) => {
     const userData = await User.findById({ _id: userId });
     if (userData.otp_verify.expiresAt < Date.now()) {
       await User.updateOne({ _id: userId }, { $set: { "otp_verify.otp": "" } });
-      res.render("otp_verification", {message_otpverification:"OTP expired"})
+      res.render("otp_verification", {message_otpverification:"OTP expired",loggedIn:"false"})
     }
     else { 
 
@@ -198,7 +198,7 @@ const otpVerifySignUp = async (req, res) => {
          res.redirect("/shop")
        }
      else {
-         res.render("otp_verification", { message_otpverification: "Invalid OTP" });
+         res.render("otp_verification", { message_otpverification: "Invalid OTP",loggedIn:"false"});
        }
     }
   }
@@ -212,7 +212,7 @@ const otpResend = async (req, res) => {
   try {
    const userData= await User.findById({ _id: req.session.user_Id })
     await sentOtpVerificationMail(userData.email, req.session.user_Id);
-    res.render("otp_verification", {timer:true});
+    res.render("otp_verification", {timer:true,loggedIn:"false"});
   }
   catch (error) {
     console.log(error.message)  
@@ -222,7 +222,7 @@ const otpResend = async (req, res) => {
 //load forgot password page
 const forgotLoad = async (req, res) => { 
   try {
-     res.render("forgot_password")
+    res.render("forgot_password", { loggedIn: "false" })
   }
   catch (error) { 
     console.log(error.message)
@@ -236,10 +236,10 @@ const forgotVerify = async (req, res) => {
     const userData = await User.findOne({ email: Email });
     if (userData) {
       await sentResetPasswordMail(Email, userData._id);
-      res.render("forgot_password", {message_forgot:"Please check your Email for the link"})
+      res.render("forgot_password", {message_forgot:"Please check your Email for the link",loggedIn:"false"})
     }
     else { 
-      res.render("forgot_password", {message_forgot:"Couldn't find an account with specified Email address"})
+      res.render("forgot_password", {message_forgot:"Couldn't find an account with specified Email address",loggedIn:"false"})
     }
   }
   catch (error) { 
@@ -251,7 +251,7 @@ const forgotVerify = async (req, res) => {
 const loadReset = async (req, res) => { 
   try {
     const Id= req.query.userId
-    res.render("Reset_password", {id:Id})
+    res.render("Reset_password", { id: Id, loggedIn:"false"})
   }
   catch (error) { 
     console.log(error.message)
@@ -264,13 +264,12 @@ const passwordReset = async (req, res) => {
     const Id = req.query.Id;
     const newPassword = await securePassword(req.body.password);
     const userData = await User.updateOne({ _id: Id }, { $set: { password: newPassword } });
-    console.log(userData)
 
     if (userData) {
-      res.render("reset_password", { message_resetpassword: "Please login with your new password", id: Id })
+      res.render("reset_password", { message_resetpassword: "Please login with your new password", id: Id ,loggedIn:"false"})
     }
     else {
-      res.render("reset_password", { message_resetpassword: "Password reset failed", id: Id })
+      res.render("reset_password", { message_resetpassword: "Password reset failed", id: Id ,loggedIn:"false"})
     }
   }
   catch (error) {
@@ -325,9 +324,9 @@ const editProfile = async (req, res) => {
 //load orders page
 const loadOrders = async (req, res) => {
   try { 
-    const orderData = await Order.find({ userId: req.session.user_Id }).sort({orderDate:-1}).populate("addressChosen")
+    const orderData = await Order.find({ userId: req.session.user_Id ,grandTotalCost:{$exists:true}}).sort({orderDate:-1}).populate("addressChosen")
 
-    if (orderData!="") {
+    if (orderData.length!==0) {
       res.render("order",{orderData,profile:true})
     }
     else {
@@ -343,7 +342,6 @@ const loadOrders = async (req, res) => {
 const orderDetail = async (req, res) => {
   try { 
     const orderData = await Order.findOne({ _id: req.query.id }).populate("addressChosen").populate("userId").populate("cartData.productId")
-    console.log(orderData)
     if (orderData) {
       res.render("order_detail",{orderData})
     }
@@ -367,7 +365,8 @@ const cancelOrder = async (req, res) => {
         "wallet.walletTransaction": {
           transactionDate: Date(),
           transactionAmount: orderData.grandTotalCost,
-          transactionType: orderData.paymentType
+          transactionType: "Credit",
+          orderId:req.body.id
         }
       }
     })
@@ -395,7 +394,8 @@ const orderReturn = async (req, res) => {
         "wallet.walletTransaction": {
           transactionDate: Date(),
           transactionAmount: orderData.grandTotalCost,
-          transactionType: orderData.paymentType
+          transactionType: "Credit",
+          orderId:req.body.id
         }
       }
     })
@@ -415,7 +415,6 @@ const orderReturn = async (req, res) => {
 const invoiceOrder = async (req, res) => {
   try {
     const data = await Order.findById({ _id: req.query.orderId, userId: req.session.user_Id }).populate("userId").populate("addressChosen").populate("cartData.productId")
-    console.log(data.userId.name,data.addressChosen.house_no,data.cartData)
     res.json(data)
   }
   catch (error) { 
@@ -426,12 +425,29 @@ const invoiceOrder = async (req, res) => {
 //load confirm Password page
 const confirmPasswordLoad = async (req, res) => {
   try {
-      res.render("confirm_password",{profile:true})
+    res.render("confirm_password", { profile: true })
+  }
+  catch (error) {
+    console.log(error.message);
+  }
+} 
+  //load wallet page
+const loadWallet = async (req, res) => {
+  try {
+    const data = await User.findById({ _id: req.session.user_Id}).populate("orderId").sort({ "wallet.walletTransaction.transactionDate": -1 })
+    if (data.wallet.walletTransaction.length!==0) {
+      res.render("wallet",{profile:true,data})
+    }
+    else {
+      res.render("wallet",{profile:true,msg:"No Recent transactions"})
+    }
+      
   }
   catch (error) { 
     console.log(error.message);
   }
 }
+
 
 //confirm password check
 const confirmPassword = async (req, res) => {
@@ -480,26 +496,27 @@ const newPassword = async (req, res) => {
 
 
 
-module.exports = {
-  verifyLogin,
-  insertUser,
-  loadLogin,
-  forgotLoad,
-  forgotVerify,
-  loadReset,
-  otpVerifySignUp,
-  passwordReset,
-  userLogout,
-  otpResend,
-  loadProfile,
-  editProfile,
-  loadOrders,
-  orderDetail,
-  cancelOrder,
-  orderReturn,
-  invoiceOrder,
-  confirmPasswordLoad,
-  confirmPassword,
-  newPasswordLoad,
-  newPassword
-}
+  module.exports = {
+    verifyLogin,
+    insertUser,
+    loadLogin,
+    forgotLoad,
+    forgotVerify,
+    loadReset,
+    otpVerifySignUp,
+    passwordReset,
+    userLogout,
+    otpResend,
+    loadProfile,
+    editProfile,
+    loadOrders,
+    orderDetail,
+    cancelOrder,
+    orderReturn,
+    invoiceOrder,
+    loadWallet,
+    confirmPasswordLoad,
+    confirmPassword,
+    newPasswordLoad,
+    newPassword
+  }

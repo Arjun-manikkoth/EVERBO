@@ -1826,3 +1826,34 @@ li {
 	box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
 	background-color: rgba(245, 245, 245, 0.838);
 }
+.wallet-bg {
+  font-size: 16px;
+  background: linear-gradient(135deg, #fe4c50, #ff6b6b);
+  width: 160px;
+  height: 110px;
+  border-radius: 15px;
+  color: white;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+  transition: background-color 0.3s ease; 
+	margin-right: 42px;
+	margin-bottom: 38px;
+	float: right;
+}
+
+.wallet-bg:hover {
+  background-color: #ff7575eb; 
+}
+
+.wallet {
+  font-size: 16px;
+}
+
+.wallet-balance {
+  color: white;
+  font-size: 21px;
+  font-weight: 500;
+  margin-top: 10px; 
+}

@@ -35,7 +35,6 @@ function validatelogin() {
 	
 	if (email_login == "" || email_login == null) {
 		emailspan.innerHTML = "&#x1F6C8; Email is a required field"
-		console.log("hello")
 		document.getElementById("email-login").focus();
 		flag = 0;
 	}
@@ -411,7 +410,7 @@ function confirmLogout() {
 		text: "You will be logged out!",
 		icon: 'warning',
 		showCancelButton: true,
-		confirmButtonColor: '#3085d6',
+		confirmButtonColor: '#008000',
 		cancelButtonColor: '#d33',
 		confirmButtonText: 'Yes, logout!'
 	}).then((result) => {
@@ -434,7 +433,7 @@ const nl = document.querySelectorAll(".cart-price")
 	if (el) { 
 		el.innerHTML = totalAmount;
 		var deliveryCharge = document.getElementById("deliveryFee")
-		if (totalAmount >= 3000) { 
+		if (totalAmount >= 1500) { 
 			deliveryCharge.innerHTML = "Free"
 			if (checkOutPrice) {
 				checkOutPrice.innerHTML = totalAmount;
@@ -482,7 +481,7 @@ function decQty(prodId) {
 					}, 0)
 				}
 				totalAmount.innerHTML = checkOutPrice
-				if (checkOutPrice >= 3000) {
+				if (checkOutPrice >= 1500) {
 					deliveryFee.innerHTML = "Free"
 					checkOutAmount.innerHTML = checkOutPrice
 				}
@@ -497,6 +496,12 @@ function decQty(prodId) {
 			icon: 'error',
 			title: 'Minimum One Quantity',
 			text: 'Please select at least one quantity',
+			timer: 4000,
+			timerProgressBar: true,
+			allowOutsideClick: true,
+			allowEscapeKey: false,
+			allowEnterKey: false,
+			showConfirmButton: false
 		});		 
 	}	
 }
@@ -513,10 +518,10 @@ function incQty(prodId) {
 	 if(quantityVal >= 10) {
 		Swal.fire({
 			title: 'Product Limit Reached',
-			text: 'You can only add 10 No\'s per product',
+			text: "You can only add 10 No's per product",
 			timer: 4000,
 			timerProgressBar: true,
-			allowOutsideClick: false,
+			allowOutsideClick: true,
 			allowEscapeKey: false,
 			allowEnterKey: false,
 			showConfirmButton: false
@@ -547,7 +552,7 @@ function incQty(prodId) {
 					}, 0)
 				}
 					totalAmount.innerHTML =checkOutPrice
-					if (checkOutPrice >= 3000) { 
+					if (checkOutPrice >= 1500) { 
 						deliveryFee.innerHTML = "Free"
 						checkOutAmount.innerHTML = checkOutPrice
 					}
@@ -608,19 +613,7 @@ function addAddressExpand() {
 	
 }
 
-function cancelOrder(id) {
 
-	fetch("/cancel_order?id=" + id, { method: 'PUT' })
-	.then((response) => {
-	
-	if (!response.ok) {
-		throw new Error('Network response was not ok.');
-		}
-		return response
-	}).then((data) => {
-		window.location.href = "/order";
-	})
-}
 
 function cancelOrder(orderId) {
 	Swal.fire({
@@ -632,8 +625,10 @@ function cancelOrder(orderId) {
         'Long delivery time': 'Long delivery time',
         'Found a better deal': 'Found a better deal'
     },
-    inputPlaceholder: 'Choose a reason',
-    showCancelButton: true,
+		inputPlaceholder: 'Choose a reason',
+		confirmButtonColor:'#008000',
+		showCancelButton: true,
+		cancelButtonColor: '#d33',
     inputValidator: function(value) {
         return new Promise(function(resolve, reject) {
             if (value !== '') {
@@ -670,7 +665,7 @@ function removeCart(prodId) {
 		text: 'Are you sure you want to remove this product from the cart?',
 		icon: 'warning',
 		showCancelButton: true,
-		confirmButtonColor: '#3085d6',
+		confirmButtonColor: '#008000',
 		cancelButtonColor: '#d33',
 		confirmButtonText: 'Yes, remove it!',
 		cancelButtonText: 'No, keep it'
@@ -702,7 +697,7 @@ function checkStock() {
 				showConfirmButton: false
 			});
 		} else if (data.find(item=> item==="unlisted")==="unlisted") {
-			console.log("unlisted")
+		
 			Swal.fire({
 				title: 'Cart Item Currently Unavailable',
 				text: 'Items you are trying to checkout is currently unavailable.Please review and try again later.',
@@ -727,7 +722,7 @@ function deleteAddress(id) {
 		text: 'Are you sure you want to remove this Address',
 		icon: 'warning',
 		showCancelButton: true,
-		confirmButtonColor: '#3085d6',
+		confirmButtonColor: '#008000',
 		cancelButtonColor: '#d33',
 		confirmButtonText: 'Yes, remove it!',
 		cancelButtonText: 'No, keep it'
@@ -745,7 +740,7 @@ function removeWishlist(prodId) {
 		text: 'Are you sure you want to remove this product from the wishlist?',
 		icon: 'warning',
 		showCancelButton: true,
-		confirmButtonColor: '#3085d6',
+		confirmButtonColor: '#008000',
 		cancelButtonColor: '#d33',
 		confirmButtonText: 'Yes, remove it!',
 		cancelButtonText: 'No, keep it'
@@ -798,85 +793,6 @@ function returnProduct(orderId) {
 
 }
 
-// document.addEventListener("DOMContentLoaded", function () {
-//   const prevButton = document.getElementById('prev');
-//   const nextButton = document.getElementById('next');
-//   const productCards = document.querySelectorAll('.product-item');
-//   const productsPerPage = 8;
-//   let currentPage = 0;
-
-//   function showPage(page) {
-//     productCards.forEach((card) => {
-//       card.style.display = 'none';
-// 		});
-		
-//     const startIndex = page * productsPerPage;
-//     const endIndex = Math.min(startIndex + productsPerPage, productCards.length);
-//     for (let i = startIndex; i < endIndex; i++) {
-//       productCards[i].style.display = 'block';
-//     }
-
-//     updatePaginationButtons(page);
-//   }
-
-// 	function updatePaginationButtons(page) {
-// 		if (prevButton || nextButton) {
-// 			prevButton.disabled = page === 0;
-// 			nextButton.disabled = (page + 1) * productsPerPage >= productCards.length;
-// 		}
-//   }
-
-//   function goToPrevPage() {
-//     if (currentPage > 0) {
-//       currentPage--;
-//       showPage(currentPage);
-//     }
-//   }
-
-//   function goToNextPage() {
-//     const nextPage = currentPage + 1;
-//     if (nextPage * productsPerPage < productCards.length) {
-//       currentPage = nextPage;
-//       showPage(currentPage);
-//     }
-//   }
-// 	if (prevButton||nextButton) {
-// 		prevButton.addEventListener('click', goToPrevPage);
-// 		nextButton.addEventListener('click', goToNextPage);
-// 	}
-//   showPage(currentPage);
-//   updatePaginationButtons(currentPage);
-// });
-
-
-// document.addEventListener("DOMContentLoaded", function() {
-//   const items = document.querySelectorAll('.items');
-  
-//   // Check if there is a selected item in localStorage
-//   const selectedItemId = localStorage.getItem('selectedItemId');
-//   if (selectedItemId) {
-//     const selectedItem = document.getElementById(selectedItemId);
-//     if (selectedItem) {
-//       selectedItem.classList.add('selected');
-//     }
-//   }
-
-//   // Add click event listener to each item
-//   items.forEach(item => {
-//     item.addEventListener('click', function() {
-//       // Remove selected class from all items
-//       items.forEach(item => {
-//         item.classList.remove('selected');
-//       });
-      
-//       // Add selected class to the clicked item
-//       this.classList.add('selected');
-      
-//       // Store the ID of the selected item in localStorage
-//       localStorage.setItem('selectedItemId', this.id);
-//     });
-//   });
-// });
 
 document.addEventListener("DOMContentLoaded", function() {
   const items = document.querySelectorAll('.items');
@@ -887,8 +803,8 @@ document.addEventListener("DOMContentLoaded", function() {
 	};
 	
 	const selectCurrentRoute = () => {
-				items.forEach(item => {
-				console.log(item.dataset.route)
+		items.forEach(item => {
+					
 				if (item.dataset.route.split(',').some(isCurrentRouteSelected)) {
 					item.classList.add('selected');
 				} else {
@@ -989,7 +905,7 @@ function generatePDF(id) {
 				  y += 10;
 				 cartTotal+=item.totalPrice
 			});
-		console.log(cartTotal)
+
 		var shippingCharges=0
 		if (data.grandTotalCost === cartTotal) {
 			pdf.text("Shipping Charges :  " + "Free", 118.5, 115);
@@ -1006,4 +922,284 @@ function generatePDF(id) {
 			.catch(error => {
 					console.error("Error fetching invoice data:", error);
 			});
+}
+
+
+function checkCod() {
+	fetch("/check_cod", { method: 'GET' })
+	.then((response) => {
+	
+	if (!response.ok) {
+		throw new Error('Network response was not ok.');
+		}
+		return response.json()
+	}).then((data) => {
+		var total=data.reduce((sum,item) => {
+			return sum += item.totalPrice;
+		}, 0)
+		if (total >= 910) {
+			document.getElementById("cod").checked=false
+			Swal.fire({
+				title: 'COD Not Available',
+				text: 'Cash on delivery is only avaliable for orders under 1000.',
+				timer: 4000,
+				timerProgressBar: true,
+				allowOutsideClick: true,
+				allowEscapeKey: false,
+				allowEnterKey: false,
+				showConfirmButton: false
+			});
+		} 
+	})
+}
+
+function checkWalletBalance() {
+	fetch("/check_wallet", { method: 'GET' })
+	.then((response) => {
+	
+	if (!response.ok) {
+		throw new Error('Network response was not ok.');
+		}
+		return response.json()
+	}).then((data) => {
+		var total=data.cart.reduce((sum,item) => {
+			return sum += item.totalPrice;
+		}, 0)
+
+		var balance = data.wallet.walletBalance
+
+		if (total > balance) {
+			document.getElementById("wallet").checked=false
+			Swal.fire({
+				title: 'Insufficent Balance',
+				text: 'Please Check your Wallet.',
+				timer: 4000,
+				timerProgressBar: true,
+				allowOutsideClick: true,
+				allowEscapeKey: false,
+				allowEnterKey: false,
+				showConfirmButton: false
+			});
+		} 
+	})
+}
+ 
+if (document.getElementById('deliverHereButton')){
+	document.getElementById('deliverHereButton').addEventListener('click', function() {
+		var paymentSection = document.getElementById('paymentBox');
+		if (paymentSection) {
+				paymentSection.scrollIntoView({ behavior: 'smooth' });
+		}
+	});
+}
+
+
+const couponForm = document.getElementById("couponForm")
+
+if (couponForm) {
+	couponForm.addEventListener('submit', couponCheck);
+}
+function couponCheck(e) {
+	e.preventDefault();
+	
+	const formData = new FormData(couponForm);
+	const plainFormData = Object.fromEntries(formData.entries());
+	const formDataJsonString = JSON.stringify(plainFormData);
+
+  fetch('/coupon_check', {
+		method: 'POST',
+		headers: {
+			"Content-Type": "application/json",
+			 Accept:"application/json"
+		},
+	body: formDataJsonString
+	}).then((response) => {
+	   return	response.json()
+  })
+		.then((data) => {
+			
+	}); 
+}
+
+
+const orderConfirm = document.getElementById("orderConfirm")
+
+if (orderConfirm) {
+	orderConfirm.addEventListener('submit', confirmOrder);
+}
+function confirmOrder(e) {
+	e.preventDefault();
+	
+	const formData = new FormData(orderConfirm);
+	const plainFormData = Object.fromEntries(formData.entries());
+	const formDataJsonString = JSON.stringify(plainFormData);
+
+  fetch('/confirm_order', {
+		method: 'POST',
+		headers: {
+			"Content-Type": "application/json",
+			 Accept:"application/json"
+		},
+	body: formDataJsonString
+	}).then((response) => {
+	   return	response.json()
+  })
+		.then((data) => {
+			if (data.payment === "COD") {
+				window.location.href="/confirm_order"
+			}
+			else if (data.payment === "Wallet") {
+				window.location.href="/confirm_order"
+			}else{
+				
+				var options = { 
+					"key": "rzp_test_bePMUEE1PKoNJ7",  
+					"amount": data.amount,  
+					"currency": "INR",  
+					"order_id":data.id,
+					"handler": function (response){ 
+							
+						fetch('/razorpay_status', {
+							method: 'POST',
+							headers: {
+								"Content-Type": "application/json",
+								 Accept:"application/json"
+							},
+						body: JSON.stringify({status:"Complete"})
+						}).then((response) => {
+							 return	response.json()
+						})
+							.then((data) => {
+								window.location.href="/confirm_order"
+						}); 
+
+					}, 
+					"theme": { 
+							"color": "#FB5531" 
+					} 
+				}; 
+				var razorpayObject = new Razorpay(options); 
+				razorpayObject.on('payment.failed', function (response){ 
+
+
+					fetch('/razorpay_status', {
+						method: 'POST',
+						headers: {
+							"Content-Type": "application/json",
+							 Accept:"application/json"
+						},
+					body: JSON.stringify({status:"Failed"})
+					}).then((response) => {
+						 return	response.json()
+					})
+						.then((data) => {
+							window.location.href="/order"
+					}); 
+					
+				}); 
+				
+				Swal.fire({
+					title: 'Proceed to payment',
+					text: 'Are you sure you want to proceed to payment',
+					icon: 'warning',
+					showCancelButton: true,
+					confirmButtonColor: '#008000',
+					cancelButtonColor: '#d33',
+					confirmButtonText: 'Yes',
+					cancelButtonText: 'No'
+				}).then((result) => {
+					if (result.isConfirmed) {
+						razorpayObject.open(); 
+						
+					}
+				});
+			}
+	}); 
+}
+
+
+const reOrder = document.getElementById("reOrder")
+
+if (reOrder) {
+	reOrder.addEventListener('submit', orderNew);
+}
+function orderNew(e) {
+	e.preventDefault();
+	const formData = new FormData(reOrder);
+	const plainFormData = Object.fromEntries(formData.entries());
+	const formDataJsonString = JSON.stringify(plainFormData);
+
+  fetch('/confirm_order', {
+		method: 'POST',
+		headers: {
+			"Content-Type": "application/json",
+			 Accept:"application/json"
+		},
+	body: formDataJsonString
+	}).then((response) => {
+	   return	response.json()
+  })
+		.then((data) => {
+			
+				var options = { 
+					"key": "rzp_test_bePMUEE1PKoNJ7",  
+					"amount": data.amount,  
+					"currency": "INR",  
+					"order_id":data.id,
+					"handler": function (response){ 
+							
+						fetch('/razorpay_status', {
+							method: 'POST',
+							headers: {
+								"Content-Type": "application/json",
+								 Accept:"application/json"
+							},
+						body: JSON.stringify({status:"Complete"})
+						}).then((response) => {
+							 return	response.json()
+						})
+							.then((data) => {
+								window.location.href="/confirm_order"
+						}); 
+
+					}, 
+					"theme": { 
+							"color": "#FB5531" 
+					} 
+				}; 
+				var razorpayObject = new Razorpay(options); 
+				razorpayObject.on('payment.failed', function (response){ 
+
+
+					fetch('/razorpay_status', {
+						method: 'POST',
+						headers: {
+							"Content-Type": "application/json",
+							 Accept:"application/json"
+						},
+					body: JSON.stringify({status:"Failed"})
+					}).then((response) => {
+						 return	response.json()
+					}).then((data) => {
+							window.location.href="/order"
+					}); 
+					
+				}); 
+				
+				Swal.fire({
+					title: 'Proceed to payment',
+					text: 'Are you sure you want to proceed to payment',
+					icon: 'warning',
+					showCancelButton: true,
+					confirmButtonColor: '#008000',
+					cancelButtonColor: '#d33',
+					confirmButtonText: 'Yes',
+					cancelButtonText: 'No'
+				}).then((result) => {
+					if (result.isConfirmed) {
+						razorpayObject.open(); 
+						
+					}
+				});
+	}); 
 }

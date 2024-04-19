@@ -48,7 +48,7 @@ const loadShop = async (req, res) => {
       ]
     }).countDocuments()
     
-
+    let session ={cartCount:2,wishlistCount:3}
     let totalPages = Math.ceil(count / limit)
 
     const category = await Category.find({is_listed:true})
@@ -57,7 +57,8 @@ const loadShop = async (req, res) => {
       product,
       category,
       currentPage:page,
-      totalPages
+      totalPages,
+      session
     })
   }
   catch (error) { 
@@ -78,10 +79,36 @@ const loadProduct = async (req, res) => {
   }
 }
 
+//load shop page with products view
+const priceAscending = async (req, res) => {
+  try {
+    const category = await Category.find({})
+    const product = await Product.find({}).sort({ price: -1 })
+    res.render("shop", {product,category})
+  }
+  catch (error) { 
+    console.log(error.message);
+  }
+}
+
+//load shop page with products view
+const priceDescending = async (req, res) => {
+  try {
+    const category = await Category.find({})
+    const product = await Product.find({}).sort({ price: 1 })
+    res.render("shop", {product,category})
+  }
+  catch (error) { 
+    console.log(error.message);
+  }
+}
+
 
 module.exports = {
   loadLanding,
   loadProduct,
+  priceAscending,
+  priceDescending,
   loadShop
 }
 

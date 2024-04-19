@@ -37,7 +37,7 @@
             <%}))%>
             <span onclick="addAddressExpand()" class="span-cursor">+Add Address</span>
               <div class="order-confirm-btn">
-                <button class="profile-button btn" type="submit" >Deliver Here</button>
+               <button id="deliverHereButton" class="profile-button btn" type="submit" >Deliver Here</button>
                </div>
               </div>
           </form>
@@ -141,22 +141,22 @@
             </div>
             <div id="paymentBox" >
               <div class="card-body">
-                <form action="/confirm_order" method="post">
+                <form id="orderConfirm" >
                   <div  class="payment-options">
                     <br>           
-                    <input type="radio" id="cod" name="payment" value="COD" checked>
+                    <input type="radio" id="cod" name="payment" value="COD" onclick="checkCod()">
                     <label class="label-radio" for="cod">Cash On Delivery</label>
                     <br>
                     <br>
-                    <input type="radio" id="upi" name="payment" value="UPI"> 
-                    <label class="label-radio" for="upi">UPI</label>
+                    <input type="radio" id="wallet" name="payment" value="Wallet" onclick="checkWalletBalance()"> 
+                    <label class="label-radio" for="wallet">Wallet</label>
                     <br>
                     <br>
-                    <input type="radio" id="card" name="payment" value="Card">
-                    <label class="label-radio" for="card">Credit / Debit / ATM Card</label>
+                    <input type="radio" id="online" name="payment" value="RazorPay">
+                    <label class="label-radio" for="online">Online Payment</label>
                     <br>
                     <div class="order-confirm-btn">
-                     <button type="submit" class="profile-button btn">Confirm Order</button>
+                     <button type="submit" class="profile-button btn" id="payButton">Confirm Order</button>
                     </div> 
                   </div>  
                   <input type="hidden" id="sumTot" name="total" value="">       
@@ -181,6 +181,10 @@
                   Shipping Charges
                   <span id="deliveryFee">Free</span>
                 </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
+                  Total Discount
+                <div>Rs. <span id="couponDiscount">0</span></div>
+                </li>
                 <li
                   class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
                   <div>
@@ -191,6 +195,12 @@
                   </div>
                   <span>Rs. <strong id="priceCheckOut"></strong></span>
                 </li>
+                <form action="" method="post" id="couponForm">
+                <div class="coupon-div d-flex mb-1">
+                  <input type="text" class="coupon-input" id="couponCode" name="couponCode" placeholder="Enter Coupon code">
+                  <button class="profile-button btn coupon-btn" type="submit">Apply</button>
+                </div>
+              </form>
               </ul>
             </div>
           </div>

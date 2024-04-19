@@ -2,6 +2,9 @@ const User = require("../models/userModel");
 const Product = require("../models/productModel")
 const Address = require("../models/addressModel")
 const Order = require("../models/orderModel")
+const Razorpay = require('razorpay');
+const { RAZORPAY_KEY_ID, RAZORPAY_SECRET } = process.env;
+var instance = new Razorpay({ key_id: RAZORPAY_KEY_ID, key_secret: RAZORPAY_SECRET })
 
 //cart Load
 const cartLoad = async (req, res) => {
@@ -24,7 +27,7 @@ const addToCart = async (req, res) => {
     const Existing = await User.findOne({ _id: req.session.user_Id, "cart.productId": req.query.prodId })
     const product = await Product.findOne({ _id: req.query.prodId })
     const cartData = await User.findOne({ _id: req.session.user_Id }).populate("cart.productId")
-    console.log(cartData)
+
     if (Existing) { 
       res.redirect("/cart")
     } else { 
@@ -97,8 +100,8 @@ const incQuantity = async (req, res) => {
              "cart.$.totalPrice": totalPrice    
         }   
      })
-     const data= await User.findOne({ _id: req.session.user_Id, "cart.productId": req.params.id }).populate("cart.productId")
-     const newData = data.cart.find(item => item.productId._id == req.params.id)
+      const data = await User.findOne({ _id: req.session.user_Id, "cart.productId": req.params.id }).populate("cart.productId")
+      const newData = data.cart.find(item => item.productId._id == req.params.id)
       res.json(newData)
     }  
   }
@@ -238,6 +241,7 @@ const updateAddress = async (req, res) => {
 //choose checkout address
 const chooseCheckoutAddress = async (req, res) => {
   try {
+
     if (req.session.orderId && req.body.address) {
       const data = await Order.findByIdAndUpdate({ _id: req.session.orderId }, { $set: { addressChosen: req.body.address, userId:req.session.user_Id } })
       res.json(data) 
@@ -261,37 +265,93 @@ const chooseCheckoutAddress = async (req, res) => {
 //confirm order
 const confirmOrder = async (req, res) => {
   try {
-    const userData = await User.findOne({ _id: req.session.user_Id, }).populate("cart.productId")
-
-    const cartArray  = userData.cart.map((item) => {
-      return {
-        productId:item.productId,
-        productQuantity:item.productQuantity,
-        pricePerProduct:item.pricePerProduct,
-        totalPrice:item.totalPrice
+    if (req.body.ordersId) {
+      req.session.orderId=req.body.ordersId
+      const data = await Order.findOne({ _id: req.body.ordersId, userId: req.session.user_Id })
+      if (req.body.payment === "RazorPay") {
+        var options = {
+          amount: req.body.total*100,  
+          currency: "INR",
+          receipt: data._id
+        };
+        instance.orders.create(options, function(err, order) {
+          if(!err) 
+          res.json(order) 
+        else
+          res.send(err);
+        });
       }
-     })
-    const orderNo= await Order.find({}).countDocuments()
-    const data= await Order.findByIdAndUpdate({ _id: req.session.orderId }, {
-      $set: {
-        orderNumber:orderNo+1,
-        paymentType: req.body.payment,
-        cartData: cartArray,
-        orderDate:Date.now(),
-        grandTotalCost: req.body.total, 
+    }
+    else {
+      const userData = await User.findOne({ _id: req.session.user_Id, }).populate("cart.productId")
+
+      const cartArray  = userData.cart.map((item) => {
+        return {
+          productId:item.productId,
+          productQuantity:item.productQuantity,
+          pricePerProduct:item.pricePerProduct,
+          totalPrice:item.totalPrice
+        }
+      }) 
+  
+      const orderNo= await Order.find({}).countDocuments()
+      const data= await Order.findByIdAndUpdate({ _id: req.session.orderId }, {
+        $set: {
+          orderNumber:orderNo+1,
+          paymentType:req.body.payment,
+          cartData: cartArray,
+          orderDate:Date.now(),
+          grandTotalCost: req.body.total, 
+        }
+      }, { new: true })
+      userData.cart.map((item) => {
+        item.productId.quantity -= item.productQuantity
+        item.productId.save()
+      })
+  
+      await User.updateOne({ _id: req.session.user_Id }, { $set: { cart: [] } })
+  
+      if (req.body.payment === "COD") {
+        await Order.findByIdAndUpdate({ _id: req.session.orderId }, {
+          $set: {
+            paymentStatus: "Complete"
+          }
+        })
+          res.json({payment:"COD"})
       }
-    })
-    userData.cart.map((item) => {
-      item.productId.quantity -= item.productQuantity
-      item.productId.save()
-    })
-    
-    await User.updateOne({ _id: req.session.user_Id }, { $set: { cart: [] } })
-
-    req.session.orderId=""
-
-    if (data) {
-      res.render("order_confirm")
+      if (req.body.payment === "Wallet") {
+          await User.findByIdAndUpdate({ _id: req.session.user_Id }, {
+          $inc: {
+            "wallet.walletBalance": -data.grandTotalCost
+          }, $push: {
+            "wallet.walletTransaction": {
+              transactionDate: Date(),
+              transactionAmount: data.grandTotalCost,
+              transactionType: "Debit",
+              orderId:data._id
+            }
+          }
+          })
+          await Order.findByIdAndUpdate({ _id: req.session.orderId }, {
+            $set: {
+              paymentStatus: "Complete"
+            }
+          })
+        res.json({payment:"Wallet"})
+      }
+      else if (req.body.payment === "RazorPay") {
+        var options = {
+          amount: req.body.total*100,  
+          currency: "INR",
+          receipt: data._id
+        };
+        instance.orders.create(options, function(err, order) {
+          if(!err) 
+          res.json(order) 
+        else
+          res.send(err);
+        });
+      }
     }
   }
   catch (error) { 
@@ -299,6 +359,65 @@ const confirmOrder = async (req, res) => {
   }
 }
 
+//razorpay payment status update
+const razorPayStatus = async (req,res) => {
+  try { 
+    if (req.body.status === "Complete"){
+      await Order.findByIdAndUpdate({ _id: req.session.orderId }, {
+        $set: {
+          paymentStatus: "Complete"
+        }
+      })
+      res.json({ Status: "success" })
+    }
+    else {
+      await Order.findByIdAndUpdate({ _id: req.session.orderId }, {
+        $set: {
+          paymentStatus: "Failed"
+        }
+      })
+      res.json({ Status: "failure" })
+    }
+  }
+  catch (error) {
+    console.log(error.message);
+  }
+
+}
+
+//order success page
+const orderPlaced = async (req, res) => {
+  try {
+    req.session.orderId=''
+  res.render("order_confirm")
+  }
+  catch (error) {
+    console.log(error.message)
+  }
+}
+
+
+//payment option cod check
+const checkCod = async (req, res) => {
+  try {
+    const data = await User.findById({ _id: req.session.user_Id })
+    res.json(data.cart)
+  }
+  catch (error) {
+    console.log(error.message)
+  }
+}
+
+//payment option wallet check
+const checkWallet = async (req, res) => {
+  try {
+    const data = await User.findById({ _id: req.session.user_Id })
+    res.json(data)
+  }
+  catch (error) {
+    console.log(error.message)
+  }
+}
 
 module.exports = {
   cartLoad,
@@ -312,5 +431,9 @@ module.exports = {
   loadEditCheckout,
   updateAddress,
   chooseCheckoutAddress,
-  confirmOrder
+  confirmOrder,
+  checkCod,
+  checkWallet,
+  razorPayStatus,
+  orderPlaced
 }

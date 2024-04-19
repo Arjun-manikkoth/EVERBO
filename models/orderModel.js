@@ -4,7 +4,8 @@ const orderSchema= new mongoose.Schema({
     userId: { type: mongoose.Types.ObjectId, ref: 'user'},
     orderNumber: { type: Number},
     orderDate: { type: Date, default: new Date()},
-    paymentType: {type: String, default:'toBeChosen'},
+    paymentType: { type: String, default: 'toBeChosen' },
+    paymentStatus:{type:String,default:"Pending"}, 
     orderStatus: {type: String, default:'Pending'},
     addressChosen : { type: mongoose.Types.ObjectId, required: true, ref: 'address'},
     cartData: [{

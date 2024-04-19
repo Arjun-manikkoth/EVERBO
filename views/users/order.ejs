@@ -9,13 +9,14 @@
                       </div>
                       <div class="container address-box">
                         <%if(locals.orderData){%>         
-                            <table class="table table-hover table-responsive">
+                            <table class="table table-hover table-responsive text-center">
                               <thead>
                                 <tr>
-                                  <th class="col-3" scope="col">Order Date</th>
+                                  <th class="col-2" scope="col">Order Date</th>
                                   <th class="col-3" scope="col">Order Status</th>
                                   <th class="col-3" scope="col">Payment Type</th>
-                                  <th class="col-3" scope="col">Order Detail</th>
+                                  <th class="col-3" scope="col">Payment Status</th>
+                                  <th class="col-1" scope="col">Details</th>
                                 </tr>
                               </thead>
                               <tbody>
@@ -24,6 +25,7 @@
                                         <td><%=data.orderDate.toLocaleString()%></td>
                                         <td><%=data.orderStatus%></td>
                                         <td><%=data.paymentType%></td>
+                                        <td><%=data.paymentStatus%></td>
                                         <td>
                                           <div class="categ-edit ml-3">
                                             <a href="/order_detail?id=<%=data._id%>" class=" categ-edit "><button type="button" class="btn profile-button btn-sm">View</button></a>

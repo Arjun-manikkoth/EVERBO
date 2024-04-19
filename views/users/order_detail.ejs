@@ -58,13 +58,26 @@
           <div class="card mb-4">
             <div class="card-body d-flex justify-content-between">
               <div>
+                <%if(orderData.paymentStatus==="Complete"){%>
                 <button class="btn mx-3 profile-button download" onclick="generatePDF('<%=orderData._id%>')" >Download Invoice</button> 
+                <%}else{%>
+                  <h5 class="mr-5">Payment Status : Pending <h5>
+                <%}%>
               </div>
               <div class="text-center">
       
                 <% if (orderData.orderStatus === "Pending" || orderData.orderStatus === "Shipped") { %>
-                  <button class="btn mx-3 profile-button" type="button" onclick="cancelOrder('<%=orderData._id%>')">Cancel Order</button>
-                <% } else if (orderData.orderStatus === "Delivered") { %>
+                     <%if(orderData.paymentStatus==="Complete"){%>
+                  <button class="btn mx-3 btn-danger" type="button" onclick="cancelOrder('<%=orderData._id%>')">Cancel Order</button>
+                <%}else{%>     
+                  <form id="reOrder" >           
+                    <input type="hidden" id="online" name="payment" value="RazorPay">
+                    <input type="hidden" id="ordersId" name="ordersId" value="<%=orderData._id%>">     
+                    <input type="hidden" id="total" name="total" value="<%=orderData.grandTotalCost%>">     
+                    <button class="btn mx-3 btn-success" type="submit" id="payAgain">Pay Now</button>  
+                </form>       
+                  <%}%>
+                  <% } else if (orderData.orderStatus === "Delivered") { %>
                   <% const deliveryDate = new Date(orderData.updatedAt);
                      const now = new Date();
                      const fifteenDaysAgo = new Date(now.getTime() - (15 * 24 * 60 * 60 * 1000));
@@ -75,7 +88,7 @@
                        <% } %>
                 <% } else if(orderData.orderStatus==="Returned") { %>
                   <h5 class="mr-5">Order Status : Returned<h5>
-                <% } else{%>
+                <% } else if(orderData.orderStatus==="Cancelled"){%>
                 <h5 class="mr-5">Order Status : Cancelled<h5>
                   <%}%>
               </div>
