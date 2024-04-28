@@ -3,8 +3,15 @@ const Category = require("../models/categoryModel")
 //category page load
 const categoriesLoad = async (req, res) => {
   try {
-   const category=await Category.find({})
-    res.render("categories", {category})
+    let page = 1
+    if (req.query.page) {
+      page=req.query.page
+    }
+    let limit = 4;
+    let count = await Category.find({is_deleted:0}).countDocuments()
+    let totalPages=Math.ceil(count/limit)
+   const category=await Category.find({is_deleted:0}).limit(limit).skip((page-1)*limit).sort({name:1})
+    res.render("categories", {category,totalPages,currentPage:page})
   }
   catch (error) {
     console.log(error.message);
@@ -27,7 +34,6 @@ const addCategory = async (req, res) => {
   try {
    const categoryName=req.body.name.toString()
     const exists = await Category.findOne({ name: { $regex: new RegExp("^"+categoryName+"$","i") } });
-    console.log(exists)
 
     if (exists) {
       res.render("add_category", { message: "Category already added" })

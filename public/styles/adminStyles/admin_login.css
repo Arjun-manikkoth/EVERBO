@@ -188,7 +188,7 @@ form .btns input[type="submit"]{
 #email-error-login,#password-error-login,
 #name-error-signup,#email-error-signup,
 #password-error-signup,#newpassword-error-signup,
-#mobile_no-error-signup{
+#mobile_no-error-signup,.error{
   font-size: 13px;
   color: red;
 }

@@ -5,6 +5,7 @@ const adminController = require("../controllers/adminController")
 const productController = require("../controllers/productController")
 const categoryController = require("../controllers/categoryController")
 const orderController = require("../controllers/orderController")
+const couponController = require("../controllers/couponController")
 const auth = require("../middlewares/adminAuth")
 const upload=require('../middlewares/multer')
 
@@ -109,6 +110,20 @@ admin_route.get("/order_detail", auth.isLogin, orderController.orderDetailLoad)
 //Admin order edit page load
 admin_route.post("/order_edit",auth.isLogin, orderController.updateOrder)
 
+
+//-----------------------------------Coupon Management----------------------------------
+
+//Admin coupon page load
+admin_route.get("/coupons", auth.isLogin, couponController.couponLoad)
+
+// //Add coupon page load
+admin_route.get("/add_coupon", auth.isLogin, couponController.addCouponLoad)
+
+// //Add coupon 
+admin_route.post("/add_coupon", auth.isLogin, couponController.addCoupon)
+
+//Delete coupon 
+ admin_route.get("/delete_coupon", auth.isLogin, couponController.deleteCoupon)
 
 
 module.exports = admin_route;

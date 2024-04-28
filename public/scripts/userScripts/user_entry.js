@@ -28,8 +28,8 @@ function validatelogin() {
 	var flag = 1;
 	var emailspan = document.getElementById("email-error-login")
 	var passwordspan = document.getElementById("password-error-login")
-	var email_login = document.getElementById("email-login").value
-	var password_login = document.getElementById("password-login").value
+	var email_login = document.getElementById("email-login").value.trim()
+	var password_login = document.getElementById("password-login").value.trim()
   
 	var validRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{3,4}$/;
 	
@@ -67,12 +67,14 @@ function validatesignup() {
 	var passwordspan = document.getElementById("password-error-signup")
 	var newpasswordspan = document.getElementById("newpassword-error-signup")
 	
-	var name_signup = document.getElementById("name-signup").value
-	var email_signup = document.getElementById("email-signup").value
-	var mobileno_signup = document.getElementById("mobile_no-signup").value
-	var password_signup = document.getElementById("password-signup").value
-	var newpassword_signup = document.getElementById("newpassword-signup").value
+	var name_signup = document.getElementById("name-signup").value.trim()
+	var email_signup = document.getElementById("email-signup").value.trim()
+	var mobileno_signup = document.getElementById("mobile_no-signup").value.trim()
+	var password_signup = document.getElementById("password-signup").value.trim()
+	var newpassword_signup = document.getElementById("newpassword-signup").value.trim()
   
+	var passwordRegex=/^(?=.*[0-9].*[0-9])(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?].*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])[A-Za-z0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]{8,}$/
+
 	var validRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{3,4}$/;
 	var mobile_regex = /^(\+\d{1,3}[- ]?)?\d{10}$/;
 	if (name_signup == "" || name_signup == null) {
@@ -113,20 +115,33 @@ function validatesignup() {
 			passwordspan.innerHTML = "&#x1F6C8; Password is a required field"
 			document.getElementById("password-signup").focus();
 			flag = 0;
-		} else {
-			passwordspan.innerHTML = ""
-		}
-		if (newpassword_signup == "" || newpassword_signup == null) {
-			newpasswordspan.innerHTML = "&#x1F6C8; Newpassword is a required field"
-			document.getElementById("password-signup").focus();
-			flag = 0;
-		} else if (password_signup != newpassword_signup) {
-			newpasswordspan.innerHTML = "&#x1F6C8; Passwords doesnot match"
-			flag = 0;
-		}
+		} 
 		else {
-			newpasswordspan.innerHTML = "";
-		}
+			 if (password_signup.length!=8) {
+				passwordspan.innerHTML = "&#x1F6C8; Password should contain minimum 8 characters "
+				document.getElementById("password-signup").focus();
+				 flag = 0;
+				 
+			 }
+			 else if (password_signup.match(passwordRegex) == null) {
+				passwordspan.innerHTML = "&#x1F6C8; Use a stronger password including numbers and special characters"
+				document.getElementById("password-signup").focus();
+				 flag = 0;
+			}
+			else if (newpassword_signup == "" || newpassword_signup == null) {
+				newpasswordspan.innerHTML = "&#x1F6C8; New password is a required feild"
+				document.getElementById("newpassword-signup").focus();
+				flag = 0;
+			}
+			else if (password_signup != newpassword_signup) {
+					newpasswordspan.innerHTML = "&#x1F6C8; Passwords doesnot match"
+					flag = 0;
+			}
+			else {
+				newpasswordspan.innerHTML = "";
+			}
+	}
+		
 		if (flag == 0)
 			return false
 		else
@@ -135,7 +150,7 @@ function validatesignup() {
 function validateforgot() {
 	
 	var flag = 1;
-	var email_login = document.getElementById("email-login").value
+	var email_login = document.getElementById("email-login").value.trim()
 	var emailspan = document.getElementById("email-error-login")
 	var validRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{3,4}$/;
 	
@@ -167,28 +182,40 @@ function clear_error(id) {
 function validatereset() { 
 	var passwordspan = document.getElementById("password-error-signup")
 	var newpasswordspan = document.getElementById("newpassword-error-signup")
-	var password_signup = document.getElementById("password-signup").value
-	var newpassword_signup = document.getElementById("newpassword-signup").value
+	var password_signup = document.getElementById("password-signup").value.trim()
+	var newpassword_signup = document.getElementById("newpassword-signup").value.trim()
 	var flag = 1;
 
 	if (password_signup == "" || password_signup == null) {
-			passwordspan.innerHTML = "&#x1F6C8; Password is a required field"
+		passwordspan.innerHTML = "&#x1F6C8; Password is a required field"
+		document.getElementById("password-signup").focus();
+		flag = 0;
+	} 
+	else {
+		 if (password_signup.length!=8) {
+			passwordspan.innerHTML = "&#x1F6C8; Password should contain minimum 8 characters "
 			document.getElementById("password-signup").focus();
-			flag = 0;
-		} else {
-			passwordspan.innerHTML = ""
+			 flag = 0;
+			 
+		 }
+		 else if (password_signup.match(passwordRegex) == null) {
+			passwordspan.innerHTML = "&#x1F6C8; Use a stronger password including numbers and special characters"
+			document.getElementById("password-signup").focus();
+			 flag = 0;
 		}
-		if (newpassword_signup == "" || newpassword_signup == null) {
-			newpasswordspan.innerHTML = "&#x1F6C8; Newpassword is a required field"
-			document.getElementById("password-signup").focus();
+		else if (newpassword_signup == "" || newpassword_signup == null) {
+			newpasswordspan.innerHTML = "&#x1F6C8; New password is a required feild"
+			document.getElementById("newpassword-signup").focus();
 			flag = 0;
-		} else if (password_signup != newpassword_signup) {
-			newpasswordspan.innerHTML = "&#x1F6C8; Passwords doesnot match"
-			flag = 0;
+		}
+		else if (password_signup != newpassword_signup) {
+				newpasswordspan.innerHTML = "&#x1F6C8; Passwords doesnot match"
+				flag = 0;
 		}
 		else {
 			newpasswordspan.innerHTML = "";
 		}
+}
 		if (flag == 0)
 			return false
 		else
@@ -240,10 +267,10 @@ if (inputs) {
 	
 function validateotp() {
 		
-	var input1 = document.getElementById("input1").value
-	var input2 = document.getElementById("input2").value
-	var input3 = document.getElementById("input3").value
-	var input4 = document.getElementById("input4").value
+	var input1 = document.getElementById("input1").value.trim()
+	var input2 = document.getElementById("input2").value.trim()
+	var input3 = document.getElementById("input3").value.trim()
+	var input4 = document.getElementById("input4").value.trim()
 	if (input1 === "" || input2 === "" || input3 === "" || input4 === "" || input1 === null || input2 === null || input3 === null || input4 === null) { 
 		return false;
 	}
@@ -254,8 +281,8 @@ function validateEditProfile() {
 	var namespan = document.getElementById("name-error")
 	var mobile_nospan=document.getElementById("mobile-error")
 
-	var name= document.getElementById("name").value
-	var mobileno = document.getElementById("mobile-no").value
+	var name= document.getElementById("name").value.trim()
+	var mobileno = document.getElementById("mobile-no").value.trim()
 
 	var mobile_regex = /^(\+\d{1,3}[- ]?)?\d{10}$/;
 	if (name == "" || name == null) {
@@ -287,30 +314,40 @@ function validateEditProfile() {
 function validateNewPassword() { 
 	var passwordspan = document.getElementById("password1-error")
 	var newpasswordspan = document.getElementById("password2-error")
-	var password = document.getElementById("password1").value
-	var newpassword = document.getElementById("password2").value
+	var password = document.getElementById("password1").value.trim()
+	var newpassword = document.getElementById("password2").value.trim()
 	var flag = 1;
-
 	if (password == "" || password == null) {
-			passwordspan.innerHTML = "&#x1F6C8; Password is a required field"
+		passwordspan.innerHTML = "&#x1F6C8; Password is a required field"
+		document.getElementById("password1").focus();
+		flag = 0;
+	} 
+	else {
+		 if (password.length!=8) {
+			passwordspan.innerHTML = "&#x1F6C8; Password should contain minimum 8 characters "
 			document.getElementById("password1").focus();
-			flag = 0;
-		} else {
-			passwordspan.innerHTML = ""
+			 flag = 0;
+			 
+		 }
+		 else if (password.match(passwordRegex) == null) {
+			passwordspan.innerHTML = "&#x1F6C8; Use a stronger password including numbers and special characters"
+			document.getElementById("password1").focus();
+			 flag = 0;
 		}
-		if (newpassword == "" || newpassword == null) {
-			newpasswordspan.innerHTML = "&#x1F6C8; Confirm password is a required field"
+		else if (newpassword == "" || newpassword == null) {
+			newpasswordspan.innerHTML = "&#x1F6C8; New password is a required feild"
 			document.getElementById("password2").focus();
 			flag = 0;
-		} else if (password!= newpassword) {
-			newpasswordspan.innerHTML = "&#x1F6C8; Passwords doesnot match"
-			document.getElementById("password1").focus();
-			document.getElementById("password2").focus();
-			flag = 0;
+		}
+		else if (password != newpassword) {
+				newpasswordspan.innerHTML = "&#x1F6C8; Passwords doesnot match"
+				flag = 0;
 		}
 		else {
 			newpasswordspan.innerHTML = "";
 		}
+}
+
 		if (flag == 0)
 			return false
 		else
@@ -319,7 +356,7 @@ function validateNewPassword() {
 	
 function validateConfirmPassword() { 
 	var passwordspan = document.getElementById("password-error")
-	var password = document.getElementById("password").value
+	var password = document.getElementById("password").value.trim()
 	var flag = 1;
 
 	if (password == "" || password == null) {
@@ -344,12 +381,12 @@ function validateAddAddress() {
 	var districtspan=document.getElementById("district-error")
 	var streetspan = document.getElementById("street-error")
 	
-	var houseno = document.getElementById("house-no").value
-	var state = document.getElementById("state").value
-	var street = document.getElementById("street").value
-	var pincode = document.getElementById("pincode").value
-	var landmark = document.getElementById("landmark").value
-	var district = document.getElementById("district").value
+	var houseno = document.getElementById("house-no").value.trim()
+	var state = document.getElementById("state").value.trim()
+	var street = document.getElementById("street").value.trim()
+	var pincode = document.getElementById("pincode").value.trim()
+	var landmark = document.getElementById("landmark").value.trim()
+	var district = document.getElementById("district").value.trim()
 
 		if (houseno == "" || houseno == null) {
 			house_nospan.innerHTML = "&#x1F6C8; House no is a required field"
@@ -572,7 +609,7 @@ function incQty(prodId) {
 				text: 'Cannot add more quantity',
 				timer: 3000,
 				timerProgressBar: true,
-				allowOutsideClick: false,
+				allowOutsideClick: true,
 				allowEscapeKey: false,
 				allowEnterKey: false,
 				showConfirmButton: false
@@ -795,15 +832,14 @@ function returnProduct(orderId) {
 
 
 document.addEventListener("DOMContentLoaded", function() {
-  const items = document.querySelectorAll('.items');
-	const selectedRoute = localStorage.getItem('selectedRoute');
+	const items = document.querySelectorAll('.items');
+	if (items.length != 0) {
+		const isCurrentRouteSelected = (route) => {
+			return window.location.pathname === route;
+		};
 	
-  const isCurrentRouteSelected = (route) => {
-    return window.location.pathname === route;
-	};
-	
-	const selectCurrentRoute = () => {
-		items.forEach(item => {
+		const selectCurrentRoute = () => {
+			items.forEach(item => {
 					
 				if (item.dataset.route.split(',').some(isCurrentRouteSelected)) {
 					item.classList.add('selected');
@@ -811,20 +847,20 @@ document.addEventListener("DOMContentLoaded", function() {
 					item.classList.remove('selected');
 				}
 			});
-	};
+		};
 
-  selectCurrentRoute();
+		selectCurrentRoute();
 
-  items.forEach(item => {
-    item.addEventListener('click', function() {
-      items.forEach(item => {
-        item.classList.remove('selected');
-			});
+		items.forEach(item => {
+			item.addEventListener('click', function () {
+				items.forEach(item => {
+					item.classList.remove('selected');
+				});
 			
-      this.classList.add('selected');
-      localStorage.setItem('selectedRoute', this.dataset.route.split(',')[0]); 
-    });
-  });
+				this.classList.add('selected');
+			});
+		});
+	}
 });
 
 
@@ -994,32 +1030,61 @@ if (document.getElementById('deliverHereButton')){
 }
 
 
-const couponForm = document.getElementById("couponForm")
-
-if (couponForm) {
-	couponForm.addEventListener('submit', couponCheck);
-}
-function couponCheck(e) {
-	e.preventDefault();
-	
-	const formData = new FormData(couponForm);
-	const plainFormData = Object.fromEntries(formData.entries());
-	const formDataJsonString = JSON.stringify(plainFormData);
-
+function couponCheck() {
+	var discount =document.getElementById('couponDiscount') //show
+	var totalPrice = document.getElementById('priceCheckOut') //show
+	var totalAmount = document.getElementById('sumTot') //input
+	var totalDiscount = document.getElementById('discountInput') //input
+	var couponCode = document.getElementById('couponCode') //input
+  var code=couponCode.value.trim()
+const data=JSON.stringify({coupon:code})
   fetch('/coupon_check', {
 		method: 'POST',
 		headers: {
 			"Content-Type": "application/json",
 			 Accept:"application/json"
 		},
-	body: formDataJsonString
+	body: data
 	}).then((response) => {
 	   return	response.json()
   })
 		.then((data) => {
-			
-	}); 
+			if (data.Status === "Valid") {
+				if (data.startDate >= new Date(Date.now()) && data.expiryDate <= new Date(Date.now())) {
+					
+				}
+				else {
+					Swal.fire({
+						title: 'Coupon cant be applied',
+						text: 'The couponcode entered is either expired or not applicable now',
+						timer: 3000,
+						timerProgressBar: true,
+						allowOutsideClick: true,
+						allowEscapeKey: false,
+						allowEnterKey: false,
+						showConfirmButton: false
+					});
+				}
+			}
+			else {
+				Swal.fire({
+					title: 'Invalid Coupon Code',
+					text: 'The coupon code you have entered is invalid',
+					timer: 3000,
+					timerProgressBar: true,
+					allowOutsideClick: true,
+					allowEscapeKey: false,
+					allowEnterKey: false,
+					showConfirmButton: false
+				});
+			}
+		}); 
+	//discount.innerHTML = Number(100)
+	//console.log("entho karyayit nadannit ind",totalPrice.textContent=(totalPrice.textContent)-(discount.textContent))
+
 }
+	
+
 
 
 const orderConfirm = document.getElementById("orderConfirm")
@@ -1029,92 +1094,131 @@ if (orderConfirm) {
 }
 function confirmOrder(e) {
 	e.preventDefault();
+  
+	fetch("/check_stock", { method: 'GET' })
+	.then((response) => {
 	
-	const formData = new FormData(orderConfirm);
-	const plainFormData = Object.fromEntries(formData.entries());
-	const formDataJsonString = JSON.stringify(plainFormData);
-
-  fetch('/confirm_order', {
-		method: 'POST',
-		headers: {
-			"Content-Type": "application/json",
-			 Accept:"application/json"
-		},
-	body: formDataJsonString
-	}).then((response) => {
-	   return	response.json()
-  })
-		.then((data) => {
-			if (data.payment === "COD") {
-				window.location.href="/confirm_order"
-			}
-			else if (data.payment === "Wallet") {
-				window.location.href="/confirm_order"
-			}else{
-				
-				var options = { 
-					"key": "rzp_test_bePMUEE1PKoNJ7",  
-					"amount": data.amount,  
-					"currency": "INR",  
-					"order_id":data.id,
-					"handler": function (response){ 
-							
-						fetch('/razorpay_status', {
-							method: 'POST',
-							headers: {
-								"Content-Type": "application/json",
-								 Accept:"application/json"
-							},
-						body: JSON.stringify({status:"Complete"})
-						}).then((response) => {
-							 return	response.json()
-						})
-							.then((data) => {
-								window.location.href="/confirm_order"
-						}); 
-
-					}, 
-					"theme": { 
-							"color": "#FB5531" 
-					} 
-				}; 
-				var razorpayObject = new Razorpay(options); 
-				razorpayObject.on('payment.failed', function (response){ 
-
-
-					fetch('/razorpay_status', {
-						method: 'POST',
-						headers: {
-							"Content-Type": "application/json",
-							 Accept:"application/json"
-						},
-					body: JSON.stringify({status:"Failed"})
-					}).then((response) => {
-						 return	response.json()
-					})
-						.then((data) => {
-							window.location.href="/order"
-					}); 
-					
-				}); 
-				
-				Swal.fire({
-					title: 'Proceed to payment',
-					text: 'Are you sure you want to proceed to payment',
-					icon: 'warning',
-					showCancelButton: true,
-					confirmButtonColor: '#008000',
-					cancelButtonColor: '#d33',
-					confirmButtonText: 'Yes',
-					cancelButtonText: 'No'
-				}).then((result) => {
-					if (result.isConfirmed) {
-						razorpayObject.open(); 
-						
+	if (!response.ok) {
+		throw new Error('Network response was not ok.');
+		}
+		return response.json()
+	}).then((data) => {
+		if (data.find(item => item === false) === false) {
+			Swal.fire({
+				title: 'Cart Item Out Of Stock',
+				text: 'Items you are trying to checkout is currently out of stock.Please review and try again later.',
+				timer: 5000,
+				timerProgressBar: true,
+				allowOutsideClick: false,
+				allowEscapeKey: false,
+				allowEnterKey: false,
+				showConfirmButton: false
+			});
+		} else if (data.find(item=> item==="unlisted")==="unlisted") {
+		
+			Swal.fire({
+				title: 'Cart Item Currently Unavailable',
+				text: 'Items you are trying to checkout is currently unavailable.Please review and try again later.',
+				timer: 5000,
+				timerProgressBar: true,
+				allowOutsideClick: false,
+				allowEscapeKey: false,
+				allowEnterKey: false,
+				showConfirmButton: false
+			})
+		}
+		else {
+			
+			const formData = new FormData(orderConfirm);
+			const plainFormData = Object.fromEntries(formData.entries());
+			const formDataJsonString = JSON.stringify(plainFormData);
+		
+			fetch('/confirm_order', {
+				method: 'POST',
+				headers: {
+					"Content-Type": "application/json",
+					 Accept:"application/json"
+				},
+			body: formDataJsonString
+			}).then((response) => {
+				 return	response.json()
+			})
+				.then((data) => {
+					if (data.payment === "COD") {
+						window.location.href="/confirm_order"
 					}
-				});
-			}
-	}); 
+					else if (data.payment === "Wallet") {
+						window.location.href="/confirm_order"
+					}else{
+						
+						var options = { 
+							"key": "rzp_test_bePMUEE1PKoNJ7",  
+							"amount": data.amount,  
+							"currency": "INR",  
+							"order_id":data.id,
+							"handler": function (response){ 
+									
+								fetch('/razorpay_status', {
+									method: 'POST',
+									headers: {
+										"Content-Type": "application/json",
+										 Accept:"application/json"
+									},
+								body: JSON.stringify({status:"Complete"})
+								}).then((response) => {
+									 return	response.json()
+								})
+									.then((data) => {
+										window.location.href="/confirm_order"
+								}); 
+		
+							}, 
+							"theme": { 
+									"color": "#FB5531" 
+							} 
+						}; 
+						var razorpayObject = new Razorpay(options); 
+						razorpayObject.on('payment.failed', function (response){ 
+		
+		
+							fetch('/razorpay_status', {
+								method: 'POST',
+								headers: {
+									"Content-Type": "application/json",
+									 Accept:"application/json"
+								},
+							body: JSON.stringify({status:"Failed"})
+							}).then((response) => {
+								 return	response.json()
+							})
+								.then((data) => {
+									window.location.href="/order"
+							}); 
+							
+						}); 
+						
+						Swal.fire({
+							title: 'Proceed to payment',
+							text: 'Are you sure you want to proceed to payment',
+							icon: 'warning',
+							showCancelButton: true,
+							confirmButtonColor: '#008000',
+							cancelButtonColor: '#d33',
+							confirmButtonText: 'Yes',
+							cancelButtonText: 'No'
+						}).then((result) => {
+							if (result.isConfirmed) {
+								razorpayObject.open(); 
+								
+							}
+						});
+					}
+				}); 
+
+		}
+	})
+	
+	
 }
 
 
@@ -1140,7 +1244,7 @@ function orderNew(e) {
 	   return	response.json()
   })
 		.then((data) => {
-			
+
 				var options = { 
 					"key": "rzp_test_bePMUEE1PKoNJ7",  
 					"amount": data.amount,  
@@ -1203,3 +1307,38 @@ function orderNew(e) {
 				});
 	}); 
 }
+
+
+document.addEventListener("DOMContentLoaded", function () {
+	const div=document.getElementById("paginationDiv")
+  const divs = document.querySelectorAll('.page-no-div');
+  const urlParams = new URLSearchParams(window.location.search);
+  let selectedPage = urlParams.get('page');
+	if (div) {
+		if (!selectedPage) {
+			selectedPage = divs[0].dataset.page;
+		}
+
+		const selectCurrentPage = () => {
+			divs.forEach(div => {
+				const page = div.dataset.page;
+				if (page === selectedPage) {
+					div.classList.add('selected');
+				} else {
+					div.classList.remove('selected');
+				}
+			});
+		};
+
+		selectCurrentPage();
+
+		divs.forEach(div => {
+			div.addEventListener('click', function () {
+				divs.forEach(div => {
+					div.classList.remove('selected');
+				});
+				this.classList.add('selected');
+			});
+		});
+	}
+});

@@ -159,7 +159,8 @@
                      <button type="submit" class="profile-button btn" id="payButton">Confirm Order</button>
                     </div> 
                   </div>  
-                  <input type="hidden" id="sumTot" name="total" value="">       
+                  <input type="hidden" id="sumTot" name="total" value="">  
+                  <input type="hidden" id="discountInput" name="discount" value="0">     
                 </form>        
               </div>
             </div>
@@ -195,12 +196,10 @@
                   </div>
                   <span>Rs. <strong id="priceCheckOut"></strong></span>
                 </li>
-                <form action="" method="post" id="couponForm">
                 <div class="coupon-div d-flex mb-1">
                   <input type="text" class="coupon-input" id="couponCode" name="couponCode" placeholder="Enter Coupon code">
-                  <button class="profile-button btn coupon-btn" type="submit">Apply</button>
+                  <button class="profile-button btn coupon-btn" type="submit" onclick="couponCheck()">Apply</button>
                 </div>
-              </form>
               </ul>
             </div>
           </div>

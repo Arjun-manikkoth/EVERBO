@@ -10,10 +10,9 @@ box-sizing: border-box;
 font-family: "Poppins", sans-serif; 
 } 
 :root { 
---background-color1: #fafaff; 
+--background-color1: #ffffff; 
 --background-color2: #ffffff; 
---background-color3: #ededed; 
---background-color4: #ffe7d1a4; 
+--background-color3: #ededed;  
 --primary-color: #4b49ac; 
 --secondary-color: #0c007d; 
 --Border-color: #3f0097; 
@@ -21,7 +20,7 @@ font-family: "Poppins", sans-serif;
 --two-use-color: #5500cb; 
 } 
 body { 
-background-color: var(--background-color4); 
+background-color: var(--background-color1); 
 max-width: 100%; 
 overflow-x: hidden; 
 } 
@@ -193,8 +192,8 @@ gap: 20px;
 transition: all 0.1s ease-in-out; 
 } 
 .nav-option:hover { 
-border-left: 5px solid #a2a2a2; 
-background-color: #dadada; 
+	box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+	background-color: rgb(240, 236, 236);
 cursor: pointer; 
 } 
 .nav-img { 
@@ -264,6 +263,7 @@ border-radius: 15px;
 box-shadow: 3px 3px 10px rgb(188, 188, 188); 
 padding: 0px 20px 20px 20px; 
 overflow-x: auto;
+position: relative;
 } 
 .report-header { 
 height: 80px; 
@@ -330,10 +330,6 @@ background-color: rgb(0, 177, 0);
 color: white; 
 border-radius: 4px; 
 }
-.nav-option:active{
-	background-color: white;
-	}
-
 	.logout{
 		text-decoration: none;
 		color: black;
@@ -409,4 +405,34 @@ table
 .categ-edit,.categ-edit:hover{
 	text-decoration: none;
 	color: white;
+}
+.logout:hover{
+	color: black!important;
+}.selected {
+	box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+	background-color: rgb(240, 236, 236);
+}
+.pagination-div{
+	margin-bottom: 16px;
+	padding-top: 20px;
+	display: flex;
+  justify-content: center;
+	text-align: center;
+}
+.page-no-div{
+height:25px;
+width:25px;
+box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+margin-left: 5px;
+margin-right: 5px;
+}
+.page-no-div a{
+	text-decoration: none;
+}
+a,a :hover{
+	color: black;
+}
+.address-msg{
+	text-align: center;
+
 }

@@ -47,6 +47,16 @@
                               <%}))%>
                           </tbody>
                       </table>	
+                      <hr>
+                      <div class="pagination-div" id="paginationDiv">
+                        <% let startPage = Math.max(1, Math.min(currentPage - 1, totalPages - 3)) %>
+                        <% let endPage = Math.min(totalPages, startPage + 3); %>
+                        <% for (let i = startPage; i <= endPage; i++) { %>
+                          <div class="page-no-div" data-page="<%= i %>">
+                            <a href="?page=<%= i %>" class="anchor order-pagination"><%= i %></a>
+                          </div>
+                        <% } %>
+                      </div>
                       <%}else if(locals.msg){%>
                         <div class="address-msg pt-5">
                           <%=msg%>

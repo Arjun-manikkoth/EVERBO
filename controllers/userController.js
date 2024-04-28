@@ -266,10 +266,10 @@ const passwordReset = async (req, res) => {
     const userData = await User.updateOne({ _id: Id }, { $set: { password: newPassword } });
 
     if (userData) {
-      res.render("reset_password", { message_resetpassword: "Please login with your new password", id: Id ,loggedIn:"false"})
+      res.render("entry", {message_signup: "Please login with your new password",loggedIn:"false"})
     }
     else {
-      res.render("reset_password", { message_resetpassword: "Password reset failed", id: Id ,loggedIn:"false"})
+      res.render("entry", { message_signup: "Password reset failed",loggedIn:"false"})
     }
   }
   catch (error) {
@@ -297,7 +297,7 @@ const loadProfile = async (req, res) => {
   try {
     const userData = await User.findOne({ _id: req.session.user_Id })
     if (userData!=[]) {
-      res.render("profile", {userData,profile:true})
+      res.render("profile", {userData,profile:true,session:req.session})
     }
     else {
       console.log("no profile data")
@@ -324,13 +324,21 @@ const editProfile = async (req, res) => {
 //load orders page
 const loadOrders = async (req, res) => {
   try { 
-    const orderData = await Order.find({ userId: req.session.user_Id ,grandTotalCost:{$exists:true}}).sort({orderDate:-1}).populate("addressChosen")
-
-    if (orderData.length!==0) {
-      res.render("order",{orderData,profile:true})
+    const data = await Order.find({ userId: req.session.user_Id ,grandTotalCost:{$exists:true}}).sort({orderDate:-1}).populate("addressChosen")
+    const count= await Order.find({ userId: req.session.user_Id ,grandTotalCost:{$exists:true}}).countDocuments()
+    if (data.length !== 0) {
+      let page = 1
+      if (req.query.page) {
+        page=req.query.page
+      }
+      const limit = 3
+      const totalPages = Math.ceil(count / limit)
+      const totalOrders = await Order.find({ userId: req.session.user_Id, cartData: { $exists: true } }).countDocuments()
+      const orderData= await Order.find({ userId: req.session.user_Id ,grandTotalCost:{$exists:true}}).limit(limit).skip((page-1)*limit).sort({orderDate:-1}).populate("addressChosen")
+      res.render("order",{orderData,profile:true,session:req.session,totalPages,currentPage:page,totalOrders})
     }
     else {
-      res.render("order",{msg:"No Orders were Made",profile:true})
+      res.render("order",{msg:"No Orders were Made",profile:true,session:req.session})
     }   
   }
   catch (error) { 
@@ -343,10 +351,10 @@ const orderDetail = async (req, res) => {
   try { 
     const orderData = await Order.findOne({ _id: req.query.id }).populate("addressChosen").populate("userId").populate("cartData.productId")
     if (orderData) {
-      res.render("order_detail",{orderData})
+      res.render("order_detail",{orderData,session:req.session})
     }
     else {
-      res.render("order",{msg:"Couldnt find Order"})
+      res.render("order",{msg:"Couldnt find Order",session:req.session})
     }   
   }
   catch (error) { 
@@ -425,7 +433,7 @@ const invoiceOrder = async (req, res) => {
 //load confirm Password page
 const confirmPasswordLoad = async (req, res) => {
   try {
-    res.render("confirm_password", { profile: true })
+    res.render("confirm_password", { profile: true ,session:req.session})
   }
   catch (error) {
     console.log(error.message);
@@ -434,12 +442,21 @@ const confirmPasswordLoad = async (req, res) => {
   //load wallet page
 const loadWallet = async (req, res) => {
   try {
-    const data = await User.findById({ _id: req.session.user_Id}).populate("orderId").sort({ "wallet.walletTransaction.transactionDate": -1 })
-    if (data.wallet.walletTransaction.length!==0) {
-      res.render("wallet",{profile:true,data})
+    const walletData = await User.findById({ _id: req.session.user_Id}).populate("orderId").sort({ "wallet.walletTransaction.transactionDate": -1 })
+    if (walletData.wallet.walletTransaction.length !== 0) {
+
+      let page = 1 
+      if (req.query.page) {
+        page = req.query.page
+      }
+      let limit = 3
+      const data = await User.findById({ _id: req.session.user_Id }).populate("orderId").skip((page - 1) * limit).limit(limit).sort({ "wallet.walletTransaction.transactionDate": -1 })
+      const count = await User.findById({ _id: req.session.user_Id }).populate("orderId").skip((page - 1) * limit).limit(limit).countDocuments()
+      let totalPages = Math.ceil(count/limit)
+      res.render("wallet",{profile:true,data,session:req.session,totalPages,currentPage: page})
     }
     else {
-      res.render("wallet",{profile:true,msg:"No Recent transactions"})
+      res.render("wallet",{profile:true,msg:"No Recent transactions",session:req.session})
     }
       
   }
@@ -470,7 +487,7 @@ const confirmPassword = async (req, res) => {
 //load new password page
 const newPasswordLoad = async (req, res) => {
   try {
-      res.render("change_password",{profile:true})
+      res.render("change_password",{profile:true,session:req.session})
   }
   catch (error) { 
     console.log(error.message);

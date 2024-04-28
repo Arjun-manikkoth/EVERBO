@@ -27,8 +27,8 @@
   
         <div class="row">
            <div class="form-group col-md-12">
-             <label for="categoryName">Product Name</label>
-             <input type="text" class="form-control" name="name" id="productName" placeholder="Name of the product" value="<%=product.name%>">
+             <label for="productName">Product Name</label>
+             <input type="text" class="form-control" name="name" id="productName" placeholder="Name of the product" value="<%=product.name%>" maxlength="45">
              <span id="product-error"></span>
            </div>
         </div>
@@ -36,7 +36,7 @@
         
         <div class="form-group">
           <label for="description">Description</label>
-          <input type="text" class="form-control" name="description" id="description" placeholder="Description of product" value="<%=product.description%>">
+          <input type="text" class="form-control" name="description" id="description" placeholder="Description of product" value="<%=product.description%>" maxlength="255">
           <span id="description-error"></span>
         </div>
 
@@ -44,12 +44,12 @@
         <div class="row">
           <div class="form-group col-md-6">
             <label for="quantity">Quantity</label>
-            <input type="text" class="form-control" name="quantity" id="quantity" placeholder="Quantity of product" value="<%=product.quantity%>">
+            <input type="text" class="form-control" name="quantity" id="quantity" placeholder="Quantity of product" value="<%=product.quantity%>" maxlength="6">
             <span id="quantity-error"></span>
           </div>
           <div class="form-group col-md-6">
             <label for="price">Price</label>
-            <input type="text" class="form-control" name="price" id="price" placeholder="Price of product" value="<%=product.price%>">
+            <input type="text" class="form-control" name="price" id="price" placeholder="Price of product" value="<%=product.price%>" maxlength="7">
             <span id="price-error"></span>
           </div>
         </div>

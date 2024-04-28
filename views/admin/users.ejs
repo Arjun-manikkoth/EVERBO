@@ -10,20 +10,25 @@
         <table class="table table-hover table-responsive">
           <thead>
             <tr>
-              <th class="col-3" scope="col">Id</th>
-              <th class="col-2" scope="col">Name</th>
+              <th class="col-3" scope="col">Name</th>
               <th class="col-3" scope="col">Email</th>
               <th class="col-2" scope="col">Mobile.no</th>
+              <th class="col-2" scope="col">Verified</th>
               <th class="col-2" scope="col">Actions</th>
             </tr>
           </thead>
           <tbody>
             <%userDetails.forEach((user)=>{%>
             <tr>
-              <td><%=user._id%></td>
               <td><%=user.name%></td>
               <td><%=user.email%></td>
               <td><%=user.mobile_no%></td>
+              <td><%if(user.is_verified===1){%>
+                Yes
+                <%}else{%>
+                  No
+                <%}%>
+              </td>
               <%if(user.is_blocked==0){%>
               <td><button type="button" class="btn-sm btn-green blockButton" onclick="userBlock('<%=user._id%>')">Block</button></td> 
               <%}else{%>
@@ -33,6 +38,15 @@
             <%})%>
           </tbody>
         </table>
+          <div class="pagination-div" id="paginationDiv">
+            <% let startPage = Math.max(1, Math.min(currentPage - 1, totalPages - 3)) %>
+            <% let endPage = Math.min(totalPages, startPage + 3); %>
+            <% for (let i = startPage; i <= endPage; i++) { %>
+              <div class="page-no-div" data-page="<%= i %>">
+                <a href="?page=<%= i %>" class="anchor order-pagination"><%= i %></a>
+              </div>
+            <% } %>
+          </div>
 			</div> 
 
 	<%-include("../layouts/admin/footer.ejs")-%>

@@ -175,3 +175,7 @@ padding-right: 200px;
 .coupon-btn{
 	width: fit-content
 }
+.shipping-title{
+	font-weight: 500;
+	font-size: 18px;
+}

@@ -6,12 +6,12 @@
 	<meta http-equiv="X-UA-Compatible"content="IE=edge"> 
 	<meta name="viewport"content="width=device-width,initial-scale=1.0"> 
 	<title>EVERBO ADMIN</title> 
-	<link rel="stylesheet" href="/styles/adminStyles/admin_dashboard.css"> 
-  <link rel="stylesheet" href="/styles/adminStyles/admin_login.css">
-	<link rel="stylesheet" href="/styles/adminStyles/admin_responsive.css"> 
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.7/dist/sweetalert2.min.css">
+	<link rel="stylesheet" href="/styles/adminStyles/admin_dashboard.css"> 
+  <link rel="stylesheet" href="/styles/adminStyles/admin_login.css">
+	<link rel="stylesheet" href="/styles/adminStyles/admin_responsive.css"> 
 </head> 
 
 <body> 
@@ -59,60 +59,74 @@
 		<div class="navcontainer"> 
 			<nav class="nav"> 
 				<div class="nav-upper-options"> 
-					<div class="nav-option option1"> 
+					<a href="/admin/dashboard"class="logout" >
+					<div class="nav-option option1" data-route="/admin/dashboard"> 
 						<img src= 
 "https://media.geeksforgeeks.org/wp-content/uploads/20221210182148/Untitled-design-(29).png"
 							class="nav-img"
 							alt="dashboard"> 
-							<div class="options"><a href="/admin/dashboard"class="logout">Dashboard</a></div>   
+							<div class="options">Dashboard</div>   
 					</div> 
+				</a>
 
-					<div class="option2 nav-option"> 
+				<a href="/admin/users"class="logout">
+					<div class="option2 nav-option" data-route="/admin/users" > 
 						<img src= 
 "https://media.geeksforgeeks.org/wp-content/uploads/20221210183322/9.png"
 							class="nav-img"
 							alt="articles"> 
-							<div class="options"><a href="/admin/users"class="logout">Users</a></div>  
+							<div class="options">Users</div>  
 					</div> 
+				</a>
 
-					<div class="nav-option option3"> 
+				<a href="/admin/products"class="logout">
+					<div class="nav-option option3" data-route="/admin/products" > 
 						<img src= 
 "https://media.geeksforgeeks.org/wp-content/uploads/20221210183320/5.png"
 							class="nav-img"
 							alt="report"> 
-							<div class="options"><a href="/admin/products"class="logout">Products</a></div> 
+							<div class="options">Products</div> 
 					</div> 
+				</a>
 
-					<div class="nav-option option4"> 
+				<a href="/admin/categories"class="logout" >
+					<div class="nav-option option4" data-route="/admin/categories"> 
 						<img src= 
 "https://media.geeksforgeeks.org/wp-content/uploads/20221210183321/6.png"
 							class="nav-img"
 							alt="institution"> 
-							<div class="options"><a href="/admin/categories"class="logout">Categories</a></div> 
+							<div class="options">Categories</div> 
 					</div> 
+				</a>
 
-					<div class="nav-option option5"> 
+				<a href="/admin/orders"class="logout" >
+					<div class="nav-option option5" data-route="/admin/orders"> 
 						<img src= 
 "https://media.geeksforgeeks.org/wp-content/uploads/20221210183323/10.png"
 							class="nav-img"
 							alt="blog"> 
-							<div class="options"><a href="/admin/orders"class="logout">Orders</a></div>  
+							<div class="options">Orders</div>  
 					</div> 
+				</a>
 
-					<div class="nav-option option6"> 
+				<a href="/admin/coupons"class="logout">
+					<div class="nav-option option6" data-route="/admin/coupons"> 
 						<img src= 
 "https://media.geeksforgeeks.org/wp-content/uploads/20221210183320/4.png"
 							class="nav-img"
 							alt="settings"> 
-							<div class="options"><a href="/admin/banners"class="logout">Banners</a></div>  
-					</div> 
+							<div class="options">Coupons</div>  
+					</div>
+				</a> 
 
-					<div class="nav-option logout"> 
+					<div class="nav-option option7" data-route="/admin/logout"  onclick="logoutConfirm()"> 
 						<img src= 
 "https://media.geeksforgeeks.org/wp-content/uploads/20221210183321/7.png"
 							class="nav-img"
 							alt="logout"> 
-						<div class="options"><a href="/admin/logout"class="logout">Logout</a></div> 
+						<div class="options">Logout</div> 
+					</div>
+				
 			</nav> 
 		</div> 
 		<div class="main"> 

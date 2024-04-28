@@ -75,6 +75,12 @@ user_route.get("/price_low_high", auth.isLogin, shopController.priceAscending)
 //price low to high filter
 user_route.get("/price_high_low", auth.isLogin, shopController.priceDescending)
 
+//name ascending sort
+user_route.get("/name_ascending", auth.isLogin, shopController.alphabetAscending)
+
+//name descending sort
+user_route.get("/name_descending", auth.isLogin, shopController.alphabetDescending)
+
 
 //---------------------------------Profile Management-----------------------------------
 
@@ -194,6 +200,9 @@ user_route.get("/check_wallet", auth.isLogin, cartController.checkWallet)
 
 //razorpay status check
 user_route.post("/razorpay_status", auth.isLogin, cartController.razorPayStatus)
+
+//razorpay status check
+user_route.post("/coupon_check", auth.isLogin, cartController.couponCheck)
 
 //---------------------------------Wishlist Management-----------------------------------
 

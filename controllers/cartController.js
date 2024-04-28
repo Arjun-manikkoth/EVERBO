@@ -2,6 +2,7 @@ const User = require("../models/userModel");
 const Product = require("../models/productModel")
 const Address = require("../models/addressModel")
 const Order = require("../models/orderModel")
+const Coupon = require("../models/couponModel")
 const Razorpay = require('razorpay');
 const { RAZORPAY_KEY_ID, RAZORPAY_SECRET } = process.env;
 var instance = new Razorpay({ key_id: RAZORPAY_KEY_ID, key_secret: RAZORPAY_SECRET })
@@ -10,10 +11,12 @@ var instance = new Razorpay({ key_id: RAZORPAY_KEY_ID, key_secret: RAZORPAY_SECR
 const cartLoad = async (req, res) => {
   try {
     const cartData = await User.findOne({ _id: req.session.user_Id }).populate("cart.productId")
+    req.session.cartCount=cartData.cart.length
+    const session=req.session
     if (cartData.cart == "") {
-      res.render("cart")
+      res.render("cart",{session})
     } else {
-      res.render("cart",{cartData})   
+      res.render("cart",{cartData,session})   
     } 
   }
   catch (error) {
@@ -42,12 +45,14 @@ const addToCart = async (req, res) => {
                totalPrice: product.price
              }      
          }
-      })
+       }, { new: true })
+      req.session.cartCount = data.cart.length
+      const session=req.session
       if (data) {
         res.redirect("/cart")
       }
         else {
-          res.render("cart", {cartData,msg:"Couldn't add item"})
+          res.render("cart", {cartData,msg:"Couldn't add item",session})
         }
       }   
   }
@@ -154,12 +159,13 @@ const checkStock = async (req, res) => {
 //checkout Load
 const loadCheckOut = async (req, res) => {
   try {
+
     const userData = await User.findOne({ _id: req.session.user_Id })
     const addressData = await Address.find({ user_id: req.session.user_Id, is_deleted: 0 }).limit(3).sort({ updatedAt: -1 })
     if (userData.address) {
-      res.render("check_out", { userData,addressData })
+      res.render("check_out", { userData,addressData ,session:req.session})
     } else {
-      res.render("check_out")   
+      res.render("check_out",{session:req.session})   
     } 
   }
   catch (error) {
@@ -195,7 +201,7 @@ const loadEditCheckout = async (req, res) => {
   try {
     const addressData = await Address.findOne({ user_id: req.session.user_Id, _id: req.query.id })
     if (addressData) {
-      res.render("edit_checkout", { addressData })
+      res.render("edit_checkout", { addressData,session:req.session })
     } else {
       res.redirect("/check_out")   
     } 
@@ -216,7 +222,7 @@ const updateAddress = async (req, res) => {
     })
     const addressData = await Address.findOne({ user_id: req.session.user_Id, _id:req.query.id})
     if (exists) {
-      res.render("edit_checkout", { msg: "Address already exists", addressData })
+      res.render("edit_checkout", { msg: "Address already exists", addressData,session:req.session })
     } else {
       const data = await Address.findByIdAndUpdate({ _id: req.query.id },
         { $set: { house_no: req.body.houseNo,
@@ -283,7 +289,7 @@ const confirmOrder = async (req, res) => {
       }
     }
     else {
-      const userData = await User.findOne({ _id: req.session.user_Id, }).populate("cart.productId")
+      const userData = await User.findOne({ _id: req.session.user_Id }).populate("cart.productId")
 
       const cartArray  = userData.cart.map((item) => {
         return {
@@ -309,7 +315,8 @@ const confirmOrder = async (req, res) => {
         item.productId.save()
       })
   
-      await User.updateOne({ _id: req.session.user_Id }, { $set: { cart: [] } })
+      const newData = await User.findByIdAndUpdate({ _id: req.session.user_Id }, { $set: { cart: [] } }, { new: true })
+      req.session.cartCount = newData.cart.length
   
       if (req.body.payment === "COD") {
         await Order.findByIdAndUpdate({ _id: req.session.orderId }, {
@@ -319,7 +326,7 @@ const confirmOrder = async (req, res) => {
         })
           res.json({payment:"COD"})
       }
-      if (req.body.payment === "Wallet") {
+      else if(req.body.payment === "Wallet") {
           await User.findByIdAndUpdate({ _id: req.session.user_Id }, {
           $inc: {
             "wallet.walletBalance": -data.grandTotalCost
@@ -339,7 +346,7 @@ const confirmOrder = async (req, res) => {
           })
         res.json({payment:"Wallet"})
       }
-      else if (req.body.payment === "RazorPay") {
+      else if(req.body.payment === "RazorPay") {
         var options = {
           amount: req.body.total*100,  
           currency: "INR",
@@ -388,8 +395,8 @@ const razorPayStatus = async (req,res) => {
 //order success page
 const orderPlaced = async (req, res) => {
   try {
-    req.session.orderId=''
-  res.render("order_confirm")
+    req.session.orderId = ''
+    res.render("order_confirm", { session: req.session })
   }
   catch (error) {
     console.log(error.message)
@@ -419,6 +426,24 @@ const checkWallet = async (req, res) => {
   }
 }
 
+//coupon Check
+const couponCheck = async (req, res) => {
+  try {
+    const data = await Coupon.findOne({ couponCode:{$regex: new RegExp("^"+req.body.coupon+"$","i") },is_deleted:0})
+    if (data) {
+      res.json({
+        Status: "Valid"})
+    }
+    else {
+      res.json({Status:"Invalid"})
+    }
+  }
+  catch (error) {
+    console.log(error.message)
+  }
+}
+
+
 module.exports = {
   cartLoad,
   addToCart,
@@ -435,5 +460,6 @@ module.exports = {
   checkCod,
   checkWallet,
   razorPayStatus,
-  orderPlaced
+  orderPlaced,
+  couponCheck
 }

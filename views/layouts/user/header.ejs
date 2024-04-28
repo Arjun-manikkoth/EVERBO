@@ -107,7 +107,9 @@
                     <%}else{%>
 											<li>
 												<a href="/wishlist"><i class="fa fa-heart" aria-hidden="true"></i>
-													<span  class="checkout_items"></span>
+													<%if(locals.session&& session.wishlistCount>0){%>
+														<span  class="checkout_items"><%=session.wishlistCount%></span>
+                            <%}%>
 												</a>
 											</li>
 											<li>
@@ -116,7 +118,9 @@
 											</li>
 											<li class="checkout">
 													<a href="/cart"><i class="fa fa-shopping-cart" aria-hidden="true"></i>
-														<span  class="checkout_items"></span>
+                            <%if(locals.session&& session.cartCount>0){%>
+														<span  class="checkout_items"><%=session.cartCount%></span>
+                            <%}%>
 													</a>
 												</li>
 										<%}%>

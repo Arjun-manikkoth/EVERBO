@@ -53,9 +53,16 @@ const loadDashboard = async (req, res) => {
 //view users page
 const usersLoad = async (req, res) => {
   try {
-
-    const userDetails =await User.find({});
-    res.render("users", {userDetails})
+     
+    let page = 1
+    if (req.query.page) {
+      page=req.query.page
+    }
+    let limit = 18;
+    let count = await User.find({}).countDocuments()
+    let totalPages=Math.ceil(count/limit)
+    const userDetails =await User.find({}).limit(limit).skip((page-1)*limit)
+    res.render("users", {userDetails,totalPages,currentPage:page})
   }
   catch (error) {
     console.log(error.message);

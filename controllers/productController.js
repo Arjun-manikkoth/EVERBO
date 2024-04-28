@@ -8,9 +8,16 @@ const Category = require("../models/categoryModel")
 //view products page
 const productsLoad = async (req, res) => {
   try {
-    const product = await Product.find({}).populate("category")
+    let page = 1
+    if (req.query.page) {
+      page=req.query.page
+    }
+    let limit = 4;
+    let count = await Product.find({is_deleted:0}).countDocuments()
+    let totalPages=Math.ceil(count/limit)
+    const product = await Product.find({is_deleted:0}).populate("category").limit(limit).skip((page-1)*limit).sort({name:1})
     if (product) {
-      res.render("products", {product})
+      res.render("products", {product,totalPages,currentPage:page})
     }
     else {
       res.render("products", {msg:"No Products Added"})
@@ -96,8 +103,7 @@ const editProductLoad = async (req, res) =>
   try {
     const id = req.query.id;
     const product = await Product.findOne({ _id: id, is_deleted: { $ne: 1 } }).populate("category");
-    console.log(product)
-    const category = await Category.find({})
+    const category = await Category.find({is_deleted:0})
     if (product) {
       res.render("edit_product", {product,category});
     }

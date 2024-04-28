@@ -56,6 +56,19 @@
             </div>
           </div>
           <div class="card mb-4">
+            <div class="card-header py-3">
+              <div class="mb-0 shipping-title">Shipping Address</div>
+            </div>
+            <div class="card-body d-flex">
+              <p class="ml-2">&#11044</p>
+                <div class="ml-5 address-div">
+                  <span class="address"><%=orderData.addressChosen.house_no%>,<%=orderData.addressChosen.street%>,</span >
+                    <span class="address"><%=orderData.addressChosen.landmark%>,<%=orderData.addressChosen.district%>,</span>
+                    <span class="address"><%=orderData.addressChosen.state%>,<%=orderData.addressChosen.pincode%></span>
+                 </div> 
+            </div>
+          </div>
+          <div class="card mb-4">
             <div class="card-body d-flex justify-content-between">
               <div>
                 <%if(orderData.paymentStatus==="Complete"){%>
