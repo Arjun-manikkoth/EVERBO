@@ -186,8 +186,9 @@ form .btns input[type="submit"]{
   padding-top: 15px;
 }
 .error-msg{
-  font-size: 13px;
+  font-size: 15px;
   color: red;
+  padding-top: 5px;
 }
 .welcome{
   text-align: center;

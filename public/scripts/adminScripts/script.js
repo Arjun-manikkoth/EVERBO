@@ -151,14 +151,15 @@ function validateProduct() {
 		 var descriptionSpan = document.getElementById("description-error")
 	   var imageSpan = document.getElementById("image-error")
 	   var priceSpan = document.getElementById("price-error")
-		 var quantitySpan=document.getElementById("quantity-error")	 
+	   var quantitySpan = document.getElementById("quantity-error")	
+	   var discountSpan=document.getElementById("discount-error")	
 		 var description = document.getElementById("description").value.trim()
 	   var image = document.getElementById("image")
 	   var product = document.getElementById("productName").value.trim()
 		 var price = document.getElementById("price").value.trim()
-		 var quantity = document.getElementById("quantity").value.trim()
-	
-
+	   var quantity = document.getElementById("quantity").value.trim()
+	   var discount = document.getElementById("discount").value.trim()
+     var limit= Math.ceil(product*5)/100
 		 if (product == "" || product == null) {
 			productSpan.innerHTML = "&#x1F6C8; Product is a required field"
 			flag = 0;
@@ -217,6 +218,21 @@ function validateProduct() {
 	  else {
 		 priceSpan.innerHTML = ""
 	  }
+		
+		if (discount == "" || discount == null) {
+			discountSpan.innerHTML = "&#x1F6C8; Discount is a required field"
+			flag = 0;
+		} else if (isNaN(discount)||discount<0) {
+			discountSpan.innerHTML = "&#x1F6C8; Discount should be a number"
+			flag = 0;
+		}
+		else if (discount>limit) {
+			discountSpan.innerHTML = "&#x1F6C8; Discount limit is max 10%"
+			flag = 0;
+		}
+		else {
+			productSpan.innerHTML = ""
+	}
 	
 	  if (quantity == "" || quantity == null) {
 			quantitySpan.innerHTML = "&#x1F6C8; Quantity is a required field"
@@ -227,7 +243,7 @@ function validateProduct() {
 			quantitySpan.innerHTML = "&#x1F6C8; Quantity should be a number"
 			flag = 0;
 		}
-		else if(quantity<=0) {
+		else if(quantity<0) {
 			quantitySpan.innerHTML = "&#x1F6C8; Quantity should be greater than 0"
 			flag = 0;
   	}
@@ -292,7 +308,7 @@ else {
 	 quantitySpan.innerHTML = "&#x1F6C8; Quantity should be a number"
 	 flag = 0;
  }
- else if(quantity<=0) {
+ else if(quantity<0) {
 	quantitySpan.innerHTML = "&#x1F6C8; Quantity should be greater than 0"
 	flag = 0;
 }
@@ -353,11 +369,11 @@ function validateEditImage() {
 	var imageSpan = document.getElementById("single-image-error")
 
 	if (image.value == "" || image.value == null) {
-		imageSpan.innerHTML = "&#x1F6C8; Image is a required field"
+		imageSpan.innerHTML = "&#x1F6C8; Image is a required field";
 		flag = 0;
 	}
 	else if (image.files.length > 1) {
-	 imageSpan.innerHTML = "&#x1F6C8; You cannot add more than 1 image"
+		imageSpan.innerHTML = "&#x1F6C8; You cannot add more than 1 image";
 		flag=0
 	}
 	else { 

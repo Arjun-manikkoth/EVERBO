@@ -7,7 +7,20 @@ const categoryController = require("../controllers/categoryController")
 const orderController = require("../controllers/orderController")
 const couponController = require("../controllers/couponController")
 const auth = require("../middlewares/adminAuth")
-const upload=require('../middlewares/multer')
+const upload = require('../middlewares/multer')
+const sharpCrop =require('../middlewares/sharp')
+
+const productMainCropSize = [
+  { width: 136, height: 136 }
+];
+
+const thumbnailCropSize = [
+  { width: 235, height: 235}
+];
+
+const categoryCropSize = [
+  { width: 370, height: 280 }
+];
 
 
 //setting the path for view engine
@@ -57,7 +70,7 @@ admin_route.get("/products",auth.isLogin, productController.productsLoad)
 admin_route.get("/add_products",auth.isLogin, productController.addProductLoad)
 
 //add product to db
-admin_route.post("/add_products", upload.array('image', 3), productController.addProduct)
+admin_route.post("/add_products", upload.array('image', 3),sharpCrop(productMainCropSize), productController.addProduct)
 
 //product list unlist
 admin_route.get("/product_view",auth.isLogin, productController.productView)
@@ -66,10 +79,10 @@ admin_route.get("/product_view",auth.isLogin, productController.productView)
 admin_route.get("/edit_products",auth.isLogin, productController.editProductLoad)
         
 //update product to db
-admin_route.post("/update_product", upload.array('image', 3), productController.updateProduct)
+admin_route.post("/update_product", upload.array('image', 3),sharpCrop(productMainCropSize), productController.updateProduct)
 
 //update product thumbnail to db
-admin_route.post("/update_product_thumb", upload.single('image'), productController.updateProductThumb)
+admin_route.post("/update_product_thumb", upload.single('image'),sharpCrop(thumbnailCropSize), productController.updateProductThumb)
 
 //delete product
 admin_route.get("/delete_products", auth.isLogin, productController.deleteProduct)
@@ -84,7 +97,7 @@ admin_route.get("/categories",auth.isLogin, categoryController.categoriesLoad)
 admin_route.get("/add_category",auth.isLogin,categoryController.addCategoryLoad)
 
 //add category to db
-admin_route.post("/add_category", upload.single('image'), categoryController.addCategory)
+admin_route.post("/add_category", upload.single('image'),sharpCrop(categoryCropSize), categoryController.addCategory)
 
 //category list unlist
 admin_route.get("/category_view", auth.isLogin, categoryController.categoryView)
@@ -93,7 +106,7 @@ admin_route.get("/category_view", auth.isLogin, categoryController.categoryView)
 admin_route.get("/edit_category",auth.isLogin, categoryController.editCategoryLoad)
 
 //Update category to db
-admin_route.post("/update_category", upload.single('image'), categoryController.updateCategory)
+admin_route.post("/update_category", upload.single('image'),sharpCrop(categoryCropSize), categoryController.updateCategory)
 
 //delete category
 admin_route.get("/delete_category", auth.isLogin, categoryController.deleteCategory)

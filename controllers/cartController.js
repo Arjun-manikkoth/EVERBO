@@ -136,6 +136,7 @@ const removeCart = async (req, res) => {
 // //checkout Load
 const checkStock = async (req, res) => {
   try {
+    console.log("this route is called")
     const cartData = await User.findOne({ _id: req.session.user_Id}).populate("cart.productId")
     const data =cartData.cart.map((item) => {
       if (item.productId.quantity < item.productQuantity) {

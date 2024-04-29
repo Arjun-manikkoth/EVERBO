@@ -85,7 +85,9 @@
 									<img src="images/userImages/<%=prod.image%>" alt="">
 								</div>
 								<div class="favorite "></div>
-								
+								<%if(prod.discount!=0){%>
+									<div class="product_bubble product_bubble_right product_bubble_red d-flex flex-column align-items-center"><span>-Rs <%=prod.discount%></span></div>
+									<%}%>
 								<div class="product_info">
 									<h6 class="product_name"><a href="/product"><%=prod.name%></a></h6>
 									<div class="product_price">Rs.<%=prod.price%></div>
@@ -168,6 +170,9 @@
 											<img src="images/userImages/<%=prod.image%>" alt="">
 										</div>
 										<div class="favorite"></div>
+										<%if(prod.discount!=0){%>
+											<div class="product_bubble product_bubble_right product_bubble_red d-flex flex-column align-items-center"><span>-Rs <%=prod.discount%></span></div>
+                      <%}%>
 										<div class="product_info">
 											<h6 class="product_name"><a href="/product"><%=prod.name%></a></h6>
 											<div class="product_price">Rs.<%=prod.price%></div>

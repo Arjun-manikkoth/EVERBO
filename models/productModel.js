@@ -17,8 +17,12 @@ const productSchema=mongoose.Schema({
     type: String
 
   }],
-  quantity: {
+  discount: {
     type: Number
+  },
+  quantity: {
+    type: Number,
+    default:0
   },
   price: {
     type: Number

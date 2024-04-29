@@ -8,7 +8,7 @@ const isLogin = async (req, res, next) => {
     }
     else {
       res.redirect("/entry")
-     // next();
+      //next();
     }
   }
   catch (error) {
@@ -22,7 +22,7 @@ const isLogout = async (req, res,next) => {
     if (req.session.user_Id) {
       const userData = await User.findOne({ _id: req.session.user_Id })
       if (userData.is_verified == 1) { 
-        res.redirect("/shop")
+      res.redirect("/shop")
        //next()
       } 
       else { 
