@@ -12,9 +12,10 @@
 			<table class="table table-hover table-responsive">
 				<thead>
 					<tr>
-						<th class="col-3" scope="col">Category name</th>
+						<th class="col-2" scope="col">Category name</th>
 						<th class="col-2" scope="col">Image</th>
 						<th class="col-3" scope="col">Description</th>
+						<th class="col-1" scope="col">Discount</th>
 						<th class="col-2" scope="col">View</th>
 						<th class="col-2" scope="col">Actions</th>
 					</tr>
@@ -25,6 +26,7 @@
 									<td><%=categ.name%></td>
 									<td><img src="/images/userImages/<%=categ.image%>" width="140px" alt="<%=categ.image%>"></td>
 									<td><%=categ.description%></td>
+									<td><%=categ.discount%></td>
 									<td>
 										<%if(categ.is_listed===false){%>
 										<button type="button" class="btn btn-success btn-sm ms-2 " onclick="listCategory('<%=categ._id%>')">List</button>

@@ -50,10 +50,12 @@ function validateCategory() {
 		var flag = 1;
 		var categorySpan = document.getElementById("category-error")
 		var descriptionSpan = document.getElementById("description-error")
-		var imageSpan=document.getElementById("image-error")
+	  var imageSpan = document.getElementById("image-error")
+	  var discountSpan=document.getElementById("discount-error")
   	var category = document.getElementById("categoryName").value.trim()
 		var description = document.getElementById("description").value.trim()
-		var image = document.getElementById("image")
+		var discount = document.getElementById("discount").value.trim()
+	  var image = document.getElementById("image")
 	
 		if (category == "" || category == null) {
 			categorySpan.innerHTML = "&#x1F6C8; Category is a required field"
@@ -71,6 +73,16 @@ function validateCategory() {
 	else {
 		descriptionSpan.innerHTML = ""
 	}
+	if (discount == "" || discount == null) {
+		discountSpan.innerHTML = "&#x1F6C8; Discount is a required field"
+		flag = 0;
+	} else if (isNaN(discount)||discount<0) {
+		discountSpan.innerHTML = "&#x1F6C8; Discount should be a number"
+		flag = 0;
+	}
+	else {
+		productSpan.innerHTML = ""
+}
 		if (image.value == "" || image.value == null) {
 			imageSpan.innerHTML = "&#x1F6C8; Image not uploaded"
 			document.getElementById("image").focus();
@@ -159,7 +171,8 @@ function validateProduct() {
 		 var price = document.getElementById("price").value.trim()
 	   var quantity = document.getElementById("quantity").value.trim()
 	   var discount = document.getElementById("discount").value.trim()
-     var limit= Math.ceil(product*5)/100
+	   var limit = Math.floor(price * 10) / 100
+	
 		 if (product == "" || product == null) {
 			productSpan.innerHTML = "&#x1F6C8; Product is a required field"
 			flag = 0;
@@ -262,12 +275,13 @@ function validateProduct() {
 	var productSpan = document.getElementById("product-error")
 	var descriptionSpan = document.getElementById("description-error")
 	var priceSpan = document.getElementById("price-error")
-	var quantitySpan=document.getElementById("quantity-error")	 
+	var quantitySpan = document.getElementById("quantity-error")
+	var discountSpan=document.getElementById("discount-error")	  
 	var description = document.getElementById("description").value.trim()
 	var product = document.getElementById("productName").value.trim()
 	var price = document.getElementById("price").value.trim()
-	 var quantity = document.getElementById("quantity").value.trim()
-
+	var quantity = document.getElementById("quantity").value.trim()
+  var discount = document.getElementById("discount").value.trim()
 	if (product == "" || product == null) {
 		productSpan.innerHTML = "&#x1F6C8; Product is a required field"
 	 flag = 0;
@@ -298,8 +312,23 @@ else {
 }
  else {
 	priceSpan.innerHTML = ""
- }
-
+	 }
+	 
+ if (discount == "" || discount == null) {
+	discountSpan.innerHTML = "&#x1F6C8; Discount is a required field"
+	flag = 0;
+} else if (isNaN(discount)||discount<0) {
+	discountSpan.innerHTML = "&#x1F6C8; Discount should be a number"
+	flag = 0;
+}
+else if (discount>limit) {
+	discountSpan.innerHTML = "&#x1F6C8; Discount limit is max 10%"
+	flag = 0;
+}
+else {
+	productSpan.innerHTML = ""
+	 }
+	 
  if (quantity == "" || quantity == null) {
 	 quantitySpan.innerHTML = "&#x1F6C8; Quantity is a required field"
 	 flag = 0;
@@ -639,6 +668,10 @@ else if(discount<0){
 	discountSpan.innerHTML = "&#x1F6C8; Discount should be a positive value"
 	flag=0
 }
+else if (discount < 5 || discount > 90) {
+	discountSpan.innerHTML = "&#x1F6C8; Discount should be between 5% - 90%"
+	flag=0
+	}
 else {
 	discountSpan.innerHTML=""
 	}

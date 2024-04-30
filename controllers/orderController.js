@@ -14,7 +14,7 @@ const orderLoad = async (req, res) => {
     let limit = 5;
     let count = await Order.find({}).countDocuments()
     let totalPages=Math.ceil(count/limit)
-    const orderData = await Order.find({}).limit(limit).skip((page-1)*limit).sort({createdAt:-1}).populate("addressChosen").populate("userId").populate("cartData.productId")
+    const orderData = await Order.find({grandTotalCost:{$exists:true}}).limit(limit).skip((page-1)*limit).sort({createdAt:-1}).populate("addressChosen").populate("userId").populate("cartData.productId")
     if (orderData) {
       res.render("orders", { orderData,totalPages,currentPage:page})
     }

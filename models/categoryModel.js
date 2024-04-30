@@ -11,11 +11,19 @@ const categorySchema = mongoose.Schema({
   description: {
     type: String
   },
+  discount: {
+    type: Number,
+    default:0
+  },
+  is_listed: {
+    type: Boolean,
+    default: true
+  },
   is_deleted: {
     type: Number,
     default:0
   }
   
-}, {timestamps:true});
+}, {timestamps:true,strictPopulate:false});
 
 module.exports = mongoose.model("category", categorySchema);

@@ -60,7 +60,7 @@ const addCategory = async (req, res) => {
    }
 }
   
-//list unlist product
+//list unlist category
 const categoryView = async (req, res) =>
 {
   try {

@@ -6,7 +6,8 @@ const cartController = require("../controllers/cartController")
 const addressController = require("../controllers/addressController")
 const shopController = require("../controllers/shopController")
 const wishlistController = require("../controllers/wishlistController")
-const auth=require("../middlewares/userAuth")
+const auth = require("../middlewares/userAuth")
+const blockCheck=require("../middlewares/blockCheck")
 
 //setting the path for the view engine
 user_route.set("views","./views/users")
@@ -31,7 +32,7 @@ user_route.get("/entry", auth.isLogout, userController.loadLogin)
 user_route.post("/user_login", auth.isLogout, userController.verifyLogin)
 
 //user logout
-user_route.get("/logout", auth.isLogin, userController.userLogout);
+user_route.get("/logout", auth.isLogin,blockCheck, userController.userLogout);
 
 
 //---------------------------------- Sign Up --------------------------------------------
@@ -64,155 +65,155 @@ user_route.post("/reset_password",auth.isLogout, userController.passwordReset);
 //---------------------------------Product Management-----------------------------------
 
 //user shop page
-user_route.get("/shop", auth.isLogin, shopController.loadShop);
+user_route.get("/shop", auth.isLogin,blockCheck, shopController.loadShop);
 
 //individual product page
-user_route.get("/product",auth.isLogin, shopController.loadProduct);
+user_route.get("/product",auth.isLogin,blockCheck, shopController.loadProduct);
 
 //price low to high filter
-user_route.get("/price_low_high", auth.isLogin, shopController.priceAscending)
+user_route.get("/price_low_high",blockCheck, auth.isLogin, shopController.priceAscending)
 
 //price low to high filter
-user_route.get("/price_high_low", auth.isLogin, shopController.priceDescending)
+user_route.get("/price_high_low",blockCheck, auth.isLogin, shopController.priceDescending)
 
 //name ascending sort
-user_route.get("/name_ascending", auth.isLogin, shopController.alphabetAscending)
+user_route.get("/name_ascending",blockCheck, auth.isLogin, shopController.alphabetAscending)
 
 //name descending sort
-user_route.get("/name_descending", auth.isLogin, shopController.alphabetDescending)
+user_route.get("/name_descending",blockCheck, auth.isLogin, shopController.alphabetDescending)
 
 
 //---------------------------------Profile Management-----------------------------------
 
 //user profile page
-user_route.get("/profile", auth.isLogin, userController.loadProfile)
+user_route.get("/profile",blockCheck, auth.isLogin, userController.loadProfile)
 
 //edit profile to db
-user_route.post("/edit_profile", auth.isLogin, userController.editProfile)
+user_route.post("/edit_profile",blockCheck, auth.isLogin, userController.editProfile)
 
 //wallet page
-user_route.get("/wallet", auth.isLogin, userController.loadWallet)
+user_route.get("/wallet",blockCheck, auth.isLogin, userController.loadWallet)
 
 
 //---------------------------------Password Management-----------------------------------
 
 //change password page
-user_route.get("/change_password", auth.isLogin, userController.confirmPasswordLoad)
+user_route.get("/change_password",blockCheck, auth.isLogin, userController.confirmPasswordLoad)
 
 //confirm password 
-user_route.post("/confirm_password", auth.isLogin, userController.confirmPassword)
+user_route.post("/confirm_password",blockCheck, auth.isLogin, userController.confirmPassword)
 
 //new password page
-user_route.get("/new_password", auth.isLogin, userController.newPasswordLoad)
+user_route.get("/new_password",blockCheck, auth.isLogin, userController.newPasswordLoad)
 
 //new password 
-user_route.post("/new_password", auth.isLogin, userController.newPassword)
+user_route.post("/new_password",blockCheck, auth.isLogin, userController.newPassword)
 
 
 
 //---------------------------------Address Management-----------------------------------
 
 //address page
-user_route.get("/address", auth.isLogin, addressController.loadAddress)
+user_route.get("/address",blockCheck, auth.isLogin, addressController.loadAddress)
 
 //add address page
-user_route.get("/add_address", auth.isLogin, addressController.addAddress)
+user_route.get("/add_address",blockCheck, auth.isLogin, addressController.addAddress)
 
 //delete address page
-user_route.get("/delete_address", auth.isLogin, addressController.deleteAddress)
+user_route.get("/delete_address",blockCheck, auth.isLogin, addressController.deleteAddress)
 
 //save address page
-user_route.post("/add_address", auth.isLogin, addressController.saveAddress)
+user_route.post("/add_address",blockCheck, auth.isLogin, addressController.saveAddress)
 
 //edit address page
-user_route.get("/edit_address", auth.isLogin, addressController.editAddress)
+user_route.get("/edit_address",blockCheck, auth.isLogin, addressController.editAddress)
 
 //edit address page to db
-user_route.post("/edit_address", auth.isLogin, addressController.updateAddress)
+user_route.post("/edit_address",blockCheck, auth.isLogin, addressController.updateAddress)
 
 
 //---------------------------------Order Management-----------------------------------
 
 //orders page
-user_route.get("/order", auth.isLogin, userController.loadOrders)
+user_route.get("/order",blockCheck, auth.isLogin, userController.loadOrders)
 
 //orders detail page
-user_route.get("/order_detail", auth.isLogin, userController.orderDetail)
+user_route.get("/order_detail",blockCheck, auth.isLogin, userController.orderDetail)
 
 //orders detail page
-user_route.put("/cancel_order", auth.isLogin, userController.cancelOrder)
+user_route.put("/cancel_order",blockCheck, auth.isLogin, userController.cancelOrder)
 
 //orders cancellation reason
-user_route.put("/return_reason", auth.isLogin, userController.orderReturn)
+user_route.put("/return_reason", blockCheck,auth.isLogin, userController.orderReturn)
 
 //invoice data
-user_route.get("/invoice", auth.isLogin, userController.invoiceOrder)
+user_route.get("/invoice",blockCheck, auth.isLogin, userController.invoiceOrder)
 
 //---------------------------------Cart Management---------------------------------------
 
 //add to cart page
-user_route.get("/add_to_cart", auth.isLogin, cartController.addToCart);
+user_route.get("/add_to_cart",blockCheck, auth.isLogin, cartController.addToCart);
 
 //load cart page
-user_route.get("/cart", auth.isLogin, cartController.cartLoad);
+user_route.get("/cart",blockCheck, auth.isLogin, cartController.cartLoad);
 
 //decrease quantity
-user_route.put("/dec_qty/:id", auth.isLogin, cartController.decQuantity);
+user_route.put("/dec_qty/:id", blockCheck,auth.isLogin, cartController.decQuantity);
 
 //increase quantity
-user_route.put("/inc_qty/:id", auth.isLogin, cartController.incQuantity);
+user_route.put("/inc_qty/:id", blockCheck,auth.isLogin, cartController.incQuantity);
 
 //remove cart product page
-user_route.get("/remove_cart/:prodId", auth.isLogin, cartController.removeCart)
+user_route.get("/remove_cart/:prodId",blockCheck, auth.isLogin, cartController.removeCart)
 
 //remove cart product page
-user_route.get("/check_stock", auth.isLogin, cartController.checkStock)
+user_route.get("/check_stock",blockCheck, auth.isLogin, cartController.checkStock)
 
 
 //---------------------------------Checkout Management-----------------------------------
 
 //load checkout page
-user_route.get("/check_out", auth.isLogin, cartController.loadCheckOut)
+user_route.get("/check_out",blockCheck, auth.isLogin, cartController.loadCheckOut)
 
 //add address checkout page
-user_route.post("/add_checkout_address", auth.isLogin, cartController.saveAddressCheckout)
+user_route.post("/add_checkout_address",blockCheck, auth.isLogin, cartController.saveAddressCheckout)
 
 //load edit address checkout page
-user_route.get("/edit_check_out", auth.isLogin, cartController.loadEditCheckout)
+user_route.get("/edit_check_out",blockCheck, auth.isLogin, cartController.loadEditCheckout)
 
 //update address checkout page
-user_route.post("/edit_check_out", auth.isLogin, cartController.updateAddress)
+user_route.post("/edit_check_out",blockCheck, auth.isLogin, cartController.updateAddress)
 
 //delivery address
-user_route.post("/delivery_address", auth.isLogin, cartController.chooseCheckoutAddress)
+user_route.post("/delivery_address",blockCheck, auth.isLogin, cartController.chooseCheckoutAddress)
 
 //confirm order
-user_route.post("/confirm_order", auth.isLogin, cartController.confirmOrder)
+user_route.post("/confirm_order",blockCheck, auth.isLogin, cartController.confirmOrder)
 
 //confirm order
-user_route.get("/confirm_order", auth.isLogin, cartController.orderPlaced)
+user_route.get("/confirm_order",blockCheck, auth.isLogin, cartController.orderPlaced)
 
 //payment option cod check
-user_route.get("/check_cod", auth.isLogin, cartController.checkCod)
+user_route.get("/check_cod",blockCheck, auth.isLogin, cartController.checkCod)
 
 //payment option wallet balance check
-user_route.get("/check_wallet", auth.isLogin, cartController.checkWallet)
+user_route.get("/check_wallet",blockCheck, auth.isLogin, cartController.checkWallet)
 
 //razorpay status check
-user_route.post("/razorpay_status", auth.isLogin, cartController.razorPayStatus)
+user_route.post("/razorpay_status",blockCheck, auth.isLogin, cartController.razorPayStatus)
 
 //razorpay status check
-user_route.post("/coupon_check", auth.isLogin, cartController.couponCheck)
+user_route.post("/coupon_check",blockCheck, auth.isLogin, cartController.couponCheck)
 
 //---------------------------------Wishlist Management-----------------------------------
 
 //Wishlist load
-user_route.get("/wishlist", auth.isLogin, wishlistController.loadWishlist)
+user_route.get("/wishlist",blockCheck, auth.isLogin, wishlistController.loadWishlist)
 
 //add to wishlist
-user_route.get("/add_to_wishlist", auth.isLogin, wishlistController.wishlistAdd)
+user_route.get("/add_to_wishlist",blockCheck, auth.isLogin, wishlistController.wishlistAdd)
 
 //remove wishlist product 
-user_route.get("/remove_wishlist/:prodId", auth.isLogin, wishlistController.removeWishlist)
+user_route.get("/remove_wishlist/:prodId",blockCheck, auth.isLogin, wishlistController.removeWishlist)
 
 module.exports = user_route;

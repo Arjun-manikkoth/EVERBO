@@ -57,7 +57,8 @@ const addProduct = async (req, res) => {
         category:req.body.category,
         description: req.body.description,
         price: req.body.price,
-        quantity: req.body.quantity
+        quantity: req.body.quantity,
+        discount: req.body.discount
       })
       const productData = await product.save();
       const  data =await Product.findOne({name:req.body.name})
@@ -141,7 +142,8 @@ const updateProduct= async (req, res) =>
             description: req.body.description,
             price: req.body.price,
             quantity: req.body.quantity,
-            category: req.body.category
+            category: req.body.category,
+            discount: req.body.discount
           }
         });
       

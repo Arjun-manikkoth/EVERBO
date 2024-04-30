@@ -57,7 +57,7 @@ cursor: pointer;
 } 
 
 .searchbar, 
-.message, 
+.admin, 
 .logosec { 
 display: flex; 
 align-items: center; 
@@ -93,10 +93,14 @@ background-color: var(--secondary-color);
 cursor: pointer; 
 } 
 
-.message { 
-gap: 40px; 
+.admin { 
+gap: 20px; 
 position: relative; 
 cursor: pointer; 
+color: #fe4c50;
+font-size: 20px;
+font-weight: 600;
+padding-left: 20px;
 } 
 .circle { 
 height: 7px; 
@@ -263,7 +267,6 @@ border-radius: 15px;
 box-shadow: 3px 3px 10px rgb(188, 188, 188); 
 padding: 0px 20px 20px 20px; 
 overflow-x: auto;
-position: relative;
 } 
 .report-header { 
 height: 80px; 

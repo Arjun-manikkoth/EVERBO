@@ -10,7 +10,7 @@ var instance = new Razorpay({ key_id: RAZORPAY_KEY_ID, key_secret: RAZORPAY_SECR
 //cart Load
 const cartLoad = async (req, res) => {
   try {
-    const cartData = await User.findOne({ _id: req.session.user_Id }).populate("cart.productId")
+    const cartData = await User.findOne({ _id: req.session.user_Id }).populate("cart.productId").populate("cart.productId.category")
     req.session.cartCount=cartData.cart.length
     const session=req.session
     if (cartData.cart == "") {

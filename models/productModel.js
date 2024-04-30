@@ -1,3 +1,4 @@
+const { strict } = require("assert");
 const mongoose = require("mongoose");
 const { stringify } = require("querystring");
 
@@ -7,8 +8,7 @@ const productSchema=mongoose.Schema({
     type: String
   },
   category: {
-    type: mongoose.Types.ObjectId,
-    ref: "category"
+    type: mongoose.Types.ObjectId,ref: "category"
   },
   description: {
     type: String
@@ -37,6 +37,6 @@ const productSchema=mongoose.Schema({
   is_listed: {
     type:Boolean , default:true
   }
-},{timestamps:true});
+},{timestamps:true,strictPopulate:false});
 
 module.exports = mongoose.model("product", productSchema);
