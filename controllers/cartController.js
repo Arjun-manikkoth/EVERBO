@@ -10,7 +10,13 @@ var instance = new Razorpay({ key_id: RAZORPAY_KEY_ID, key_secret: RAZORPAY_SECR
 //cart Load
 const cartLoad = async (req, res) => {
   try {
-    const cartData = await User.findOne({ _id: req.session.user_Id }).populate("cart.productId").populate("cart.productId.category")
+    const cartData = await User.findOne({ _id: req.session.user_Id }).populate({
+      path: 'cart.productId',
+      populate: {
+          path: 'category',
+          model: 'category'
+      }
+  });
     req.session.cartCount=cartData.cart.length
     const session=req.session
     if (cartData.cart == "") {
@@ -40,7 +46,8 @@ const addToCart = async (req, res) => {
            cart: 
              {
                productId: req.query.prodId,
-               productQuantity:1,
+               productQuantity: 1,
+               totalProductDiscount:product.discount,
                pricePerProduct:product.price,
                totalPrice: product.price
              }      
@@ -70,12 +77,14 @@ const decQuantity = async (req, res) => {
     if (cartProduct.productQuantity >1) {
       const updatedQuantity =cartProduct.productQuantity-1;
       const totalPrice = cartProduct.productId.price * updatedQuantity;
+      const discount = cartProduct.productId.discount*updatedQuantity
 
      const cart=await User.updateOne({ _id: req.session.user_Id,"cart.productId": req.params.id}, {
         $set: {
              "cart.$.productQuantity": updatedQuantity,
              "cart.$.pricePerProduct":cartProduct.productId.price,
-             "cart.$.totalPrice": totalPrice    
+             "cart.$.totalPrice": totalPrice,
+             "cart.$.totalProductDiscount":discount
         }   
      })
      const data= await User.findOne({ _id: req.session.user_Id, "cart.productId": req.params.id }).populate("cart.productId")
@@ -97,12 +106,14 @@ const incQuantity = async (req, res) => {
     if (cartProduct.productQuantity < cartProduct.productId.quantity) {
       const updatedQuantity =cartProduct.productQuantity+1;
       const totalPrice = updatedQuantity * cartProduct.productId.price;
-
+      const discount = cartProduct.productId.discount * updatedQuantity
+      
      const cart=await User.updateOne({ _id: req.session.user_Id,"cart.productId": req.params.id}, {
         $set: {
              "cart.$.productQuantity": updatedQuantity,
              "cart.$.pricePerProduct":cartProduct.productId.price,
-             "cart.$.totalPrice": totalPrice    
+             "cart.$.totalPrice": totalPrice,
+             "cart.$.totalProductDiscount":discount
         }   
      })
       const data = await User.findOne({ _id: req.session.user_Id, "cart.productId": req.params.id }).populate("cart.productId")

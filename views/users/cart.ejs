@@ -27,7 +27,7 @@
                     </a>
                   </div>
                   <div class="hidden"><%=prod.productId.discount%></div>
-                  <div class="hidden"><%=prod.productId.category%></div>
+                  <div class="hidden"><%=prod.productId.category.discount%></div>
                   <!-- Image -->
                 </div>
                 <div class="col-lg-5 col-md-6 mb-4 mb-lg-0">
@@ -64,6 +64,7 @@
                   </div>
                   <!-- Quantity -->
                    <input type="hidden" id="productStock<%=prod.productId._id%>" value="<%=prod.productId.quantity%>">
+                   <div class="hidden productDiscountTot" id="productDiscountTot<%=prod.productId._id%>"><%=prod.totalProductDiscount%></div>
                   <!-- Price -->
                   <div class="d-flex">
                    <span>Rs.</span>

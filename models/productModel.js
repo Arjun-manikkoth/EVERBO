@@ -1,6 +1,4 @@
-const { strict } = require("assert");
 const mongoose = require("mongoose");
-const { stringify } = require("querystring");
 
 const productSchema=mongoose.Schema({
   
@@ -37,6 +35,6 @@ const productSchema=mongoose.Schema({
   is_listed: {
     type:Boolean , default:true
   }
-},{timestamps:true,strictPopulate:false});
+},{timestamps:true});
 
 module.exports = mongoose.model("product", productSchema);

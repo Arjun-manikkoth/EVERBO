@@ -37,7 +37,8 @@ const userSchema=mongoose.Schema({
       {
         productId: { type: mongoose.Types.ObjectId, ref: "product" },
         productQuantity: { type: Number,min:1},
-        pricePerProduct: {type: Number},
+        totalProductDiscount: {type: Number},
+        pricePerProduct: { type: Number },
         totalPrice: {type:Number}
       }
     ],

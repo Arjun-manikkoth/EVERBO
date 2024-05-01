@@ -457,30 +457,39 @@ function confirmLogout() {
 	});
 }
 
+const n2 = document.querySelectorAll(".productDiscountTot")
 const nl = document.querySelectorAll(".cart-price")
-	if (nl) {
+	if (nl.length>0) {
 		var priceList = Array.from(nl)
 		var totalAmount = priceList.reduce((total, value) => { 
 			var price = parseInt(value.innerHTML)
 			return total += price;
 		}, 0)
+}	if (n2.length>0) {
+	var prodDiscList = Array.from(n2)
+	var totalProdDisc = prodDiscList.reduce((total, value) => { 
+		var disc = parseInt(value.textContent)
+		return total += disc;
+	}, 0)
 }
+  var el1=document.getElementById("productDiscountTotal")
 	var el = document.getElementById("totalPrice")
 	var checkOutPrice = document.getElementById("priceCheckOut")
-	if (el) { 
+	if (el&&el1) { 
 		el.innerHTML = totalAmount;
+		el1.innerHTML = totalProdDisc;
 		var deliveryCharge = document.getElementById("deliveryFee")
 		if (totalAmount >= 1500) { 
 			deliveryCharge.innerHTML = "Free"
 			if (checkOutPrice) {
-				checkOutPrice.innerHTML = totalAmount;
+				checkOutPrice.innerHTML = totalAmount-totalProdDisc;
 			}
 		}
 		else {
 			deliveryCharge.innerHTML = "Rs.90"
 
 				if (checkOutPrice) {
-				checkOutPrice.innerHTML = totalAmount+90;
+				checkOutPrice.innerHTML = totalAmount+90-totalProdDisc;
 			}
 		}
 		var grandTotal = document.getElementById("sumTot")
@@ -493,7 +502,9 @@ const nl = document.querySelectorAll(".cart-price")
 function decQty(prodId) {
 	var quantity = document.getElementById("qtyNo" + prodId)
 	var productPrice = document.getElementById("price" + prodId)
+	var productDiscount = document.getElementById("productDiscountTot" + prodId)
 	var totalAmount = document.getElementById("totalPrice")
+	var totalProductDiscount=document.getElementById("productDiscountTotal")
 	var checkOutAmount = document.getElementById("priceCheckOut")
 	var deliveryFee = document.getElementById("deliveryFee")
 
@@ -509,23 +520,39 @@ function decQty(prodId) {
 			})
 			.then((newData) => {
 				productPrice.innerHTML = newData.totalPrice
+        productDiscount.innerHTML= newData.productDiscountTot
 				const nl = document.querySelectorAll(".cart-price")
+				const n2 = document.querySelectorAll(".productDiscountTot")
+				console.log(nl)
+				console.log(n2)
+
 				let priceList = Array.from(nl)
-				if (nl) {
+				if (nl.length>0) {
 					var checkOutPrice = priceList.reduce((total, value) => {
 						var price = parseInt(value.innerHTML)
 						return total += price;
 					}, 0)
 				}
+				if (n2.length>0) {
+					var prodDiscList = Array.from(n2)
+					var totalProdDisc = prodDiscList.reduce((total, value) => { 
+						console.log("this is value.textcontent",value.textContent)
+						var disc = parseInt(value.textContent)
+						console.log("this is after parseint",disc)
+						return total += disc;
+					}, 0)
+				}
+				console.log("total product discount",totalProdDisc)
+				totalProductDiscount.innerHTML=totalProdDisc
 				totalAmount.innerHTML = checkOutPrice
 				if (checkOutPrice >= 1500) {
 					deliveryFee.innerHTML = "Free"
-					checkOutAmount.innerHTML = checkOutPrice
+					checkOutAmount.innerHTML = checkOutPrice-totalProdDisc
 				}
 				else {
 					deliveryFee.innerHTML = "Rs.90"
-					checkOutAmount.innerHTML = checkOutPrice + 90;
-				}			
+					checkOutAmount.innerHTML = checkOutPrice + 90-totalProdDisc;
+				}	
 			})	
 	}
 	else if(quantity.value==1) {
@@ -545,7 +572,9 @@ function decQty(prodId) {
 function incQty(prodId) {
 	var quantity = document.getElementById("qtyNo" + prodId)
 	var productPrice = document.getElementById("price" + prodId)
+	var productDiscount = document.getElementById("productDiscountTot" + prodId)
 	var totalAmount = document.getElementById("totalPrice")
+	var totalProductDiscount=document.getElementById("productDiscountTotal")
 	var checkOutAmount= document.getElementById("priceCheckOut")
 	var deliveryFee = document.getElementById("deliveryFee")
   
@@ -580,22 +609,33 @@ function incQty(prodId) {
 			.then((newData) => {
 				var checkOutPrice = 0;
 				productPrice.innerHTML = newData.totalPrice
+				productDiscount.innerHTML= newData.productDiscountTot
 				const nl = document.querySelectorAll(".cart-price")
+				const n2 = document.querySelectorAll(".productDiscountTot")
+				
 				let priceList = Array.from(nl)
-				if (nl) {
+				if (nl.length>0) {
 						checkOutPrice = priceList.reduce((total, value) => {
 						var price = parseInt(value.innerHTML)
 						return total += price;
 					}, 0)
 				}
+				if (n2.length>0) {
+					var prodDiscList = Array.from(n2)
+					var totalProdDisc = prodDiscList.reduce((total, value) => { 
+						var disc = parseInt(value.textContent)
+						return total += disc;
+					}, 0)
+				}
+				  totalProductDiscount.innerHTML=totalProdDisc
 					totalAmount.innerHTML =checkOutPrice
 					if (checkOutPrice >= 1500) { 
 						deliveryFee.innerHTML = "Free"
-						checkOutAmount.innerHTML = checkOutPrice
+						checkOutAmount.innerHTML = checkOutPrice-totalProdDisc
 					}
 					else {
 						deliveryFee.innerHTML = "Rs.90"
-						checkOutAmount.innerHTML = checkOutPrice + 90;
+						checkOutAmount.innerHTML = checkOutPrice + 90-totalProdDisc;
 					}			
 			})
 			.catch((error) => {
