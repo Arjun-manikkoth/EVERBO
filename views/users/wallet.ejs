@@ -14,8 +14,8 @@
                              Wallet Balance
                              <br>
                              <div class="wallet-balance mt-2">Rs.
-                              <%if(locals.data){%>
-                               <%=data.wallet.walletBalance%>
+                              <%if(locals.walletBalance){%>
+                               <%=walletBalance.walletBalance%>
                               <%}else{%>
                                 0
                               <%}%>
@@ -33,7 +33,7 @@
                             </tr>
                           </thead>
                           <tbody>
-                            <%if(data.wallet.walletTransaction.forEach((each)=>{%> 
+                            <%if(data.forEach((each)=>{%> 
                               <tr> 
                                     <td><%=each.transactionDate.toLocaleString()%></td>
                                     <td><%=each.transactionType%></td>

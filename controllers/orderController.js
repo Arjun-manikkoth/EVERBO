@@ -1,5 +1,6 @@
 const Order = require("../models/orderModel")
 const User = require("../models/userModel")
+const Product = require("../models/productModel")
 
 //--------------------------------Admin Side - Order Management-------------------------------------------
 
@@ -45,19 +46,25 @@ const orderDetailLoad = async (req, res) => {
 //update order detail page
 const updateOrder = async (req, res) => {
   try {
-    const orderData = await Order.findById({ _id: req.body.id })
-     await User.findByIdAndUpdate({ _id: orderData.userId }, {
-      $inc: {
-    "wallet.walletBalance": orderData.grandTotalCost
-      }, $push: {
-        "wallet.walletTransaction": {
-          transactionDate: Date(),
-          transactionAmount: orderData.grandTotalCost,
-          transactionType: "Credit",
-          orderId:req.body.id
+    if (req.body.status === "Cancelled") {
+      const orderData = await Order.findById({ _id: req.body.id })
+      await User.findByIdAndUpdate({ _id: orderData.userId }, {
+        $inc: {
+          "wallet.walletBalance": orderData.grandTotalCost
+        }, $push: {
+          "wallet.walletTransaction": {
+            transactionDate: Date(),
+            transactionAmount: orderData.grandTotalCost,
+            transactionType: "Credit",
+            orderId: req.body.id
+          }
         }
-      }
-    })
+      })
+      orderData.cartData.forEach(async(prod) => {
+        const productData = await Product.findByIdAndUpdate({ _id: prod.productId }, { $inc: { quantity: prod.productQuantity } },{new:true})
+        console.log(productData)
+      })
+    }
     const data = await Order.findByIdAndUpdate({ _id: req.body.id }, { $set: { orderStatus: req.body.status } })
 
     res.json(data)

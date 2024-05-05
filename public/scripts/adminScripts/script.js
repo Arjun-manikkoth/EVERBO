@@ -81,7 +81,7 @@ function validateCategory() {
 		flag = 0;
 	}
 	else {
-		productSpan.innerHTML = ""
+		discountSpan.innerHTML = ""
 }
 		if (image.value == "" || image.value == null) {
 			imageSpan.innerHTML = "&#x1F6C8; Image not uploaded"
@@ -91,21 +91,27 @@ function validateCategory() {
 		else { 
 				var allowedExtensions = ["jpg", "jpeg", "png"];
 			for (var i = 0; i < image.files.length; i++) {
-					var file = image.files[i];
+				var file = image.files[i];
 					var extension = file.name.split('.').pop().toLowerCase();
 					if (allowedExtensions.indexOf(extension) === -1) {
 							imageSpan.innerHTML = "&#x1F6C8; Invalid file format";
 							flag = 0;
 							break;
 					} else {
+						if (image.files[i].size > 204800) {
+							imageSpan.innerHTML = "&#x1F6C8; Image size should be within 200kb";
+							flag = 0;
+							break;
+						} else {
 							imageSpan.innerHTML = "";
+						}		
 					}
 			}		
 	}	
-		if (flag == 0)
-				return false
-		else
-			return true
+  if(flag==0)
+		return false
+	else
+		return true
 }
 
 function validateEditCategory() { 
@@ -146,7 +152,13 @@ else {
 						flag = 0;
 						break;
 				} else {
+					if (image.files[i].size > 204800) {
+						imageSpan.innerHTML = "&#x1F6C8; Image size should be within 200kb";
+						flag = 0;
+						break;
+					} else {
 						imageSpan.innerHTML = "";
+					}	
 				}
 		}		
 }	
@@ -210,7 +222,13 @@ function validateProduct() {
             flag = 0;
             break;
         } else {
-            imageSpan.innerHTML = "";
+					if (image.files[i].size > 204800) {
+						imageSpan.innerHTML = "&#x1F6C8; Image size should be within 200kb";
+						flag = 0;
+						break;
+					} else {
+						imageSpan.innerHTML = "";
+					}	
         }
     }
 	}
@@ -244,7 +262,7 @@ function validateProduct() {
 			flag = 0;
 		}
 		else {
-			productSpan.innerHTML = ""
+			discountSpan.innerHTML = ""
 	}
 	
 	  if (quantity == "" || quantity == null) {
@@ -261,7 +279,7 @@ function validateProduct() {
 			flag = 0;
   	}
 		else {
-			productSpan.innerHTML = ""
+		  quantitySpan.innerHTML = ""
 		} 	
 	if (flag == 0) 
 		return false 	 
@@ -326,7 +344,7 @@ else if (discount>limit) {
 	flag = 0;
 }
 else {
-	productSpan.innerHTML = ""
+	discountSpan.innerHTML = ""
 	 }
 	 
  if (quantity == "" || quantity == null) {
@@ -380,7 +398,13 @@ function validateEditImages() {
             flag = 0;
             break;
         } else {
-            imageSpan.innerHTML = "";
+					if (image.files[i].size > 204800) {
+						imageSpan.innerHTML = "&#x1F6C8; Image size should be within 200kb";
+						flag = 0;
+						break;
+					} else {
+						imageSpan.innerHTML = "";
+					}	
         }
     }
 	}
@@ -415,7 +439,13 @@ function validateEditImage() {
             flag = 0;
             break;
         } else {
-            imageSpan.innerHTML = "";
+					if (image.files[i].size > 204800) {
+						imageSpan.innerHTML = "&#x1F6C8; Image size should be within 200kb";
+						flag = 0;
+						break;
+					} else {
+						imageSpan.innerHTML = "";
+					}	
         }
 	}
 	}

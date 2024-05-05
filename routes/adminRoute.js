@@ -129,14 +129,19 @@ admin_route.post("/order_edit",auth.isLogin, orderController.updateOrder)
 //Admin coupon page load
 admin_route.get("/coupons", auth.isLogin, couponController.couponLoad)
 
-// //Add coupon page load
+//Add coupon page load
 admin_route.get("/add_coupon", auth.isLogin, couponController.addCouponLoad)
 
-// //Add coupon 
+//Add coupon 
 admin_route.post("/add_coupon", auth.isLogin, couponController.addCoupon)
+
+//edit coupon load
+admin_route.get("/edit_coupon", auth.isLogin, couponController.editCouponLoad)
+
+//edit coupon to db
+admin_route.post("/edit_coupon", auth.isLogin, couponController.updateCoupon)
 
 //Delete coupon 
  admin_route.get("/delete_coupon", auth.isLogin, couponController.deleteCoupon)
-
 
 module.exports = admin_route;

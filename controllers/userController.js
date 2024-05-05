@@ -2,6 +2,7 @@ const User = require("../models/userModel");
 const bcrypt = require("bcrypt")
 const nodemailer = require("nodemailer")
 const Order = require("../models/orderModel");
+const Product = require("../models/productModel");
 
  
 // ---------------------------------------------User Account Management-------------------------------------------------
@@ -378,6 +379,9 @@ const cancelOrder = async (req, res) => {
         }
       }
     })
+   orderData.cartData.forEach(async(prod) => {
+      const productData = await Product.findByIdAndUpdate({ _id: prod.productId }, { $inc: { quantity: prod.productQuantity } },{new:true})
+    })
     if (orderData) {     
       res.json(orderData) 
     }
@@ -406,6 +410,9 @@ const orderReturn = async (req, res) => {
           orderId:req.body.id
         }
       }
+    })
+    orderData.cartData.forEach(async(prod) => {
+      const productData = await Product.findByIdAndUpdate({ _id: prod.productId }, { $inc: { quantity: prod.productQuantity } },{new:true})
     })
     if (orderData) {     
       res.json(orderData) 
@@ -442,7 +449,8 @@ const confirmPasswordLoad = async (req, res) => {
   //load wallet page
 const loadWallet = async (req, res) => {
   try {
-    const walletData = await User.findById({ _id: req.session.user_Id}).populate("orderId").sort({ "wallet.walletTransaction.transactionDate": -1 })
+    const walletData = await User.findById({ _id: req.session.user_Id }).populate("wallet.walletTransaction.orderId")
+    
     if (walletData.wallet.walletTransaction.length !== 0) {
 
       let page = 1 
@@ -450,10 +458,18 @@ const loadWallet = async (req, res) => {
         page = req.query.page
       }
       let limit = 3
-      const data = await User.findById({ _id: req.session.user_Id }).populate("orderId").skip((page - 1) * limit).limit(limit).sort({ "wallet.walletTransaction.transactionDate": -1 })
-      const count = await User.findById({ _id: req.session.user_Id }).populate("orderId").skip((page - 1) * limit).limit(limit).countDocuments()
-      let totalPages = Math.ceil(count/limit)
-      res.render("wallet",{profile:true,data,session:req.session,totalPages,currentPage: page})
+
+      const count = walletData.wallet.walletTransaction.length;
+      let totalPages = Math.ceil(count / limit)
+    
+      walletData.wallet.walletTransaction.sort((a, b) => {
+        return new Date(b.transactionDate) - new Date(a.transactionDate);
+      });
+      const startIndex = (page - 1) * limit;
+      const endIndex = startIndex + limit;
+      const data = walletData.wallet.walletTransaction.slice(startIndex, endIndex);
+      
+      res.render("wallet",{profile:true,data,session:req.session,walletBalance:walletData.wallet,totalPages,currentPage: page})
     }
     else {
       res.render("wallet",{profile:true,msg:"No Recent transactions",session:req.session})

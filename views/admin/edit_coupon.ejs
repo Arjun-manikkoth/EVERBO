@@ -1,0 +1,80 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Coupon</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+    <link rel="stylesheet" href="/styles/adminStyles/adminstyles.css">
+</head>
+<body>
+
+  <div class="form-box container">
+    <div class="title-container">
+      <div class="table-title">
+        Edit Coupon
+      </div> 
+    </div>
+    <% if(locals.message){%>
+      <div class="error">
+        <span class="message" id="error-message"><%=message%></span>
+      </div>
+         <%}%>
+    <form  action="/admin/edit_coupon?id=<%=coupon._id%>" method="post"  onsubmit="return validateCoupon()">
+    
+  
+        <div class="row">
+          <div class="form-group col-md-6">
+            <label for="couponCode">Coupon Code</label>
+            <input type="text" class="form-control" name="couponCode" id="couponCode" placeholder="Enter coupon code" maxlength="12" value="<%=coupon.couponCode%>">
+            <span id="coupon-code-error" class="error"></span>
+          </div>
+          <div class="form-group col-md-6">
+            <label for="discountPercent">Discount Percentage</label>
+            <input type="text" class="form-control" name="discountPercentage" id="discountPercent" placeholder="Enter discount percentage" maxlength="2" value="<%=coupon.discountPercentage%>">
+            <span id="discount-percentage-error" class="error"></span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group col-md-6">
+            <label for="startingDate">Start Date</label>
+            <input type="date" class="form-control" name="startingDate" id="startingDate" placeholder="Enter starting date">
+            <span id="start-date-error" class="error"></span>
+          </div>
+    
+            <div class="form-group col-md-6">
+              <label for="expiryDate">Expiry Date</label>
+              <input type="date" class="form-control" name="expiryDate" id="expiryDate" placeholder="Enter expiry date">
+              <span id="expiry-date-error" class="error"></span>
+            </div>
+        </div>
+        <div class="row">
+          <div class="form-group col-md-6">
+            <label for="minPurchase">Minimum Purchase</label>
+            <input type="text" class="form-control" name="minPurchase" id="minPurchase" placeholder="Min purchase amount" maxlength="4" value="<%=coupon.minimumPurchase%>">
+            <span id="min-purchase-error" class="error"></span>
+          </div>
+  
+          <div class="form-group col-md-6">
+            <label for="maxDiscount">Maximum Discount</label>
+            <input type="text" class="form-control" name="maxDiscount" id="maxDiscount" placeholder="Max discount amount" maxlength="4" value="<%=coupon.maximumDiscount%>">
+            <span id="max-discount-error" class="error"></span>
+          </div>
+        </div>
+        
+       <div class="categoryadd">
+        <button type="submit" class="btn btn-dark confirm-categ">Edit Coupon</button>
+       </div>
+       
+  
+    
+    </form>
+  </div>
+  
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script src="/scripts/adminScripts/script.js"></script>
+</body>
+</html>

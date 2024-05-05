@@ -40,7 +40,7 @@ const addCouponLoad = async (req, res) => {
 const addCoupon = async (req, res) => {
   try {
    const coupon=req.body.couponCode.toString()
-    const exists = await Coupon.findOne({ name: { $regex: new RegExp("^"+coupon+"$","i") } });
+    const exists = await Coupon.findOne({ couponCode: { $regex: new RegExp("^"+coupon+"$","i") } });
 
     if (exists) {
       res.render("add_coupon", { message: "Coupon already added" })
@@ -69,7 +69,54 @@ const addCoupon = async (req, res) => {
     console.log(error.message)
    }
 }
+ 
+//edit coupon page load
+const editCouponLoad = async (req, res) => {
+  try {
+    const coupon = await Coupon.findById({ _id:req.query.id })
+    res.render("edit_coupon",{coupon})
+  }
+  catch(error) {
+    console.log(error.message)
+  }
+}
+
+//update coupon to db
+const updateCoupon = async (req, res) => {
+  try {
+    const coupon=req.body.couponCode.toString()
+    const exists = await Coupon.findOne({ _id: { $ne: req.query.id },couponCode: { $regex: new RegExp("^"+coupon+"$","i") } });
   
+    if (exists) {
+      res.render("edit_coupon", { message: "Coupon already added",coupon:exists })
+    }
+    else { 
+
+      const couponData = await Coupon.findByIdAndUpdate({_id:req.query.id}, {
+        $set: {
+          couponCode: req.body.couponCode,
+          discountPercentage: req.body.discountPercentage,
+          startDate: moment(req.body.startingDate, 'YYYY-MM-DD').format('ddd MMM DD YYYY'),
+          expiryDate: moment(req.body.expiryDate, 'YYYY-MM-DD').format('ddd MMM DD YYYY'),
+          minimumPurchase: req.body.minPurchase,
+          maximumDiscount: req.body.maxDiscount
+        }
+      },{new:true})
+    
+      if (couponData) {
+        res.redirect("/admin/coupons")
+      }
+      else { 
+        res.render("edit_coupon",{message:"Failed to add coupon"})
+      }
+    }
+  }
+  catch (error) {
+
+    console.log(error.message)
+   }
+}
+
 //delete coupon
 const deleteCoupon = async (req, res) => {
   try {
@@ -85,9 +132,12 @@ const deleteCoupon = async (req, res) => {
 
 
 
+
 module.exports = {
   couponLoad,
   addCouponLoad,
   addCoupon,
+  updateCoupon,
+  editCouponLoad,
   deleteCoupon
 }
