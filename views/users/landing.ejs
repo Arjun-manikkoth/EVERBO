@@ -4,8 +4,11 @@
 	
 
 	<!-- Slider -->
-
-	<div class="main_slider" style="background-image:url(images/userImages/slider_1.jpg)">
+	<%if(banner!==null){%>
+		<div class="main_slider" style="background-image:url(/images/userImages/<%=banner.image%>)">
+		<%}else{%>
+			<div class="main_slider" style="background-image:url(/images/userImages/slider_1.jpg)">
+		 <%}%>
 		<div class="container fill_height">
 			<div class="row align-items-center fill_height">
 				<div class="col">

@@ -142,6 +142,22 @@ admin_route.get("/edit_coupon", auth.isLogin, couponController.editCouponLoad)
 admin_route.post("/edit_coupon", auth.isLogin, couponController.updateCoupon)
 
 //Delete coupon 
- admin_route.get("/delete_coupon", auth.isLogin, couponController.deleteCoupon)
+admin_route.get("/delete_coupon", auth.isLogin, couponController.deleteCoupon)
+ 
+
+//-----------------------------------Banner Management--------------------------------------
+
+//Admin banner page load
+admin_route.get("/banner", auth.isLogin, adminController.bannerLoad)
+
+//Add banner page load
+admin_route.get("/add_banner", auth.isLogin, adminController.addBannerLoad)
+
+//Add banner to db 
+admin_route.post("/add_banner", auth.isLogin, upload.single('image'), adminController.addBanner)
+
+//Admin banner listing
+admin_route.get("/bannerCheck", auth.isLogin, adminController.bannerSelect)
+
 
 module.exports = admin_route;

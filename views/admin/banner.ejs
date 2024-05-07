@@ -1,0 +1,46 @@
+<%-include("../layouts/admin/header.ejs")-%>
+	    
+			<div class="report-container"> 
+			<div class="title-container">
+				<div class="table-title">
+          Banners
+        </div> 
+				<div class="btn_add_categories">
+					<button class="btn btn-dark category"><a href="/admin/add_banner" class="category-add">+Banner</a></button>
+				</div>
+  	</div>				
+			<table class="table table-hover table-responsive">
+				<thead>
+					<tr>
+						<th class="col-6" scope="col">Banner Image</th>
+						<th class="col-6" scope="col">Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					<%banner.forEach((images)=>{%>
+						<tr> 
+									<td><img src="/images/userImages/<%=images.image%>" width="440px" alt="<%=images.image%>"></td>
+                  <td >
+                    
+                      <%if(images.is_active===false){%>
+                        <button type="button" class="btn btn-success btn-sm ms-2 my-5 " onclick="activateBanner('<%=images._id%>')">Enable</button>
+                        <%}else{%>
+                        <button type="button" class="btn btn-danger btn-sm ms-2 my-5 " onclick="removeBanner('<%=images._id%>')">Disable</button>
+                        <%}%>
+
+									</td>
+						<%})%>
+				</tbody>
+		</table>	
+		<div class="pagination-div" id="paginationDiv">
+			<% let startPage = Math.max(1, Math.min(currentPage - 1, totalPages - 3)) %>
+			<% let endPage = Math.min(totalPages, startPage + 3); %>
+			<% for (let i = startPage; i <= endPage; i++) { %>
+				<div class="page-no-div" data-page="<%= i %>">
+					<a href="?page=<%= i %>" class="anchor order-pagination"><%= i %></a>
+				</div>
+			<% } %>
+		</div>			
+	</div> 
+
+	<%-include("../layouts/admin/footer.ejs")-%>

@@ -15,7 +15,7 @@
 						<form method="get" action="/shop">
 							<div class="d-flex">
 							<input type="text" class="search-bar" name="search">
-							<button class="btn profile-button btn-sm"><i class="fa fa-search search-icon" aria-hidden="true"></i></button>
+							<button class="btn profile-button btn-sm search-button"><i class="fa fa-search search-icon" aria-hidden="true"></i></button>
 							 </div>	
 						</form>	
 					</div>			
@@ -45,10 +45,14 @@
 						<div class="sidebar_title">
 							<h5>Filter by Price</h5>
 						</div>
-						<p>
-							<input type="text" id="amount" readonly style="border:0; color:#f6931f; font-weight:bold;">
-						</p>
-						<div id="slider-range"></div>
+							<div class="price-range-slider">
+  
+								<p class="range-value">
+									<input type="text" id="amount" readonly>
+								</p>
+								<div id="slider-range" class="range-bar"></div>
+								
+							</div>
 						<div class="filter_button"><span>filter</span></div>
 					</div>
 

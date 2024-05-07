@@ -1,6 +1,7 @@
 const Product = require("../models/productModel")
 const Category = require("../models/categoryModel")
-const User= require("../models/userModel")
+const User = require("../models/userModel")
+const Banner= require("../models/bannerModel")
 
 //-----------------------------------------User Side Shop And Products------------------------------------------------
 
@@ -9,8 +10,9 @@ const User= require("../models/userModel")
 const loadLanding = async (req, res) => {
   try {
     const category = await Category.find({})
+    const banner= await Banner.findOne({is_active:true})
     const product=await Product.find({is_listed:true}).limit(5).populate("category")
-    res.render("landing",{product,category,loggedIn:"false"})
+    res.render("landing",{product,category,loggedIn:"false",banner})
   }
   catch (error) { 
     console.log(error.message);

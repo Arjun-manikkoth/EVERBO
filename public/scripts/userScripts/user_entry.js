@@ -520,11 +520,9 @@ function decQty(prodId) {
 			})
 			.then((newData) => {
 				productPrice.innerHTML = newData.totalPrice
-        productDiscount.innerHTML= newData.productDiscountTot
+        productDiscount.innerHTML= newData.totalProductDiscount
 				const nl = document.querySelectorAll(".cart-price")
 				const n2 = document.querySelectorAll(".productDiscountTot")
-				console.log(nl)
-				console.log(n2)
 
 				let priceList = Array.from(nl)
 				if (nl.length>0) {
@@ -536,13 +534,10 @@ function decQty(prodId) {
 				if (n2.length>0) {
 					var prodDiscList = Array.from(n2)
 					var totalProdDisc = prodDiscList.reduce((total, value) => { 
-						console.log("this is value.textcontent",value.textContent)
 						var disc = parseInt(value.textContent)
-						console.log("this is after parseint",disc)
 						return total += disc;
 					}, 0)
 				}
-				console.log("total product discount",totalProdDisc)
 				totalProductDiscount.innerHTML=totalProdDisc
 				totalAmount.innerHTML = checkOutPrice
 				if (checkOutPrice >= 1500) {
@@ -606,29 +601,36 @@ function incQty(prodId) {
 				}
 				return response.json();
 			})
-			.then((newData) => {
+				.then((newData) => {
+				console.log(newData)
 				var checkOutPrice = 0;
+				var totalProdDisc = 0;
 				productPrice.innerHTML = newData.totalPrice
-				productDiscount.innerHTML= newData.productDiscountTot
+				productDiscount.innerHTML= newData.totalProductDiscount
 				const nl = document.querySelectorAll(".cart-price")
 				const n2 = document.querySelectorAll(".productDiscountTot")
 				
 				let priceList = Array.from(nl)
+				console.log(priceList)
 				if (nl.length>0) {
-						checkOutPrice = priceList.reduce((total, value) => {
-						var price = parseInt(value.innerHTML)
+					checkOutPrice = priceList.reduce((total, value) => {
+							var price = parseInt(value.innerHTML)
 						return total += price;
 					}, 0)
 				}
+				let prodDiscList = Array.from(n2)
 				if (n2.length>0) {
-					var prodDiscList = Array.from(n2)
-					var totalProdDisc = prodDiscList.reduce((total, value) => { 
-						var disc = parseInt(value.textContent)
+					totalProdDisc = prodDiscList.reduce((total, value) => {
+						console.log("this is the value.innerhtml",value.textContent)
+							var disc = parseInt(value.textContent)
+							console.log("the indiv product discount is", disc)
+							console.log("the total is :",total)
 						return total += disc;
 					}, 0)
 				}
+				  console.log("total product discount after addition",totalProdDisc)
 				  totalProductDiscount.innerHTML=totalProdDisc
-					totalAmount.innerHTML =checkOutPrice
+				  totalAmount.innerHTML = checkOutPrice
 					if (checkOutPrice >= 1500) { 
 						deliveryFee.innerHTML = "Free"
 						checkOutAmount.innerHTML = checkOutPrice-totalProdDisc
@@ -1382,3 +1384,21 @@ document.addEventListener("DOMContentLoaded", function () {
 		});
 	}
 });
+
+//-----JS for Price Range slider-----
+
+$(function() {
+	$( "#slider-range" ).slider({
+	  range: true,
+	  min: 200,
+	  max: 3500,
+	  values: [ 200, 3500 ],
+	  slide: function( event, ui ) {
+		$( "#amount" ).val( "Rs." + ui.values[ 0 ] + " - Rs." + ui.values[ 1 ] );
+	  }
+	});
+	$( "#amount" ).val( "Rs." + $( "#slider-range" ).slider( "values", 0 ) +
+	  " - Rs." + $( "#slider-range" ).slider( "values", 1 ) );
+});
+
+

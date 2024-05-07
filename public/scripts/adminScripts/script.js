@@ -857,3 +857,38 @@ function changeOrderStatus(orderId) {
 });
 
 }
+
+function removeBanner(id) {
+	Swal.fire({
+		title: 'Unlist Banner',
+		text: 'Are you sure you want to Unlist this image',
+		icon: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#008000',
+		cancelButtonColor: '#d33',
+		confirmButtonText: 'Yes',
+		cancelButtonText: 'No'
+	}).then((result) => {
+		if (result.isConfirmed) {
+			window.location.href = "/admin/bannerCheck?id="+id;
+		}
+	});
+}
+
+function activateBanner(id) {
+	Swal.fire({
+		title: 'Display Banner',
+		text: 'Are you sure you want to display this image',
+		icon: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#008000',
+		cancelButtonColor: '#d33',
+		confirmButtonText: 'Yes',
+		cancelButtonText: 'No'
+	}).then((result) => {
+		if (result.isConfirmed) {
+			window.location.href = "/admin/bannerCheck?id="+id;
+		}
+	});
+}
+

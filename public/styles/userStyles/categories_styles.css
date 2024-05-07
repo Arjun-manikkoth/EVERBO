@@ -1716,3 +1716,47 @@ section
 .arrow,.fa-long-arrow-right,.fa-long-arrow-left{
 	color: white !important;
 }
+.price-range-slider {
+	width:100%;
+
+	.range-value {
+		margin:0;
+		input {
+			width:100%;
+			background:none;
+			color: #fe4c50;
+			font-size: 16px;
+			font-weight: initial;
+			box-shadow: none;
+			border: none;
+			margin: 20px 0 20px 0;
+		}
+	}
+	
+	.range-bar {
+		border: none;
+		background: rgb(184, 184, 184);
+		height: 3px;	
+		width: 96%;
+		margin-left: 8px;
+		
+		.ui-slider-range {
+			background:#fe4c50;
+		}
+		
+		.ui-slider-handle {
+			border:none;
+			border-radius:25px;
+			background:#fff;
+			border:2px solid #fe4c50;
+			height:17px;
+			width:17px;
+			top: -0.52em;
+			cursor:pointer;
+		}
+		.ui-slider-handle + span {
+			background:#fe4c50;
+		}
+	}
+}
+/*--- /.price-range-slider ---*/

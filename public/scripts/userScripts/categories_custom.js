@@ -53,7 +53,6 @@ jQuery(document).ready(function($)
 	initFavorite();
 	initFixProductBorder();
 	initIsotopeFiltering();
-	initPriceSlider();
 	initCheckboxes();
 
 	/* 
@@ -358,26 +357,6 @@ jQuery(document).ready(function($)
 	        	});
 	        });	
 
-	        // Filter based on the price range slider
-	        filterButton.on('click', function()
-	        {
-	        	$('.product-grid').isotope({
-		            filter: function()
-		            {
-		            	var priceRange = $('#amount').val();
-			        	var priceMin = parseFloat(priceRange.split('-')[0].replace('Rs.', ''));
-			        	var priceMax = parseFloat(priceRange.split('-')[1].replace('Rs.', ''));
-			        	var itemPrice = $(this).find('.product_price').clone().children().remove().end().text().replace( 'Rs.', '' );
-
-			        	return (itemPrice > priceMin) && (itemPrice < priceMax);
-		            },
-		            animationOptions: {
-		                duration: 750,
-		                easing: 'linear',
-		                queue: false
-		            }
-		        });
-	        });
     	}
     }
 
@@ -386,23 +365,6 @@ jQuery(document).ready(function($)
 	7. Init Price Slider
 
 	*/
-
-    function initPriceSlider()
-    {
-		$( "#slider-range" ).slider(
-		{
-			range: true,
-			min: 0,
-			max: 8000,
-			values: [ 0,7000 ],
-			slide: function( event, ui )
-			{
-				$( "#amount" ).val( "Rs." + ui.values[ 0 ] + " - Rs." + ui.values[ 1 ] );
-			}
-		});
-			
-		$( "#amount" ).val( "Rs." + $( "#slider-range" ).slider( "values", 0 ) + " - Rs." + $( "#slider-range" ).slider( "values", 1 ) );
-    }
 
     /* 
 

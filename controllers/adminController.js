@@ -1,5 +1,6 @@
 const Admin = require("../models/adminModel");
 const User = require("../models/userModel");
+const Banner = require("../models/bannerModel");
 const bcrypt = require("bcrypt");
 
 
@@ -72,7 +73,6 @@ const usersLoad = async (req, res) => {
 //user management page
 const userBlock = async (req, res) => {
   try {
-    res.redirect("/admin/users");
     const Id = req.query.id;
     const userData=await User.findOne({_id:Id})
     if (userData.is_blocked == 0) {
@@ -83,6 +83,7 @@ const userBlock = async (req, res) => {
       const value = 0;
       await User.updateOne({ _id: Id }, { $set: {is_blocked:value} })
     }  
+    res.redirect("/admin/users")
   }
   catch (error) {
     console.log(error.message);
@@ -101,6 +102,76 @@ const logout = async (req, res) => {
   }
 }
 
+//load banner page
+const bannerLoad = async (req, res) => {
+  try {
+    let page = 1
+    if (req.query.page) {
+      page=req.query.page
+    }
+    let limit = 4;
+    let count = await Banner.find({}).countDocuments()
+    let totalPages=Math.ceil(count/limit)
+    const banner = await Banner.find({}).limit(limit).skip((page - 1) * limit).sort({ createdAt: 1 })
+    
+    res.render("banner",{banner,totalPages,currentPage:page})
+  }
+  catch (error) {
+
+    console.log(error.message)
+   }
+}
+
+
+//load add banner page
+const addBannerLoad = async (req, res) => {
+  try {
+    res.render("add_banner")
+  }
+  catch (error) {
+
+    console.log(error.message)
+   }
+}
+
+//add category to db
+const addBanner = async (req, res) => {
+  try {
+
+      const banner = new Banner({
+        image: req.file.filename
+      })
+    await banner.save();
+    res.status(200).json({ message: 'Banner added successfully' })
+
+    }
+  catch (error) {
+
+    console.log(error.message)
+   }
+}
+
+//banner management page
+const bannerSelect = async (req, res) => {
+  try {
+
+    const Id = req.query.id;
+    const bannerData=await Banner.findOne({_id:Id})
+    if (bannerData.is_active === true) {
+      await Banner.updateOne({ _id: Id }, { $set: {is_active:false} })
+    }
+    else { 
+      await Banner.updateMany({},{$set:{is_active:false}})
+      await Banner.updateOne({ _id: Id }, { $set: {is_active:true} })
+    } 
+    res.redirect("/admin/banner");
+  }
+  catch (error) {
+    console.log(error.message);
+  }
+}
+
+
 
 module.exports = {
   loadLogin,
@@ -108,5 +179,9 @@ module.exports = {
   loadDashboard,
   logout,
   usersLoad,
-  userBlock
+  userBlock,
+  bannerLoad,
+  addBannerLoad,
+  addBanner,
+  bannerSelect
 }
