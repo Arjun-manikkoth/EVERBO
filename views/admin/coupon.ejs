@@ -1,13 +1,11 @@
 <%-include("../layouts/admin/header.ejs")-%>
-
-
 			<div class="report-container"> 
 			<div class="title-container">
 				<div class="table-title">
           Coupons
         </div> 
 				<div class="btn_add_categories">
-					<button class="btn btn-dark category"><a href="/admin/add_coupon" class="category-add">+Coupon</a></button>
+					<a href="/admin/add_coupon" class="category-add"><button class="btn btn-dark category">+Coupon</button></a>
 				</div>
 				</div>
       	   	
@@ -29,8 +27,8 @@
 						<tr> 
 									<td><%=each.couponCode%></td>
 									<td><%=each.discountPercentage%></td>
-					        <td><%=each.startDate%></td>
-                  <td><%=each.expiryDate%></td>
+					        <td><%=each.startDate.toLocaleString()%></td>
+                  <td><%=each.expiryDate.toLocaleString()%></td>
 									<td><%=each.minimumPurchase%></td>
                   <td><%=each.maximumDiscount%></td>
 									<td>
@@ -45,6 +43,15 @@
 									</td>			
 						</tr>
 						<%})%>
+						<%}else{%>
+							<tr>
+								<td colspan="6">
+										<div class="address-msg">
+												<%= msg %>
+										</div>
+								</td>
+						</tr>
+							<%}%>
 					</tbody>
 			</table>
 			<div class="pagination-div" id="paginationDiv">
@@ -56,12 +63,5 @@
 					</div>
 				<% } %>
 			</div>
-      <%}else{%>
-        <div class="address-msg">
-          <%=msg%>
-        </div>
-        <%}%>
 	 </div> 
-
-
 	<%-include("../layouts/admin/footer.ejs")-%>

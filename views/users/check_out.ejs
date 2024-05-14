@@ -14,6 +14,9 @@
        <%if(locals.userData){%>
            <%if(userData.cart.forEach((prod)=>{%>
            <div class="cart-price eachTotal"><%=prod.totalPrice%></div>
+           <div class="hidden productDiscountTot" id="productDiscountTot<%=prod.productId._id%>"><%=prod.productId.discount*prod.productQuantity%></div>
+           <div class="hidden" id="productDiscountIndiv<%=prod.productId._id%>"><%=prod.productId.discount%></div>
+           <div class="hidden category-discount" ><%=prod.productId.category.name%> <%=prod.productId.category.discount%></div>
            <%}))%>
          <form action="" method="post" id="addressForm">
                 <div class="address-options">
@@ -160,8 +163,11 @@
                     </div> 
                   </div>  
                   <input type="hidden" id="sumTot" name="total" value="">  
-                  <input type="hidden" id="discountInput" name="discount" value="0">     
-                </form>        
+                  <input type="hidden" id="totalProductDiscount" name="productDiscount" value="0"> 
+                  <input type="hidden" id="totalCategoryDiscount" name="categoryDiscount" value="0">
+                  <input type="hidden" id="couponDiscount" name="couponDiscount" value="0">    
+                </form> 
+                <input type="hidden" id="total" value="0">       
               </div>
             </div>
           </div>
@@ -182,10 +188,27 @@
                   Shipping Charges
                   <span id="deliveryFee">Free</span>
                 </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
-                  Total Discount
-                <div>Rs. <span id="couponDiscount">0</span></div>
-                </li>
+                <li
+                class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
+                <div>
+                 Product discount
+                </div>
+                <span>- Rs. <span id="productDiscountTotal">0</span></span>
+              </li>
+              <li
+              class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 ">
+              <div>
+               Category discount
+              </div>
+              <span>- Rs. <span id="categoryDiscountTotal">0</span></span>
+            </li>
+            <li
+              class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 ">
+              <div>
+               Coupon discount
+              </div>
+              <span>- Rs. <span id="couponDiscountTotal">0</span></span>
+            </li>
                 <li
                   class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
                   <div>
@@ -198,7 +221,8 @@
                 </li>
                 <div class="coupon-div d-flex mb-1">
                   <input type="text" class="coupon-input" id="couponCode" name="couponCode" placeholder="Enter Coupon code">
-                  <button class="profile-button btn coupon-btn" type="submit" onclick="couponCheck()">Apply</button>
+                  <button class="profile-button btn coupon-btn" type="button" onclick="couponCheck()" id="apply-btn">Apply</button>
+                  <button class="profile-button hidden btn coupon-btn" type="button" onclick="couponRemove()" id="remove-btn">Remove</button>
                 </div>
               </ul>
             </div>

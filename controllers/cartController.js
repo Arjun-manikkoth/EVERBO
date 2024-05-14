@@ -34,7 +34,7 @@ const cartLoad = async (req, res) => {
 const addToCart = async (req, res) => {
   try {
     const Existing = await User.findOne({ _id: req.session.user_Id, "cart.productId": req.query.prodId })
-    const product = await Product.findOne({ _id: req.query.prodId })
+    const product = await Product.findOne({ _id: req.query.prodId }).populate("category")
     const cartData = await User.findOne({ _id: req.session.user_Id }).populate("cart.productId")
 
     if (Existing) { 
@@ -47,7 +47,6 @@ const addToCart = async (req, res) => {
              {
                productId: req.query.prodId,
                productQuantity: 1,
-               totalProductDiscount:product.discount,
                pricePerProduct:product.price,
                totalPrice: product.price
              }      
@@ -83,8 +82,7 @@ const decQuantity = async (req, res) => {
         $set: {
              "cart.$.productQuantity": updatedQuantity,
              "cart.$.pricePerProduct":cartProduct.productId.price,
-             "cart.$.totalPrice": totalPrice,
-             "cart.$.totalProductDiscount":discount
+             "cart.$.totalPrice": totalPrice
         }   
      })
      const data= await User.findOne({ _id: req.session.user_Id, "cart.productId": req.params.id }).populate("cart.productId")
@@ -112,8 +110,7 @@ const incQuantity = async (req, res) => {
         $set: {
              "cart.$.productQuantity": updatedQuantity,
              "cart.$.pricePerProduct":cartProduct.productId.price,
-             "cart.$.totalPrice": totalPrice,
-             "cart.$.totalProductDiscount":discount
+             "cart.$.totalPrice": totalPrice
         }   
      })
       const data = await User.findOne({ _id: req.session.user_Id, "cart.productId": req.params.id }).populate("cart.productId")
@@ -147,7 +144,7 @@ const removeCart = async (req, res) => {
 // //checkout Load
 const checkStock = async (req, res) => {
   try {
-    console.log("this route is called")
+
     const cartData = await User.findOne({ _id: req.session.user_Id}).populate("cart.productId")
     const data =cartData.cart.map((item) => {
       if (item.productId.quantity < item.productQuantity) {
@@ -172,7 +169,13 @@ const checkStock = async (req, res) => {
 const loadCheckOut = async (req, res) => {
   try {
 
-    const userData = await User.findOne({ _id: req.session.user_Id })
+    const userData = await User.findOne({ _id: req.session.user_Id }).populate({
+      path: 'cart.productId',
+      populate: {
+          path: 'category',
+          model: 'category'
+      }
+  });
     const addressData = await Address.find({ user_id: req.session.user_Id, is_deleted: 0 }).limit(3).sort({ updatedAt: -1 })
     if (userData.address) {
       res.render("check_out", { userData,addressData ,session:req.session})
@@ -318,7 +321,10 @@ const confirmOrder = async (req, res) => {
           orderNumber:orderNo+1,
           paymentType:req.body.payment,
           cartData: cartArray,
-          orderDate:Date.now(),
+          orderDate: Date.now(),
+          categoryDiscountTotal: req.body.categoryDiscount,
+          productDiscountTotal: req.body.productDiscount,
+          couponDiscount:req.body.couponDiscount,
           grandTotalCost: req.body.total, 
         }
       }, { new: true })
@@ -443,8 +449,10 @@ const couponCheck = async (req, res) => {
   try {
     const data = await Coupon.findOne({ couponCode:{$regex: new RegExp("^"+req.body.coupon+"$","i") },is_deleted:0})
     if (data) {
+
       res.json({
-        Status: "Valid"})
+        Status: "Valid",data
+      })
     }
     else {
       res.json({Status:"Invalid"})

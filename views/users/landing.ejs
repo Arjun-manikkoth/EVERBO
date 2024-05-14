@@ -87,13 +87,18 @@
 								<div class="product_image">
 									<img src="images/userImages/<%=prod.image%>" alt="">
 								</div>
-								<div class="favorite "></div>
-								<%if(prod.discount!=0){%>
-									<div class="product_bubble product_bubble_right product_bubble_red d-flex flex-column align-items-center"><span>-Rs <%=prod.discount%></span></div>
-									<%}%>
+								<%if(prod.quantity===0){%>
+									<div class="product_bubble product_bubble_right product_bubble_red d-flex flex-column align-items-center"><span>Sold!</span></div>
+								 <%}else if(prod.discount!=0){%>
+								<div class="product_bubble product_bubble_right product_bubble_red d-flex flex-column align-items-center"><span>-Rs <%=prod.discount%></span></div>
+								<%}%>
 								<div class="product_info">
-									<h6 class="product_name"><a href="/product"><%=prod.name%></a></h6>
-									<div class="product_price">Rs.<%=prod.price%></div>
+									<h6 class="product_name"><a href="/product?prodId=<%=prod._id%>"><%=prod.name%></a></h6>
+									<div class="product_price">Rs.<%=prod.price-prod.discount%>.00
+										<%if(prod.discount!==0){%>
+										<span>Rs.<%=prod.price%></span>
+										<%}%>
+									</div>
 								</div>
 							</div>
 							<div class="red_button1 add_to_cart_button"><a href="/add_to_cart">add to cart</a></div>
@@ -172,13 +177,18 @@
 										<div class="product_image">
 											<img src="images/userImages/<%=prod.image%>" alt="">
 										</div>
-										<div class="favorite"></div>
-										<%if(prod.discount!=0){%>
-											<div class="product_bubble product_bubble_right product_bubble_red d-flex flex-column align-items-center"><span>-Rs <%=prod.discount%></span></div>
-                      <%}%>
+										<%if(prod.quantity===0){%>
+											<div class="product_bubble product_bubble_right product_bubble_red d-flex flex-column align-items-center"><span>Sold!</span></div>
+										 <%}else if(prod.discount!=0){%>
+										<div class="product_bubble product_bubble_right product_bubble_red d-flex flex-column align-items-center"><span>-Rs <%=prod.discount%></span></div>
+										<%}%>
 										<div class="product_info">
-											<h6 class="product_name"><a href="/product"><%=prod.name%></a></h6>
-											<div class="product_price">Rs.<%=prod.price%></div>
+											<h6 class="product_name"><a href="/product?prodId=<%=prod._id%>"><%=prod.name%></a></h6>
+											<div class="product_price">Rs.<%=prod.price-prod.discount%>.00
+												<%if(prod.discount!==0){%>
+												<span>Rs.<%=prod.price%></span>
+												<%}%>
+											</div>
 										</div>
 									</div>
 								</div>

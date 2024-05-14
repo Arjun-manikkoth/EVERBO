@@ -1,6 +1,5 @@
 const Coupon = require("../models/couponModel")
-const moment = require("moment")
-
+const moment = require("moment-timezone")
 //----------------------------------------------Admin Side Coupon management -------------------------------------------
 
 //coupon page load
@@ -50,8 +49,8 @@ const addCoupon = async (req, res) => {
       const coupon = new Coupon({
         couponCode: req.body.couponCode,
         discountPercentage: req.body.discountPercentage,
-        startDate: moment(req.body.startingDate,'YYYY-MM-DD').format('ddd MMM DD YYYY'),
-        expiryDate: moment(req.body.expiryDate,'YYYY-MM-DD').format('ddd MMM DD YYYY'),
+        startDate: new Date(req.body.startingDate) ,
+        expiryDate: new Date(req.body.expiryDate),
         minimumPurchase: req.body.minPurchase,
         maximumDiscount: req.body.maxDiscount
       })
@@ -73,7 +72,8 @@ const addCoupon = async (req, res) => {
 //edit coupon page load
 const editCouponLoad = async (req, res) => {
   try {
-    const coupon = await Coupon.findById({ _id:req.query.id })
+    const coupon = await Coupon.findById({ _id: req.query.id })
+
     res.render("edit_coupon",{coupon})
   }
   catch(error) {
@@ -96,8 +96,8 @@ const updateCoupon = async (req, res) => {
         $set: {
           couponCode: req.body.couponCode,
           discountPercentage: req.body.discountPercentage,
-          startDate: moment(req.body.startingDate, 'YYYY-MM-DD').format('ddd MMM DD YYYY'),
-          expiryDate: moment(req.body.expiryDate, 'YYYY-MM-DD').format('ddd MMM DD YYYY'),
+          startDate: new Date(req.body.startingDate),
+          expiryDate: new Date(req.body.expiryDate),
           minimumPurchase: req.body.minPurchase,
           maximumDiscount: req.body.maxDiscount
         }

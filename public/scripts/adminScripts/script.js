@@ -299,7 +299,8 @@ function validateProduct() {
 	var product = document.getElementById("productName").value.trim()
 	var price = document.getElementById("price").value.trim()
 	var quantity = document.getElementById("quantity").value.trim()
-  var discount = document.getElementById("discount").value.trim()
+	 var discount = document.getElementById("discount").value.trim()
+	 var limit = Math.floor(price * 10) / 100
 	if (product == "" || product == null) {
 		productSpan.innerHTML = "&#x1F6C8; Product is a required field"
 	 flag = 0;
@@ -890,5 +891,66 @@ function activateBanner(id) {
 			window.location.href = "/admin/bannerCheck?id="+id;
 		}
 	});
+}
+
+const salesPdfDownload = document.getElementById("downloadSalesPdf");
+
+if (salesPdfDownload) {
+    salesPdfDownload.addEventListener('click', downloadSalesPdf);
+}
+
+function downloadSalesPdf() {
+    fetch("/admin/download_report", { method: 'GET' })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok.');
+            }
+            return response.blob(); 
+        })
+        .then((blob) => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'sales_report.pdf';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+        })
+        .catch((error) => {
+            console.error('Error downloading PDF:', error);
+        });
+}
+
+
+const salesCsvDownload = document.getElementById("downloadSalesCsv");
+
+if (salesCsvDownload) {
+  salesCsvDownload.addEventListener('click', downloadSalesCsv);
+}
+
+function downloadSalesCsv() {
+  fetch('/admin/download_csv', { method: 'GET' })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok.');
+      }
+      return response.blob();
+    })
+    .then((blob) => {
+      // Create a URL for the Blob
+      const url = window.URL.createObjectURL(blob);
+
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'sales_report.csv';
+      document.body.appendChild(a);
+
+			a.click();
+			
+      window.URL.revokeObjectURL(url);
+    })
+    .catch((error) => {
+      console.error('Error downloading CSV:', error);
+    });
 }
 

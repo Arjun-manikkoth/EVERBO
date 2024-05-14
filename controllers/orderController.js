@@ -20,7 +20,7 @@ const orderLoad = async (req, res) => {
       res.render("orders", { orderData,totalPages,currentPage:page})
     }
     else {
-      res.render("orders",{msg:"No Recent Orders"})
+      res.render("orders",{msg:"No Recent Orders",totalPages,currentPage:page})
     }
     
   }
@@ -73,6 +73,8 @@ const updateOrder = async (req, res) => {
     console.log(error.message);
   }
 }
+
+
 
 module.exports = {
   orderLoad,

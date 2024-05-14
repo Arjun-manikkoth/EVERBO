@@ -15,7 +15,10 @@ const orderSchema= new mongoose.Schema({
         pricePerProduct: {type: Number},
         totalPrice: {type:Number}
       }],
-   grandTotalCost: { type: Number },
+    grandTotalCost: { type: Number },
+    categoryDiscountTotal: { type: Number },
+    productDiscountTotal: { type: Number },
+    couponDiscount: { type: Number },
     paymentId: { type: String, },
     reason:{type:String}  
 },{timestamps:true})

@@ -459,6 +459,7 @@ function confirmLogout() {
 
 const n2 = document.querySelectorAll(".productDiscountTot")
 const nl = document.querySelectorAll(".cart-price")
+const n3 = document.querySelectorAll(".category-discount")
 	if (nl.length>0) {
 		var priceList = Array.from(nl)
 		var totalAmount = priceList.reduce((total, value) => { 
@@ -472,29 +473,66 @@ const nl = document.querySelectorAll(".cart-price")
 		return total += disc;
 	}, 0)
 }
+if (n3.length > 0) {
+
+function removeRepetitiveItems(arr) {
+  
+    const uniqueCategories = new Set();
+
+    for (const item of arr) {
+        uniqueCategories.add(item);
+    }
+    const uniqueArray = Array.from(uniqueCategories);
+    return uniqueArray;
+}
+var a = Array.from(n3)
+const uniqueCategoriesArray = removeRepetitiveItems(a);
+
+	var categDiscount = uniqueCategoriesArray.reduce((total,value) => {
+		var [category, discount] = value.textContent.split(' ');
+		return total+=parseInt(discount);
+	}, 0)
+	var categDiscountTot = document.getElementById("categoryDiscountTotal")
+	categDiscountTot.innerHTML=categDiscount
+ 
+}
+  var totalPay = document.getElementById("total")
   var el1=document.getElementById("productDiscountTotal")
 	var el = document.getElementById("totalPrice")
-	var checkOutPrice = document.getElementById("priceCheckOut")
+  var checkOutPrice = document.getElementById("priceCheckOut")
 	if (el&&el1) { 
 		el.innerHTML = totalAmount;
-		el1.innerHTML = totalProdDisc;
+		if (totalProdDisc) {
+			el1.innerHTML = totalProdDisc;
+		}
+
 		var deliveryCharge = document.getElementById("deliveryFee")
 		if (totalAmount >= 1500) { 
 			deliveryCharge.innerHTML = "Free"
 			if (checkOutPrice) {
-				checkOutPrice.innerHTML = totalAmount-totalProdDisc;
+				checkOutPrice.innerHTML = totalAmount - totalProdDisc - categDiscount;
+				if (totalPay) {
+					totalPay.value = checkOutPrice.innerHTML	
+				}
 			}
 		}
 		else {
 			deliveryCharge.innerHTML = "Rs.90"
 
 				if (checkOutPrice) {
-				checkOutPrice.innerHTML = totalAmount+90-totalProdDisc;
+					checkOutPrice.innerHTML = totalAmount + 90 - totalProdDisc - categDiscount;
+					if (totalPay) {
+						totalPay.value = checkOutPrice.innerHTML
+					}
 			}
 		}
+		var totalPrdctDiscount = document.getElementById("totalProductDiscount")
+		var totalctgryDiscount = document.getElementById("totalCategoryDiscount")
 		var grandTotal = document.getElementById("sumTot")
     if (grandTotal) {
 			grandTotal.value = checkOutPrice.innerHTML;
+			totalPrdctDiscount.value = totalProdDisc;
+			totalctgryDiscount.value = categDiscount;
      }
 }
 
@@ -503,6 +541,7 @@ function decQty(prodId) {
 	var quantity = document.getElementById("qtyNo" + prodId)
 	var productPrice = document.getElementById("price" + prodId)
 	var productDiscount = document.getElementById("productDiscountTot" + prodId)
+	var productIndivDiscount=document.getElementById("productDiscountIndiv" + prodId)
 	var totalAmount = document.getElementById("totalPrice")
 	var totalProductDiscount=document.getElementById("productDiscountTotal")
 	var checkOutAmount = document.getElementById("priceCheckOut")
@@ -520,7 +559,8 @@ function decQty(prodId) {
 			})
 			.then((newData) => {
 				productPrice.innerHTML = newData.totalPrice
-        productDiscount.innerHTML= newData.totalProductDiscount
+				productDiscount.innerHTML = (newData.productQuantity) * (parseInt(productIndivDiscount.textContent))
+				
 				const nl = document.querySelectorAll(".cart-price")
 				const n2 = document.querySelectorAll(".productDiscountTot")
 
@@ -542,11 +582,11 @@ function decQty(prodId) {
 				totalAmount.innerHTML = checkOutPrice
 				if (checkOutPrice >= 1500) {
 					deliveryFee.innerHTML = "Free"
-					checkOutAmount.innerHTML = checkOutPrice-totalProdDisc
+					checkOutAmount.innerHTML = checkOutPrice-totalProdDisc-categDiscount
 				}
 				else {
 					deliveryFee.innerHTML = "Rs.90"
-					checkOutAmount.innerHTML = checkOutPrice + 90-totalProdDisc;
+					checkOutAmount.innerHTML = checkOutPrice + 90-totalProdDisc-categDiscount;
 				}	
 			})	
 	}
@@ -568,11 +608,11 @@ function incQty(prodId) {
 	var quantity = document.getElementById("qtyNo" + prodId)
 	var productPrice = document.getElementById("price" + prodId)
 	var productDiscount = document.getElementById("productDiscountTot" + prodId)
+	var productIndivDiscount=document.getElementById("productDiscountIndiv" + prodId)
 	var totalAmount = document.getElementById("totalPrice")
 	var totalProductDiscount=document.getElementById("productDiscountTotal")
 	var checkOutAmount= document.getElementById("priceCheckOut")
 	var deliveryFee = document.getElementById("deliveryFee")
-  
 	var quantityVal = parseInt(document.getElementById("qtyNo" + prodId).value)
 	var stockVal = parseInt(document.getElementById("productStock" + prodId).value)
 
@@ -602,16 +642,16 @@ function incQty(prodId) {
 				return response.json();
 			})
 				.then((newData) => {
-				console.log(newData)
+
 				var checkOutPrice = 0;
 				var totalProdDisc = 0;
 				productPrice.innerHTML = newData.totalPrice
-				productDiscount.innerHTML= newData.totalProductDiscount
+				productDiscount.innerHTML = (newData.productQuantity) * (parseInt(productIndivDiscount.textContent))
+					
 				const nl = document.querySelectorAll(".cart-price")
 				const n2 = document.querySelectorAll(".productDiscountTot")
-				
+					
 				let priceList = Array.from(nl)
-				console.log(priceList)
 				if (nl.length>0) {
 					checkOutPrice = priceList.reduce((total, value) => {
 							var price = parseInt(value.innerHTML)
@@ -621,23 +661,19 @@ function incQty(prodId) {
 				let prodDiscList = Array.from(n2)
 				if (n2.length>0) {
 					totalProdDisc = prodDiscList.reduce((total, value) => {
-						console.log("this is the value.innerhtml",value.textContent)
 							var disc = parseInt(value.textContent)
-							console.log("the indiv product discount is", disc)
-							console.log("the total is :",total)
 						return total += disc;
 					}, 0)
 				}
-				  console.log("total product discount after addition",totalProdDisc)
 				  totalProductDiscount.innerHTML=totalProdDisc
 				  totalAmount.innerHTML = checkOutPrice
 					if (checkOutPrice >= 1500) { 
 						deliveryFee.innerHTML = "Free"
-						checkOutAmount.innerHTML = checkOutPrice-totalProdDisc
+						checkOutAmount.innerHTML = checkOutPrice-totalProdDisc-categDiscount
 					}
 					else {
 						deliveryFee.innerHTML = "Rs.90"
-						checkOutAmount.innerHTML = checkOutPrice + 90-totalProdDisc;
+						checkOutAmount.innerHTML = checkOutPrice + 90-totalProdDisc-categDiscount;
 					}			
 			})
 			.catch((error) => {
@@ -770,7 +806,7 @@ function checkStock() {
 				text: 'Items you are trying to checkout is currently out of stock.Please review and try again later.',
 				timer: 5000,
 				timerProgressBar: true,
-				allowOutsideClick: false,
+				allowOutsideClick: true,
 				allowEscapeKey: false,
 				allowEnterKey: false,
 				showConfirmButton: false
@@ -979,20 +1015,31 @@ function generatePDF(id) {
 			data.cartData.forEach(item => {
 					pdf.text(item.productId.name, 25, y);
 					pdf.text(item.productQuantity.toString(), 125, y);
-					pdf.text( item.totalPrice.toFixed(2), 153, y);
+					pdf.text( "Rs."+item.totalPrice.toFixed(2), 153, y);
 				  y += 10;
 				 cartTotal+=item.totalPrice
 			});
 
 		var shippingCharges=0
 		if (data.grandTotalCost === cartTotal) {
-			pdf.text("Shipping Charges :  " + "Free", 118.5, 115);
+			pdf.text("Shipping Charges : ", 110, 115);
+			pdf.text("Rs." + 0 ,153,115)
 		} else {
 			shippingCharges=90
-			pdf.text("Shipping Charges : Rs." + shippingCharges.toFixed(2), 118.5, 115);
+			pdf.text("Shipping Charges : ", 110, 115);
+			pdf.text("Rs."+ shippingCharges.toFixed(2),153,115)
 		}
-		pdf.text("Total : ", 118.5, 128);
-		pdf.text("Rs."+data.grandTotalCost.toFixed(2), 147, 128)
+		pdf.text("Product Discount : ",110,125)
+		pdf.text("Rs." + data.productDiscountTotal, 153, 125)
+		
+		pdf.text("Category Discount : ",110,135)
+		pdf.text("Rs." + data.categoryDiscountTotal,153, 135)
+		
+		pdf.text("Coupon Discount : ",110,145)
+		pdf.text("Rs."+data.couponDiscount,153, 145)
+		
+		pdf.text("Total : ", 110, 155);
+		pdf.text("Rs."+data.grandTotalCost.toFixed(2), 153, 155)
 		
 			pdf.save('Invoice.pdf');
 	
@@ -1073,10 +1120,8 @@ if (document.getElementById('deliverHereButton')){
 
 
 function couponCheck() {
-	var discount =document.getElementById('couponDiscount') //show
-	var totalPrice = document.getElementById('priceCheckOut') //show
+
 	var totalAmount = document.getElementById('sumTot') //input
-	var totalDiscount = document.getElementById('discountInput') //input
 	var couponCode = document.getElementById('couponCode') //input
   var code=couponCode.value.trim()
 const data=JSON.stringify({coupon:code})
@@ -1090,10 +1135,65 @@ const data=JSON.stringify({coupon:code})
 	}).then((response) => {
 	   return	response.json()
   })
-		.then((data) => {
-			if (data.Status === "Valid") {
-				if (data.startDate >= new Date(Date.now()) && data.expiryDate <= new Date(Date.now())) {
-					
+		.then((couponData) => {
+			if (couponData.Status === "Valid") {
+				if (new Date(couponData.data.startDate) < new Date(Date.now()) && new Date(couponData.data.expiryDate) > new Date(Date.now())) {
+					if (totalAmount.value < couponData.data.minimumPurchase) {
+						Swal.fire({
+							title: 'Coupon cant be applied',
+							text: `The purchase amount should be more than ${couponData.data.minimumPurchase}`,
+							timer: 3000,
+							timerProgressBar: true,
+							allowOutsideClick: true,
+							allowEscapeKey: false,
+							allowEnterKey: false,
+							showConfirmButton: false
+						});
+					}
+					else {
+						var total = Math.floor((totalPay.value) * (couponData.data.discountPercentage / 100))
+						if (total <= couponData.data.maximumDiscount) {
+							var discountData = document.getElementById("couponDiscount")
+							discountData.value = total;
+							document.getElementById("couponDiscountTotal").innerHTML = total;
+							grandTotal.value = totalPay.value - total;
+							checkOutPrice.innerHTML = totalPay.value - total;
+							document.getElementById("apply-btn").classList.add("hidden")
+							document.getElementById("remove-btn").classList.remove("hidden")
+
+							Swal.fire({
+								title: 'Coupon Applied Successfully',
+								text: `You have received a discount of Rs.${total} . Enjoy your savings!`,
+								timer: 3000,
+								timerProgressBar: true,
+								allowOutsideClick: true,
+								allowEscapeKey: false,
+								allowEnterKey: true,
+								showConfirmButton: false
+							});
+						}
+						else {
+							var discountData = document.getElementById("couponDiscount")
+							discountData.value = couponData.data.maximumDiscount;
+							document.getElementById("couponDiscountTotal").innerHTML = couponData.data.maximumDiscount;
+							grandTotal.value = totalPay.value - couponData.data.maximumDiscount;
+							checkOutPrice.innerHTML = totalPay.value - couponData.data.maximumDiscount;
+							document.getElementById("apply-btn").classList.add("hidden")
+							document.getElementById("remove-btn").classList.remove("hidden")
+
+							Swal.fire({
+								title: 'Coupon Applied Successfully',
+								text: `You have received a discount of Rs.${couponData.data.maximumDiscount} . Enjoy your savings!`,
+								timer: 3000,
+								timerProgressBar: true,
+								allowOutsideClick: true,
+								allowEscapeKey: false,
+								allowEnterKey: true,
+								showConfirmButton: false
+							});
+
+						}
+					}
 				}
 				else {
 					Swal.fire({
@@ -1121,12 +1221,31 @@ const data=JSON.stringify({coupon:code})
 				});
 			}
 		}); 
-	//discount.innerHTML = Number(100)
-	//console.log("entho karyayit nadannit ind",totalPrice.textContent=(totalPrice.textContent)-(discount.textContent))
 
 }
 	
+function couponRemove() {
+	document.getElementById("couponDiscountTotal").innerHTML = 0
+	checkOutPrice.innerHTML = totalPay.value
+	grandTotal.value = totalPay.value
+	document.getElementById("couponDiscount").value = 0
+	
+	document.getElementById("apply-btn").classList.remove("hidden")
+	document.getElementById("remove-btn").classList.add("hidden")
 
+	Swal.fire({
+		title: 'Coupon Removed Successfully',
+		text: 'Your checkout is now ready to roll',
+		timer: 3000,
+		timerProgressBar: true,
+		allowOutsideClick: true,
+		allowEscapeKey: false,
+		allowEnterKey: true,
+		showConfirmButton: false
+	});
+  
+}
+  
 
 
 const orderConfirm = document.getElementById("orderConfirm")
@@ -1151,7 +1270,7 @@ function confirmOrder(e) {
 				text: 'Items you are trying to checkout is currently out of stock.Please review and try again later.',
 				timer: 5000,
 				timerProgressBar: true,
-				allowOutsideClick: false,
+				allowOutsideClick: true,
 				allowEscapeKey: false,
 				allowEnterKey: false,
 				showConfirmButton: false
@@ -1163,14 +1282,31 @@ function confirmOrder(e) {
 				text: 'Items you are trying to checkout is currently unavailable.Please review and try again later.',
 				timer: 5000,
 				timerProgressBar: true,
-				allowOutsideClick: false,
+				allowOutsideClick: true,
 				allowEscapeKey: false,
 				allowEnterKey: false,
 				showConfirmButton: false
 			})
 		}
 		else {
-			
+		 	
+	var couponCode = document.getElementById('couponCode') //input
+  var code=couponCode.value.trim()
+  const data=JSON.stringify({coupon:code})
+  fetch('/coupon_check', {
+		method: 'POST',
+		headers: {
+			"Content-Type": "application/json",
+			 Accept:"application/json"
+		},
+	body: data
+	}).then((response) => {
+	   return	response.json()
+  })
+		.then((couponData) => {
+
+		if (new Date(couponData.data.startDate) < new Date(Date.now()) && new Date(couponData.data.expiryDate) > new Date(Date.now())) {
+				
 			const formData = new FormData(orderConfirm);
 			const plainFormData = Object.fromEntries(formData.entries());
 			const formDataJsonString = JSON.stringify(plainFormData);
@@ -1256,8 +1392,23 @@ function confirmOrder(e) {
 						});
 					}
 				}); 
+				}
+				else {
+					Swal.fire({
+						title: 'Coupon cant be applied',
+						text: 'The couponcode entered is either expired or not applicable now',
+						timer: 3000,
+						timerProgressBar: true,
+						allowOutsideClick: true,
+						allowEscapeKey: false,
+						allowEnterKey: false,
+						showConfirmButton: false
+					});
+				}
+		}); 
 
-		}
+		}//end
+
 	})
 	
 	

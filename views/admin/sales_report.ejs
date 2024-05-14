@@ -1,0 +1,71 @@
+<%-include("../layouts/admin/header.ejs")-%>
+
+			<div class="report-container"> 
+			<div class="title-container">
+				<div class="table-title">
+        Sales Report
+        </div>					
+	         <form class="form-group" id="filterSales">
+						<div class="d-flex filter-sales">	
+            <input type="date" class="form-control date-range-input " name="from">
+						<input type="date" class="form-control ms-2 date-range-input" name="to">
+						<button class="btn btn-dark category sales-btn ms-4" type="submit">Filter</button>
+						</div>
+					 </form>
+				<div class="d-flex">
+					<div>
+           <button class="btn btn-dark category sales-btn ms-3" id="downloadSalesCsv">Download Csv</button>
+					</div>
+					<div>
+					<button class="btn btn-dark category sales-btn ms-3 " id="downloadSalesPdf">Download Pdf</button>
+					</div>
+				</div>
+					
+			
+				</div> 	   	
+				<table class="table table-hover table-responsive">
+					<thead>
+						<tr>
+							<th class="col-2" scope="col">Order Id</th>
+							<th class="col-2" scope="col">Customer Name</th>
+							<th class="col-3" scope="col">Order Date</th>
+							<th class="col-2" scope="col">Total Discount</th>
+							<th class="col-2" scope="col">Total Amount</th>
+							<th class="col-1" scope="col">Payment</th>						
+						</tr>
+					</thead>
+					<tbody>
+				 <%if(locals.orderData){%>	
+					<%orderData.forEach((prod)=>{%>
+						<tr>
+									<td><%=prod._id%></td>
+									<td><%=prod.userId.name%></td>
+									<td><%=prod.orderDate.toLocaleString()%></td>
+									<td><%=prod.productDiscountTotal + prod.categoryDiscountTotal+prod.couponDiscount%></td>
+									<td><%=prod.grandTotalCost%></td>
+									<td><%=prod.paymentType%></td>													
+						</tr>
+						<%})%>
+						<%}else{%>
+							<tr>
+								<td colspan="6">
+										<div class="address-msg">
+												<%= msg %>
+										</div>
+								</td>
+						</tr>
+							<%}%>
+					</tbody>
+			</table>
+			<div class="pagination-div" id="paginationDiv">
+				<% let startPage = Math.max(1, Math.min(currentPage - 1, totalPages - 3)) %>
+				<% let endPage = Math.min(totalPages, startPage + 3); %>
+				<% for (let i = startPage; i <= endPage; i++) { %>
+					<div class="page-no-div" data-page="<%= i %>">
+						<a href="?page=<%= i %>" class="anchor order-pagination"><%= i %></a>
+					</div>
+				<% } %>
+			</div>
+	 </div> 
+
+	<%-include("../layouts/admin/footer.ejs")-%>

@@ -437,5 +437,17 @@ a,a :hover{
 }
 .address-msg{
 	text-align: center;
-
+  padding-top: 50px;
+	padding-bottom: 50px;
+	font-size: 20px;
+	font-weight: 500;
+}
+.sales-btn{
+	font-size: 13px;
+}
+.filter-sales{
+margin-top: 8px;
+}
+.date-range-input{
+	max-height: 35px;
 }

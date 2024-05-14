@@ -1879,3 +1879,10 @@ margin-right: 5px;
 .form1 {
   background-color:white !important;
 }
+.actual-amnt{
+	text-decoration: line-through;
+	color: #b5aec4;
+	font-size: 15px;
+	font-weight: 400;
+	font-family: sans-serif;
+}

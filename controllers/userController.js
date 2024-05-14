@@ -1,8 +1,10 @@
 const User = require("../models/userModel");
 const bcrypt = require("bcrypt")
 const nodemailer = require("nodemailer")
+const moment = require("moment")
 const Order = require("../models/orderModel");
 const Product = require("../models/productModel");
+const Coupon = require("../models/couponModel");
 
  
 // ---------------------------------------------User Account Management-------------------------------------------------
@@ -332,7 +334,7 @@ const loadOrders = async (req, res) => {
       if (req.query.page) {
         page=req.query.page
       }
-      const limit = 3
+      const limit = 5
       const totalPages = Math.ceil(count / limit)
       const totalOrders = await Order.find({ userId: req.session.user_Id, cartData: { $exists: true } }).countDocuments()
       const orderData= await Order.find({ userId: req.session.user_Id ,grandTotalCost:{$exists:true}}).limit(limit).skip((page-1)*limit).sort({orderDate:-1}).populate("addressChosen")
@@ -351,6 +353,7 @@ const loadOrders = async (req, res) => {
 const orderDetail = async (req, res) => {
   try { 
     const orderData = await Order.findOne({ _id: req.query.id }).populate("addressChosen").populate("userId").populate("cartData.productId")
+
     if (orderData) {
       res.render("order_detail",{orderData,session:req.session})
     }
@@ -481,6 +484,29 @@ const loadWallet = async (req, res) => {
   }
 }
 
+//load coupons page
+const loadCoupons = async (req, res) => {
+  try { 
+    const data = await Coupon.find({is_deleted:0, expiryDate: {$gte:Date.now()}})
+    if (data.length !== 0) {
+      let page = 1
+      if (req.query.page) {
+        page=req.query.page
+      }
+      const limit = 5
+      const count = await Coupon.find({is_deleted:0, expiryDate: {$gte:Date.now()}}).countDocuments()
+      const totalPages = Math.ceil(count / limit)
+      const couponData= await Coupon.find({ is_deleted: 0, expiryDate: {$gte:Date.now()} }).sort({expiryDate:1})
+      res.render("coupons",{couponData,profile:true,session:req.session,totalPages,currentPage:page})
+    }
+    else {
+      res.render("coupons",{msg:"No coupons available",profile:true,session:req.session})
+    }   
+  }
+  catch (error) { 
+    console.log(error.message);
+  }
+}
 
 //confirm password check
 const confirmPassword = async (req, res) => {
@@ -548,6 +574,7 @@ const newPassword = async (req, res) => {
     orderReturn,
     invoiceOrder,
     loadWallet,
+    loadCoupons,
     confirmPasswordLoad,
     confirmPassword,
     newPasswordLoad,

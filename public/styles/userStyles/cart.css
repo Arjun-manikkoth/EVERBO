@@ -182,3 +182,11 @@ padding-right: 200px;
 .hidden{
 	display: none;
 }
+.alert-text{
+	color: red;
+	font-weight: 500;
+}
+.coupon-code{
+	font-size: 15px;
+	font-weight: 500;
+}

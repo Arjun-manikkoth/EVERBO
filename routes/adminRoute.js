@@ -6,6 +6,7 @@ const productController = require("../controllers/productController")
 const categoryController = require("../controllers/categoryController")
 const orderController = require("../controllers/orderController")
 const couponController = require("../controllers/couponController")
+const dashboardController = require("../controllers/dashboardController")
 const auth = require("../middlewares/adminAuth")
 const upload = require('../middlewares/multer')
 const sharpCrop =require('../middlewares/sharp')
@@ -50,6 +51,14 @@ admin_route.get("/logout", auth.isLogin, adminController.logout)
 //Admin dashboard load
 admin_route.get("/dashboard", auth.isLogin, adminController.loadDashboard)
 
+//Admin sales data load
+admin_route.get("/sales_report", auth.isLogin, dashboardController.salesDataLoad)
+
+//download sales report pdf
+admin_route.get("/download_report", auth.isLogin, dashboardController.downloadSalesPdf)
+
+//download sales report csv
+admin_route.get("/download_csv", auth.isLogin, dashboardController.downloadSalesCsv)
 
 //-----------------------------------User Management----------------------------------------
 
@@ -79,7 +88,7 @@ admin_route.get("/product_view",auth.isLogin, productController.productView)
 admin_route.get("/edit_products",auth.isLogin, productController.editProductLoad)
         
 //update product to db
-admin_route.post("/update_product", upload.array('image', 3),sharpCrop(productMainCropSize), productController.updateProduct)
+admin_route.post("/update_product",auth.isLogin, productController.updateProduct)
 
 //update product thumbnail to db
 admin_route.post("/update_product_thumb", upload.single('image'),sharpCrop(thumbnailCropSize), productController.updateProductThumb)

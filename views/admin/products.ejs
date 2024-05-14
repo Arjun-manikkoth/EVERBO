@@ -7,7 +7,7 @@
           Products
         </div> 
 				<div class="btn_add_categories">
-					<button class="btn btn-dark category"><a href="/admin/add_Products" class="category-add">+Product</a></button>
+					<a href="/admin/add_Products" class="category-add"><button class="btn btn-dark category">+Product</button></a>
 				</div>
 				</div>
       	   	
@@ -52,9 +52,13 @@
 						</tr>
 						<%})%>
 						<%}else{%>
-							<div class="address-msg">
-								<%=msg%>
-							</div>
+							<tr>
+								<td colspan="6">
+										<div class="address-msg">
+												<%= msg %>
+										</div>
+								</td>
+						</tr>
 							<%}%>
 					</tbody>
 			</table>

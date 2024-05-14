@@ -17,6 +17,7 @@
 					</tr>
 				</thead>
 				<tbody>
+					<%if(locals.banner){%>
 					<%banner.forEach((images)=>{%>
 						<tr> 
 									<td><img src="/images/userImages/<%=images.image%>" width="440px" alt="<%=images.image%>"></td>
@@ -30,6 +31,15 @@
 
 									</td>
 						<%})%>
+						<%}else{%>
+							<tr>
+								<td colspan="6">
+										<div class="address-msg">
+												<%= msg %>
+										</div>
+								</td>
+						</tr>
+							<%}%>
 				</tbody>
 		</table>	
 		<div class="pagination-div" id="paginationDiv">

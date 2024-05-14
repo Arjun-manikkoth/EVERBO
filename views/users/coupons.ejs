@@ -1,0 +1,56 @@
+<%-include("../layouts/user/header.ejs")-%>
+
+     <div class="col-lg-8 profile-box">
+          <div class=" rounded bg-white mb-5 content">
+              <div class="border-right">
+                  <div class="p-3">
+                      <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="text-right">Coupons</h4>
+                      </div>
+                      <div class="container address-box">
+                        <%if(locals.couponData){%>         
+                            <table class="table table-hover table-responsive text-center">
+                              <thead>
+                                <tr>
+                                  <th class="col-3" scope="col">Coupon Code</th>
+                                  <th class="col-3" scope="col">Max Discount Rate</th>
+                                  <th class="col-3" scope="col">Starting Date</th>
+                                  <th class="col-3" scope="col">Ending Date</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <%if(couponData.forEach((data)=>{%> 
+                                  <tr> 
+                                        <td class="coupon-code"><%=data.couponCode%></td>
+                                        <td><%=data.discountPercentage%>%</td>
+                                        <td><%=data.startDate.toDateString()%></td>
+                                        <td><%=data.expiryDate.toDateString()%></td>                     			
+                                  </tr>
+                                  <%}))%>
+                              </tbody>
+                          </table>
+                            <hr>
+                            <div class="pagination-div" id="paginationDiv">
+                              <% let startPage = Math.max(1, Math.min(currentPage - 1, totalPages - 3)) %>
+                              <% let endPage = Math.min(totalPages, startPage + 3); %>
+                              <% for (let i = startPage; i <= endPage; i++) { %>
+                                <div class="page-no-div" data-page="<%= i %>">
+                                  <a href="?page=<%= i %>" class="anchor order-pagination"><%= i %></a>
+                                </div>
+                              <% } %>
+                            </div>
+                            
+                          <%}else if(locals.msg){%>
+                            <div class="address-msg">
+                              <%=msg%>
+                            </div>
+                          <%}%>
+                          </div>                        
+                      </div>
+                      </div>                                                         
+                   </div>
+              </div>
+          </div>
+      </div>
+</div>
+<%-include("../layouts/user/footer.ejs")-%>

@@ -92,7 +92,10 @@ user_route.get("/profile",blockCheck, auth.isLogin, userController.loadProfile)
 user_route.post("/edit_profile",blockCheck, auth.isLogin, userController.editProfile)
 
 //wallet page
-user_route.get("/wallet",blockCheck, auth.isLogin, userController.loadWallet)
+user_route.get("/wallet", blockCheck, auth.isLogin, userController.loadWallet)
+
+//coupons page
+user_route.get("/coupon",blockCheck, auth.isLogin, userController.loadCoupons)
 
 
 //---------------------------------Password Management-----------------------------------
@@ -202,7 +205,7 @@ user_route.get("/check_wallet",blockCheck, auth.isLogin, cartController.checkWal
 //razorpay status check
 user_route.post("/razorpay_status",blockCheck, auth.isLogin, cartController.razorPayStatus)
 
-//razorpay status check
+//coupon check
 user_route.post("/coupon_check",blockCheck, auth.isLogin, cartController.couponCheck)
 
 //---------------------------------Wishlist Management-----------------------------------

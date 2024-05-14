@@ -26,13 +26,13 @@
                       <div class="mask" style="background-color: rgba(251, 251, 251, 0.2)"></div>
                     </a>
                   </div>
-                  <div class="hidden"><%=prod.productId.discount%></div>
-                  <div class="hidden"><%=prod.productId.category.discount%></div>
+
                   <!-- Image -->
                 </div>
                 <div class="col-lg-5 col-md-6 mb-4 mb-lg-0">
                   <!-- Data -->
                   <a href="/product?prodId=<%=prod.productId._id%>"><p><h6><%=prod.productId.name%></h6></p></a>
+                  <p>Category: <%=prod.productId.category.name%>'s</p>
                   <p>Color: blue</p>
                   <p>Size: M</p>
                   <button type="button" class="btn fs-remove btn-sm me-1 mb-2" onclick="removeCart('<%=prod.productId._id%>')" data-mdb-toggle="tooltip"
@@ -63,20 +63,22 @@
                     </button>
                   </div>
                   <!-- Quantity -->
-                   <input type="hidden" id="productStock<%=prod.productId._id%>" value="<%=prod.productId.quantity%>">
-                    <div></div><div class="hidden productDiscountTot" id="productDiscountTot<%=prod.productId._id%>"><%=prod.totalProductDiscount%></div>
+                  <input type="hidden" id="productStock<%=prod.productId._id%>" value="<%=prod.productId.quantity%>">
+                  <div class="hidden productDiscountTot" id="productDiscountTot<%=prod.productId._id%>"><%=prod.productId.discount*prod.productQuantity%></div>
+                  <div class="hidden" id="productDiscountIndiv<%=prod.productId._id%>"><%=prod.productId.discount%></div>
+                  <div class="hidden category-discount" id="categoryDiscount"><%=prod.productId.category.name%> <%=prod.productId.category.discount%></div>
                   <!-- Price -->
                   <div class="d-flex">
                    <span>Rs.</span>
                    <div id="price<%=prod.productId._id%>" class="cart-price"><%=prod.totalPrice%></div>
                   </div>
-                  <div id="stockStatus"  class="mt-3">
+                  <div id="stockStatus"  class="mt-4">
                     <%if(prod.productId.quantity>0&&prod.productId.is_listed===true){%>
                      In Stock
                     <%}else if(prod.productId.is_listed===false){%>
-                      Currently Unavailable 
+                     <div class="alert-text">Currently Unavailable</div> 
                    <%}else{%>
-                      Out Of Stock
+                     <div class="alert-text">Out Of Stock</div> 
                     <%}%>
                   </div>
                   <!-- Price -->

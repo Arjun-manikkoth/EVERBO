@@ -23,7 +23,7 @@
 					<%orderData.forEach((prod)=>{%>
 						<tr>
 									<td><%=prod.userId.name%></td>
-									<td><%=prod.orderDate%></td>
+									<td><%=prod.orderDate.toLocaleString()%></td>
 									<td><%=prod.orderStatus%></td>
 									<td><%=prod.paymentType%></td>
 									<td><%=prod.paymentStatus%></td>
@@ -36,9 +36,13 @@
 						</tr>
 						<%})%>
 						<%}else{%>
-							<div class="address-msg">
-								<%=msg%>
-							</div>
+							<tr>
+								<td colspan="6">
+										<div class="address-msg">
+												<%= msg %>
+										</div>
+								</td>
+						</tr>
 							<%}%>
 					</tbody>
 			</table>

@@ -110,7 +110,29 @@
                       <span id="deliveryFee" ></span>
                     </li>
                     <li
-                      class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 ">
+                    class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mt-2 ">
+                    <div>
+                     Product discounts
+                    </div>
+                    <span>- Rs. <span id="productDiscountTotal"><%=orderData.productDiscountTotal%></span></span>
+                  </li>
+                  <li
+                  class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mt-2 ">
+                  <div>
+                   Category discounts
+                  </div>
+                  <span>- Rs. <span id="categoryDiscountTotal"><%=orderData.categoryDiscountTotal%></span></span>
+                </li>
+                <li
+                class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 ">
+                <div>
+                 Coupon discount
+                </div>
+                <span>- Rs. <span id="couponDiscountTotal"><%=orderData.couponDiscount%></span></span>
+              </li>
+                <hr>
+                    <li
+                      class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mt-2 ">
                       <div>
                         <strong>Total Payable</strong>
                           <p class="mb-0">(including Taxes)</p>

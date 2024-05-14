@@ -46,16 +46,20 @@
 						<p><%=product.description%></p>
 					</div>
 					<div class="free_delivery d-flex flex-row align-items-center justify-content-center">
-						<span class="ti-truck"></span><span>free delivery</span>
+						<span class="ti-truck"></span><span>free delivery for 1500 above purchase</span>
 					</div>
 					<%if(product.quantity>=1&&product.is_listed===true){%>
 						<div class="stock-div"><span>Stocks left: </span><span id="stocks"><%=product.quantity%></span></div>
 					<%}else if(product.is_listed===false){%>
 						<div class="stock-div"><span id="stocks">Currently Unavailable</span></div>
 					<%}else{%>
-						<div class="stock-div"><span>Out Of Stock</span></div>
+						<div class="stock-div"><span class="alert-text">Out Of Stock !</span></div>
 					<%}%>
-					<div class="product_prices"><span class="rupeereal">₹</span><%=product.price%></div>
+					<div class="product_prices"><span class="rupeereal">₹</span><%=product.price - product.discount %> 
+						<%if(product.discount!==0){%>
+						<span class="actual-amnt">₹<%=product.price%></span>
+						<%}%>
+					</div>
 					<ul class="star_rating">
 						<li><i class="fa fa-star" aria-hidden="true"></i></li>
 						<li><i class="fa fa-star" aria-hidden="true"></i></li>
