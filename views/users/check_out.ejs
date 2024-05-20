@@ -165,7 +165,8 @@
                   <input type="hidden" id="sumTot" name="total" value="">  
                   <input type="hidden" id="totalProductDiscount" name="productDiscount" value="0"> 
                   <input type="hidden" id="totalCategoryDiscount" name="categoryDiscount" value="0">
-                  <input type="hidden" id="couponDiscount" name="couponDiscount" value="0">    
+                  <input type="hidden" id="couponDiscount" name="couponDiscount" value="0">
+                  <input type="hidden" id="referralDiscount" name="referralDiscount" value="">    
                 </form> 
                 <input type="hidden" id="total" value="0">       
               </div>
@@ -223,6 +224,14 @@
                   <input type="text" class="coupon-input" id="couponCode" name="couponCode" placeholder="Enter Coupon code">
                   <button class="profile-button btn coupon-btn" type="button" onclick="couponCheck()" id="apply-btn">Apply</button>
                   <button class="profile-button hidden btn coupon-btn" type="button" onclick="couponRemove()" id="remove-btn">Remove</button>
+                </div>
+                <span class="mt-4 mr-2 text-left referral-click" id="referralClick" >Have a referral Code ?</span>
+                <div class="hidden" id="referralCodeDisplay">
+                  <div class="d-flex mb-1 mt-3">
+                    <input type="text" class="coupon-input" id="codeReferral" name="referralCode" placeholder="Enter referral code">
+                    <button class="profile-button btn coupon-btn" type="button" onclick="referralCheck()" id="referralApply">Apply</button>
+                    <button class="profile-button hidden btn coupon-btn" type="button" onclick="referralRemove()" id="referralRemove">Remove</button>
+                  </div>
                 </div>
               </ul>
             </div>

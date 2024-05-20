@@ -2,9 +2,11 @@ const User = require("../models/userModel");
 const bcrypt = require("bcrypt")
 const nodemailer = require("nodemailer")
 const moment = require("moment")
+const random = require("random-string-generator");
 const Order = require("../models/orderModel");
 const Product = require("../models/productModel");
 const Coupon = require("../models/couponModel");
+
 
  
 // ---------------------------------------------User Account Management-------------------------------------------------
@@ -94,6 +96,54 @@ const sentResetPasswordMail = async (email,id) => {
   }
 }
 
+//referral mail
+const sentReferralMail = async (req,res) => { 
+  try {
+    const data = await User.findById({ _id: req.session.user_Id })
+    
+    const transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 587,
+      secure: false,
+      requireTLS: true,
+      auth: {
+        user: "itsmearjun1028@gmail.com",
+        pass: "ldhp gham wlcl ofac"
+      }
+    });
+    const mailOptions = {
+      from: "itsmearjun1028@gmail.com",
+      to: req.body.email,
+      subject: "Enjoy a 10% Discount on Your Fashion Purchase with This Referral Code!",
+      html: `
+        <p>Hello,</p>
+        <p>I am excited to share an exclusive offer with you. Use the referral code below to get a 10% discount on your next purchase from the EVERBO fashions website:</p>
+        <p><strong>Referral Code: ${data.referral.referral_code}</strong></p>
+        <p>How to apply this referral code:</p>
+        <ul>
+          <li>Browse our collection and add your favorite items to your shopping cart.</li>
+          <li>Proceed to checkout.</li>
+          <li>Enter the referral code in the promo code field to receive your 10% discount.</li>
+        </ul>
+        <p>Don't miss out on this great opportunity to enhance your wardrobe at a discounted price. Happy shopping!</p>
+        <p><small>Terms and conditions apply. Visit the website for more details.</small></p>
+      `
+    };
+    
+    transporter.sendMail(mailOptions, (error,info) => {
+      if (error) { 
+        console.log(error.message)
+      }
+      else {
+        res.json(req.body.email)
+      }
+    })
+
+  }
+  catch (error) { 
+   console.log(error.message)
+  }
+}
 
 //load login page
 const loadLogin = async (req,res) => { 
@@ -352,7 +402,7 @@ const loadOrders = async (req, res) => {
 //load order detial page
 const orderDetail = async (req, res) => {
   try { 
-    const orderData = await Order.findOne({ _id: req.query.id }).populate("addressChosen").populate("userId").populate("cartData.productId")
+    const orderData = await Order.findOne({ _id: req.query.id }).populate("addressChosen").populate("userId").populate("cartData.productId").populate("referralData.referredUser")
 
     if (orderData) {
       res.render("order_detail",{orderData,session:req.session})
@@ -369,7 +419,7 @@ const orderDetail = async (req, res) => {
 //cancel order
 const cancelOrder = async (req, res) => {
   try {
-    const orderData = await Order.findByIdAndUpdate({ _id: req.body.id }, { $set: { reason: req.body.reason, orderStatus: "Cancelled" } })
+    const orderData = await Order.findByIdAndUpdate({ _id: req.body.id }, { $set: { reason: req.body.reason, orderStatus: "Cancelled" } },{new:true}).populate("referralData.referredUser")
     const data = await User.findByIdAndUpdate({ _id: req.session.user_Id }, {
       $inc: {
     "wallet.walletBalance": orderData.grandTotalCost
@@ -381,7 +431,34 @@ const cancelOrder = async (req, res) => {
           orderId:req.body.id
         }
       }
-    })
+    }, { new: true })
+  
+
+        await User.findByIdAndUpdate({ _id: orderData.referralData.referredUser._id }, {
+          $inc: {
+            "wallet.walletBalance": -orderData.referralData.referralDiscountAmount
+          }, $push: {
+            "wallet.walletTransaction": {
+              transactionDate: Date(),
+              transactionAmount: orderData.referralData.referralDiscountAmount,
+              transactionType: "Debit",
+            }
+          }
+        })
+        
+        await User.findByIdAndUpdate({ _id: req.session.user_Id }, {
+          $inc: {
+            "wallet.walletBalance": -orderData.referralData.referralDiscountAmount
+          }, $push: {
+            "wallet.walletTransaction": {
+              transactionDate: Date(),
+              transactionAmount: orderData.referralData.referralDiscountAmount,
+              transactionType: "Debit",
+            }
+          }
+        })
+
+
    orderData.cartData.forEach(async(prod) => {
       const productData = await Product.findByIdAndUpdate({ _id: prod.productId }, { $inc: { quantity: prod.productQuantity } },{new:true})
     })
@@ -401,7 +478,7 @@ const cancelOrder = async (req, res) => {
 //new return reason to db
 const orderReturn = async (req, res) => {
   try {
-    const orderData = await Order.findByIdAndUpdate({ _id: req.body.id }, { $set: { reason: req.body.reason, orderStatus: "Returned" } })
+    const orderData = await Order.findByIdAndUpdate({ _id: req.body.id }, { $set: { reason: req.body.reason, orderStatus: "Returned" } }).populate("referralData.referredUser")
     const data = await User.findByIdAndUpdate({ _id: req.session.user_Id }, {
       $inc: {
     "wallet.walletBalance": orderData.grandTotalCost
@@ -414,6 +491,31 @@ const orderReturn = async (req, res) => {
         }
       }
     })
+
+    await User.findByIdAndUpdate({ _id: orderData.referralData.referredUser._id }, {
+      $inc: {
+        "wallet.walletBalance": -orderData.referralData.referralDiscountAmount
+      }, $push: {
+        "wallet.walletTransaction": {
+          transactionDate: Date(),
+          transactionAmount: orderData.referralData.referralDiscountAmount,
+          transactionType: "Debit",
+        }
+      }
+    })
+    
+    await User.findByIdAndUpdate({ _id: req.session.user_Id }, {
+      $inc: {
+        "wallet.walletBalance": -orderData.referralData.referralDiscountAmount
+      }, $push: {
+        "wallet.walletTransaction": {
+          transactionDate: Date(),
+          transactionAmount: orderData.referralData.referralDiscountAmount,
+          transactionType: "Debit",
+        }
+      }
+    })
+
     orderData.cartData.forEach(async(prod) => {
       const productData = await Product.findByIdAndUpdate({ _id: prod.productId }, { $inc: { quantity: prod.productQuantity } },{new:true})
     })
@@ -553,6 +655,32 @@ const newPassword = async (req, res) => {
   }
 }
 
+//load refer and earn page
+const referralLoad = async (req, res) => {
+  try {
+    const userData=await User.findById({_id:req.session.user_Id})
+    res.render("referral", { profile: true ,session:req.session,userData})
+  }
+  catch (error) {
+    console.log(error.message);
+  }
+}
+
+
+//create referral offer
+const createReferral = async (req, res) => {
+  try {
+    const code = random(8, 'uppernumeric')
+
+    const data = await User.findByIdAndUpdate({ _id: req.session.user_Id }, { $set: { "referral.referral_code": code } }, { new: true })
+    
+    res.json(data)
+
+  }
+  catch (error) {
+    console.log(error.message);
+  }
+}
 
 
   module.exports = {
@@ -575,6 +703,9 @@ const newPassword = async (req, res) => {
     invoiceOrder,
     loadWallet,
     loadCoupons,
+    referralLoad,
+    createReferral,
+    sentReferralMail,
     confirmPasswordLoad,
     confirmPassword,
     newPasswordLoad,

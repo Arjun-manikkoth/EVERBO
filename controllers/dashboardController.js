@@ -22,8 +22,8 @@ const salesDataLoad = async (req, res) => {
       from = req.query.from;
        to = req.query.to;
     }
-    let limit = 5;
-    let count = await Order.find({}).countDocuments()
+    let limit = 15;
+    let count = await Order.find({grandTotalCost:{$exists:true,$ne:null},orderStatus:"Delivered",$and: [ { createdAt: { $gte: from } }, { createdAt: { $lte: to } } ]}).countDocuments()
     let totalPages=Math.ceil(count/limit)
     const orderData = await Order.find({grandTotalCost:{$exists:true,$ne:null},orderStatus:"Delivered",$and: [ { createdAt: { $gte: from } }, { createdAt: { $lte: to } } ]}).limit(limit).skip((page-1)*limit).sort({createdAt:-1}).populate("addressChosen").populate("userId").populate("cartData.productId")
     if (orderData.length != 0) {

@@ -15,7 +15,7 @@ const productsLoad = async (req, res) => {
     let limit = 4;
     let count = await Product.find({is_deleted:0}).countDocuments()
     let totalPages=Math.ceil(count/limit)
-    const product = await Product.find({is_deleted:0}).populate("category").limit(limit).skip((page-1)*limit).sort({name:1})
+    const product = await Product.find({is_deleted:0}).populate("category").limit(limit).skip((page-1)*limit).sort({updatedAt:-1})
     if (product) {
       res.render("products", {product,totalPages,currentPage:page})
     }

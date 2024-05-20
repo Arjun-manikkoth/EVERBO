@@ -13,7 +13,7 @@
 							<th class="col-2" scope="col">Order Date</th>
 							<th class="col-2" scope="col">Order Status</th>
 							<th class="col-1" scope="col">Payment</th>
-							<th class="col-2" scope="col">Order Status</th>
+							<th class="col-2" scope="col">Payment Status</th>
 							<th class="col-2" scope="col">Total Amount</th>						
 							<th class="col-1" scope="col">Actions</th>
 						</tr>
@@ -50,9 +50,11 @@
 				<% let startPage = Math.max(1, Math.min(currentPage - 1, totalPages - 3)) %>
 				<% let endPage = Math.min(totalPages, startPage + 3); %>
 				<% for (let i = startPage; i <= endPage; i++) { %>
-					<div class="page-no-div" data-page="<%= i %>">
-						<a href="?page=<%= i %>" class="anchor order-pagination"><%= i %></a>
-					</div>
+					<a href="?page=<%= i %>" class="anchor order-pagination">
+						<div class="page-no-div" data-page="<%= i %>">
+						 <%= i %>
+						</div>
+					</a>
 				<% } %>
 			</div>
 	 </div> 

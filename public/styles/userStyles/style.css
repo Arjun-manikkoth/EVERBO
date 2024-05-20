@@ -309,3 +309,26 @@ color: white;
   justify-content: center;
   padding-top: 20px;
 }
+.responsive-img{
+ width: 100%;
+ height: auto;
+}
+.para-refer{
+  font-size: 17px;
+}
+.center-text{
+  text-align: center;
+  font-weight: 400;
+}
+.center-text span{
+  font-size: 12px;
+}
+.referral-click{
+  font-size: 14px;
+  color: rgba(11, 11, 211, 0.838);
+  font-weight: 400;
+  margin-bottom: 0px;
+}
+.referral-click:hover{
+  cursor: pointer;
+}

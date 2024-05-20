@@ -22,8 +22,9 @@ const userSchema=mongoose.Schema({
     type: Number,
     default:0
   },
-  referral_code: {
-    type: String
+  referral: {
+    referral_code: { type: String },
+    applied:[{type:String}]
   },
   otp_verify: {
     verified: { type:Boolean,default:false },

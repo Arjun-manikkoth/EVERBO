@@ -19,6 +19,10 @@ const orderSchema= new mongoose.Schema({
     categoryDiscountTotal: { type: Number },
     productDiscountTotal: { type: Number },
     couponDiscount: { type: Number },
+    referralData: {
+       referralDiscountAmount:{type:Number},
+       referredUser:{type:mongoose.Types.ObjectId, ref : "user"}
+    },
     paymentId: { type: String, },
     reason:{type:String}  
 },{timestamps:true})

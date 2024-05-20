@@ -153,6 +153,9 @@ const checkStock = async (req, res) => {
       else if (item.productId.is_listed === false) {
         return "unlisted";
       }
+      else if (item.productId.is_deleted === 1) {
+        return "deleted"
+      }
       else {
         return true;
       }
@@ -168,7 +171,7 @@ const checkStock = async (req, res) => {
 //checkout Load
 const loadCheckOut = async (req, res) => {
   try {
-
+    req.session.orderId=""
     const userData = await User.findOne({ _id: req.session.user_Id }).populate({
       path: 'cart.productId',
       populate: {
@@ -263,11 +266,6 @@ const updateAddress = async (req, res) => {
 const chooseCheckoutAddress = async (req, res) => {
   try {
 
-    if (req.session.orderId && req.body.address) {
-      const data = await Order.findByIdAndUpdate({ _id: req.session.orderId }, { $set: { addressChosen: req.body.address, userId:req.session.user_Id } })
-      res.json(data) 
-    }
-    else if (!req.session.orderId && req.body.address) {
         const order = new Order({
           addressChosen: req.body.address,
           userId:req.session.user_Id
@@ -276,10 +274,20 @@ const chooseCheckoutAddress = async (req, res) => {
         const data = await order.save()
         req.session.orderId = data._id 
         res.json(data)
-    } 
+
   }
   catch (error) { 
     console.log(error.message);
+  }
+}
+
+//referall reward
+const referralReward = async(req,res) => {
+  try {
+   
+    }
+  catch (error) {
+    console.log(error.message)
   }
 }
 
@@ -287,6 +295,7 @@ const chooseCheckoutAddress = async (req, res) => {
 const confirmOrder = async (req, res) => {
   try {
     if (req.body.ordersId) {
+
       req.session.orderId=req.body.ordersId
       const data = await Order.findOne({ _id: req.body.ordersId, userId: req.session.user_Id })
       if (req.body.payment === "RazorPay") {
@@ -304,71 +313,27 @@ const confirmOrder = async (req, res) => {
       }
     }
     else {
-      const userData = await User.findOne({ _id: req.session.user_Id }).populate("cart.productId")
 
-      const cartArray  = userData.cart.map((item) => {
-        return {
-          productId:item.productId,
-          productQuantity:item.productQuantity,
-          pricePerProduct:item.pricePerProduct,
-          totalPrice:item.totalPrice
-        }
-      }) 
-  
-      const orderNo= await Order.find({}).countDocuments()
-      const data= await Order.findByIdAndUpdate({ _id: req.session.orderId }, {
-        $set: {
-          orderNumber:orderNo+1,
-          paymentType:req.body.payment,
-          cartData: cartArray,
-          orderDate: Date.now(),
-          categoryDiscountTotal: req.body.categoryDiscount,
+      const userData = await User.findOne({ _id: req.session.user_Id }).populate("cart.productId")
+      
+      if (req.body.payment === "RazorPay") {
+        
+          orderData = {
+          grandTotalCost: req.body.total,
           productDiscountTotal: req.body.productDiscount,
-          couponDiscount:req.body.couponDiscount,
-          grandTotalCost: req.body.total, 
+          categoryDiscountTotal: req.body.categoryDiscount,
+          couponDiscount: req.body.couponDiscount,
+          paymentType: req.body.payment,
         }
-      }, { new: true })
-      userData.cart.map((item) => {
-        item.productId.quantity -= item.productQuantity
-        item.productId.save()
-      })
+        if (req.body.referralDiscount) {
+          orderData.referral = req.body.referralDiscount
+        }
+        req.session.orderData = orderData;
   
-      const newData = await User.findByIdAndUpdate({ _id: req.session.user_Id }, { $set: { cart: [] } }, { new: true })
-      req.session.cartCount = newData.cart.length
-  
-      if (req.body.payment === "COD") {
-        await Order.findByIdAndUpdate({ _id: req.session.orderId }, {
-          $set: {
-            paymentStatus: "Complete"
-          }
-        })
-          res.json({payment:"COD"})
-      }
-      else if(req.body.payment === "Wallet") {
-          await User.findByIdAndUpdate({ _id: req.session.user_Id }, {
-          $inc: {
-            "wallet.walletBalance": -data.grandTotalCost
-          }, $push: {
-            "wallet.walletTransaction": {
-              transactionDate: Date(),
-              transactionAmount: data.grandTotalCost,
-              transactionType: "Debit",
-              orderId:data._id
-            }
-          }
-          })
-          await Order.findByIdAndUpdate({ _id: req.session.orderId }, {
-            $set: {
-              paymentStatus: "Complete"
-            }
-          })
-        res.json({payment:"Wallet"})
-      }
-      else if(req.body.payment === "RazorPay") {
         var options = {
           amount: req.body.total*100,  
           currency: "INR",
-          receipt: data._id
+          receipt: "reciept_1020"
         };
         instance.orders.create(options, function(err, order) {
           if(!err) 
@@ -376,7 +341,154 @@ const confirmOrder = async (req, res) => {
         else
           res.send(err);
         });
+
       }
+      else {
+        const cartArray  = userData.cart.map((item) => {
+          return {
+            productId:item.productId,
+            productQuantity:item.productQuantity,
+            pricePerProduct:item.pricePerProduct,
+            totalPrice:item.totalPrice
+          }
+        }) 
+        
+        let data;
+        const orderNo = await Order.find({}).countDocuments()
+        if (req.body.referralDiscount) {
+          
+          const referredUser = await User.findOne({"referral.referral_code":req.body.referralDiscount})
+
+              data = await Order.findByIdAndUpdate({ _id: req.session.orderId }, {
+          $set: {
+            orderNumber:orderNo+1,
+            paymentType:req.body.payment,
+            cartData: cartArray,
+            orderDate: Date.now(),
+            categoryDiscountTotal: req.body.categoryDiscount,
+            productDiscountTotal: req.body.productDiscount,
+            couponDiscount:req.body.couponDiscount,
+            grandTotalCost: req.body.total, 
+            "referralData.referralDiscountAmount": Math.floor(req.body.total * (10 / 100)),
+            "referralData.referredUser":referredUser._id
+          }
+        }, { new: true })
+          
+        }else{
+              data= await Order.findByIdAndUpdate({ _id: req.session.orderId }, {
+          $set: {
+            orderNumber:orderNo+1,
+            paymentType:req.body.payment,
+            cartData: cartArray,
+            orderDate: Date.now(),
+            categoryDiscountTotal: req.body.categoryDiscount,
+            productDiscountTotal: req.body.productDiscount,
+            couponDiscount:req.body.couponDiscount,
+            grandTotalCost: req.body.total, 
+          }
+        }, { new: true })
+        }
+     
+        userData.cart.map((item) => {
+          item.productId.quantity -= item.productQuantity
+          item.productId.save()
+        })
+    
+        const newData = await User.findByIdAndUpdate({ _id: req.session.user_Id }, { $set: { cart: [] } }, { new: true })
+        req.session.cartCount = newData.cart.length
+    
+        if (req.body.payment === "COD") {
+          await Order.findByIdAndUpdate({ _id: req.session.orderId }, {
+            $set: {
+              paymentStatus: "Complete"
+            }
+          })
+          if (req.body.referralDiscount)
+          {
+            const orderData = await Order.findById({ _id: req.session.orderId }).populate("referralData.referredUser")
+
+            await User.findByIdAndUpdate({ _id: orderData.referralData.referredUser._id }, {
+              $inc: {
+                "wallet.walletBalance": +orderData.referralData.referralDiscountAmount
+              }, $push: {
+                "wallet.walletTransaction": {
+                  transactionDate: Date(),
+                  transactionAmount: orderData.referralData.referralDiscountAmount,
+                  transactionType: "Credit",
+                }
+              }
+           })
+            
+            await User.findByIdAndUpdate({ _id: req.session.user_Id }, {
+              $inc: {
+                "wallet.walletBalance": +orderData.referralData.referralDiscountAmount
+              }, $push: {
+                "wallet.walletTransaction": {
+                  transactionDate: Date(),
+                  transactionAmount: orderData.referralData.referralDiscountAmount,
+                  transactionType: "Credit",
+                },
+                "referral.applied":req.body.referralDiscount
+              }
+            })
+            
+          }
+            res.json({payment:"COD"})
+        }
+        else if(req.body.payment === "Wallet") {
+            await User.findByIdAndUpdate({ _id: req.session.user_Id }, {
+            $inc: {
+              "wallet.walletBalance": -data.grandTotalCost
+            }, $push: {
+              "wallet.walletTransaction": {
+                transactionDate: Date(),
+                transactionAmount: data.grandTotalCost,
+                transactionType: "Debit",
+                orderId:data._id
+              }
+            }
+            })
+            await Order.findByIdAndUpdate({ _id: req.session.orderId }, {
+              $set: {
+                paymentStatus: "Complete"
+              }
+            })
+          
+            if (req.body.referralDiscount) {
+          
+              const orderData = await Order.findById({ _id: req.session.orderId }).populate("referralData.referredUser")
+
+              await User.findByIdAndUpdate({ _id: orderData.referralData.referredUser._id }, {
+                $inc: {
+                  "wallet.walletBalance": +orderData.referralData.referralDiscountAmount
+                }, $push: {
+                  "wallet.walletTransaction": {
+                    transactionDate: Date(),
+                    transactionAmount: orderData.referralData.referralDiscountAmount,
+                    transactionType: "Credit",
+                  }
+                }
+              })
+              
+              await User.findByIdAndUpdate({ _id: req.session.user_Id }, {
+                $inc: {
+                  "wallet.walletBalance": +orderData.referralData.referralDiscountAmount
+                }, $push: {
+                  "wallet.walletTransaction": {
+                    transactionDate: Date(),
+                    transactionAmount: orderData.referralData.referralDiscountAmount,
+                    transactionType: "Credit",
+                  },
+                  "referral.applied":req.body.referralDiscount
+                }
+              })
+              
+  
+            }
+          res.json({payment:"Wallet"})
+        }
+      }
+
     }
   }
   catch (error) { 
@@ -387,12 +499,110 @@ const confirmOrder = async (req, res) => {
 //razorpay payment status update
 const razorPayStatus = async (req,res) => {
   try { 
-    if (req.body.status === "Complete"){
-      await Order.findByIdAndUpdate({ _id: req.session.orderId }, {
+
+    if (!req.body.attempt) {
+      
+      const userData = await User.findOne({ _id: req.session.user_Id }).populate("cart.productId")
+
+      const cartArray  = userData.cart.map((item) => {
+        return {
+          productId:item.productId,
+          productQuantity:item.productQuantity,
+          pricePerProduct:item.pricePerProduct,
+          totalPrice:item.totalPrice
+        }
+      }) 
+
+      const orderNo= await Order.find({}).countDocuments()
+      
+      let data
+
+      if (req.session.orderData.referral) {
+
+        const referredUser = await User.findOne({"referral.referral_code":req.session.orderData.referral})
+      
+           data = await Order.findByIdAndUpdate({ _id: req.session.orderId }, {
+          $set: {
+            orderNumber:orderNo+1,
+            paymentType:req.session.orderData.paymentType,
+            cartData: cartArray,
+            orderDate: Date.now(),
+            categoryDiscountTotal: req.session.orderData.categoryDiscountTotal,
+            productDiscountTotal: req.session.orderData.productDiscountTotal,
+            couponDiscount:req.session.orderData.couponDiscount,
+            grandTotalCost: req.session.orderData.grandTotalCost,
+            "referralData.referralDiscountAmount": Math.floor(req.session.orderData.grandTotalCost * (10 / 100)),
+            "referralData.referredUser":referredUser._id
+          }
+        }, { new: true })
+
+      } else {
+        
+           data = await Order.findByIdAndUpdate({ _id: req.session.orderId }, {
+          $set: {
+            orderNumber:orderNo+1,
+            paymentType:req.session.orderData.paymentType,
+            cartData: cartArray,
+            orderDate: Date.now(),
+            categoryDiscountTotal: req.session.orderData.categoryDiscountTotal,
+            productDiscountTotal: req.session.orderData.productDiscountTotal,
+            couponDiscount:req.session.orderData.couponDiscount,
+            grandTotalCost: req.session.orderData.grandTotalCost
+          }
+        }, { new: true })
+      }
+      
+      userData.cart.map((item) => {
+        item.productId.quantity -= item.productQuantity
+        item.productId.save()
+      })
+  
+      const newData = await User.findByIdAndUpdate({ _id: req.session.user_Id }, { $set: { cart: [] } }, { new: true })
+      req.session.cartCount = newData.cart.length
+  
+  
+
+    }
+    
+    if (req.body.status === "Complete") {
+      
+     const orderDetails = await Order.findByIdAndUpdate({ _id: req.session.orderId }, {
         $set: {
           paymentStatus: "Complete"
         }
-      })
+      },{new:true})
+
+      if (req.session?.orderData?.referral|| orderDetails.referralData.referredUser ) { 
+ 
+        const orderData = await Order.findById({ _id: req.session.orderId }).populate("referralData.referredUser")
+
+        await User.findByIdAndUpdate({ _id: orderData.referralData.referredUser._id }, {
+          $inc: {
+            "wallet.walletBalance": +orderData.referralData.referralDiscountAmount
+          }, $push: {
+            "wallet.walletTransaction": {
+              transactionDate: Date(),
+              transactionAmount: orderData.referralData.referralDiscountAmount,
+              transactionType: "Credit",
+            }
+          }
+        })
+        
+        await User.findByIdAndUpdate({ _id: req.session.user_Id }, {
+          $inc: {
+            "wallet.walletBalance": +orderData.referralData.referralDiscountAmount
+          }, $push: {
+            "wallet.walletTransaction": {
+              transactionDate: Date(),
+              transactionAmount: orderData.referralData.referralDiscountAmount,
+              transactionType: "Credit",
+            },
+            "referral.applied": req.session.orderData.referral ?? orderData.referralData.referredUser.referral.referral_code
+          }
+        })
+        req.session.orderData = {}
+      }
+
       res.json({ Status: "success" })
     }
     else {
@@ -401,6 +611,8 @@ const razorPayStatus = async (req,res) => {
           paymentStatus: "Failed"
         }
       })
+      req.session.orderData = {}
+
       res.json({ Status: "failure" })
     }
   }
@@ -423,15 +635,15 @@ const orderPlaced = async (req, res) => {
 
 
 //payment option cod check
-const checkCod = async (req, res) => {
-  try {
-    const data = await User.findById({ _id: req.session.user_Id })
-    res.json(data.cart)
-  }
-  catch (error) {
-    console.log(error.message)
-  }
-}
+// const checkCod = async (req, res) => {
+//   try {
+//     const data = await User.findById({ _id: req.session.user_Id })
+//     res.json(data.cart)
+//   }
+//   catch (error) {
+//     console.log(error.message)
+//   }
+// }
 
 //payment option wallet check
 const checkWallet = async (req, res) => {
@@ -463,6 +675,31 @@ const couponCheck = async (req, res) => {
   }
 }
 
+//referral Check
+const referralCheck = async (req, res) => {
+  try {
+
+    const data = await User.findOne({ "referral.referral_code": req.body.codeReferral })
+    const userData=await User.findOne({_id:req.session.user_Id})
+    if (data) {
+
+      if (userData.referral.applied.includes(req.body.codeReferral)) {
+
+         res.json({ Status: "Applied"})
+       }
+      else { 
+        res.json({ Status: "Valid", data })
+      }
+    }
+    else {
+      res.json({Status:"Invalid"})
+    }
+  }
+  catch (error) {
+    console.log(error.message)
+  }
+}
+
 
 module.exports = {
   cartLoad,
@@ -477,9 +714,10 @@ module.exports = {
   updateAddress,
   chooseCheckoutAddress,
   confirmOrder,
-  checkCod,
+  // checkCod,
   checkWallet,
   razorPayStatus,
   orderPlaced,
-  couponCheck
+  couponCheck,
+  referralCheck
 }

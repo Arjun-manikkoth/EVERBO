@@ -73,9 +73,9 @@
                    <div id="price<%=prod.productId._id%>" class="cart-price"><%=prod.totalPrice%></div>
                   </div>
                   <div id="stockStatus"  class="mt-4">
-                    <%if(prod.productId.quantity>0&&prod.productId.is_listed===true){%>
+                    <%if(prod.productId.quantity>0&&prod.productId.is_listed===true&&prod.productId.is_deleted===0){%>
                      In Stock
-                    <%}else if(prod.productId.is_listed===false){%>
+                    <%}else if(prod.productId.is_listed===false||prod.productId.is_deleted===1){%>
                      <div class="alert-text">Currently Unavailable</div> 
                    <%}else{%>
                      <div class="alert-text">Out Of Stock</div> 

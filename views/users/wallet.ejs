@@ -39,9 +39,13 @@
                                     <td><%=each.transactionType%></td>
                                     <td><%=each.transactionAmount%></td>
                                     <td>
+                                      <%if(each.orderId){%>
                                       <div class="categ-edit ">
                                         <a href="/order_detail?id=<%=each.orderId._id%>" class=" categ-edit "><button type="button" class="btn profile-button btn-sm">View</button></a>
                                       </div>
+                                      <%}else{%>
+                                        Referral
+                                        <%}%>
                                     </td>                       			
                               </tr>
                               <%}))%>
@@ -52,9 +56,12 @@
                         <% let startPage = Math.max(1, Math.min(currentPage - 1, totalPages - 3)) %>
                         <% let endPage = Math.min(totalPages, startPage + 3); %>
                         <% for (let i = startPage; i <= endPage; i++) { %>
+
+                          <a href="?page=<%= i %>" class="anchor order-pagination">
                           <div class="page-no-div" data-page="<%= i %>">
-                            <a href="?page=<%= i %>" class="anchor order-pagination"><%= i %></a>
+                            <%= i %>
                           </div>
+                        </a>
                         <% } %>
                       </div>
                       <%}else if(locals.msg){%>

@@ -117,8 +117,8 @@ function validatesignup() {
 			flag = 0;
 		} 
 		else {
-			 if (password_signup.length!=8) {
-				passwordspan.innerHTML = "&#x1F6C8; Password should contain minimum 8 characters "
+			 if (password_signup.length<8) {
+				passwordspan.innerHTML = "&#x1F6C8; Password should contain minimum 8-12 characters "
 				document.getElementById("password-signup").focus();
 				 flag = 0;
 				 
@@ -186,14 +186,16 @@ function validatereset() {
 	var newpassword_signup = document.getElementById("newpassword-signup").value.trim()
 	var flag = 1;
 
+	var passwordRegex=/^(?=.*[0-9].*[0-9])(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?].*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])[A-Za-z0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]{8,}$/
+
 	if (password_signup == "" || password_signup == null) {
 		passwordspan.innerHTML = "&#x1F6C8; Password is a required field"
 		document.getElementById("password-signup").focus();
 		flag = 0;
 	} 
 	else {
-		 if (password_signup.length!=8) {
-			passwordspan.innerHTML = "&#x1F6C8; Password should contain minimum 8 characters "
+		 if (password_signup.length<8) {
+			passwordspan.innerHTML = "&#x1F6C8; Password should contain minimum 8-12 characters "
 			document.getElementById("password-signup").focus();
 			 flag = 0;
 			 
@@ -323,8 +325,8 @@ function validateNewPassword() {
 		flag = 0;
 	} 
 	else {
-		 if (password.length!=8) {
-			passwordspan.innerHTML = "&#x1F6C8; Password should contain minimum 8 characters "
+		 if (password.length<8) {
+			passwordspan.innerHTML = "&#x1F6C8; Password should contain minimum 8-12 characters "
 			document.getElementById("password1").focus();
 			 flag = 0;
 			 
@@ -811,7 +813,8 @@ function checkStock() {
 				allowEnterKey: false,
 				showConfirmButton: false
 			});
-		} else if (data.find(item=> item==="unlisted")==="unlisted") {
+		}
+		else if ((data.find(item => item === "unlisted") === "unlisted")||(data.find(item=> item==="deleted")==="deleted")) {
 		
 			Swal.fire({
 				title: 'Cart Item Currently Unavailable',
@@ -995,13 +998,13 @@ function generatePDF(id) {
 		  pdf.text("Shipping Address:\n" + address, 15, y + 16);
 		
 			pdf.setFontSize(11);
-		  pdf.text("Customer Name : " + data.userId.name, 134, y + 16);
+		  pdf.text("Customer Name : " + data.userId.name, 126, y + 16);
 		
 		  pdf.setFontSize(11);
-		  pdf.text("Order Id : " + data._id, 134, y + 21);
+		  pdf.text("Order Id : " + data._id, 126, y + 21);
 		
 		  pdf.setFontSize(11);
-		  pdf.text("Payment : " + data.paymentType, 134, y+26);
+		  pdf.text("Payment : " + data.paymentType, 126, y+26);
 
 			y += 42; 
 			pdf.setFillColor(200, 200, 200);
@@ -1051,18 +1054,11 @@ function generatePDF(id) {
 
 
 function checkCod() {
-	fetch("/check_cod", { method: 'GET' })
-	.then((response) => {
+
+	var total = document.getElementById("priceCheckOut")
+	var amount = parseInt(total.innerHTML)
 	
-	if (!response.ok) {
-		throw new Error('Network response was not ok.');
-		}
-		return response.json()
-	}).then((data) => {
-		var total=data.reduce((sum,item) => {
-			return sum += item.totalPrice;
-		}, 0)
-		if (total >= 910) {
+		if (amount>= 1000) {
 			document.getElementById("cod").checked=false
 			Swal.fire({
 				title: 'COD Not Available',
@@ -1075,7 +1071,7 @@ function checkCod() {
 				showConfirmButton: false
 			});
 		} 
-	})
+
 }
 
 function checkWalletBalance() {
@@ -1087,13 +1083,13 @@ function checkWalletBalance() {
 		}
 		return response.json()
 	}).then((data) => {
-		var total=data.cart.reduce((sum,item) => {
-			return sum += item.totalPrice;
-		}, 0)
 
+		var total = document.getElementById("priceCheckOut")
+		var amount = parseInt(total.innerHTML)
+		
 		var balance = data.wallet.walletBalance
 
-		if (total > balance) {
+		if (amount > balance) {
 			document.getElementById("wallet").checked=false
 			Swal.fire({
 				title: 'Insufficent Balance',
@@ -1229,7 +1225,6 @@ function couponRemove() {
 	checkOutPrice.innerHTML = totalPay.value
 	grandTotal.value = totalPay.value
 	document.getElementById("couponDiscount").value = 0
-	
 	document.getElementById("apply-btn").classList.remove("hidden")
 	document.getElementById("remove-btn").classList.add("hidden")
 
@@ -1275,7 +1270,7 @@ function confirmOrder(e) {
 				allowEnterKey: false,
 				showConfirmButton: false
 			});
-		} else if (data.find(item=> item==="unlisted")==="unlisted") {
+		} else if ((data.find(item=> item==="unlisted")==="unlisted")||(data.find(item=> item==="deleted")==="deleted")) {
 		
 			Swal.fire({
 				title: 'Cart Item Currently Unavailable',
@@ -1291,8 +1286,13 @@ function confirmOrder(e) {
 		else {
 		 	
 	var couponCode = document.getElementById('couponCode') //input
-  var code=couponCode.value.trim()
-  const data=JSON.stringify({coupon:code})
+	var code = couponCode.value.trim()
+  var discountData = document.getElementById("couponDiscount").value
+
+	if (parseInt(discountData) !== 0) {
+	console.log("coupon ond",typeof(discountData))
+	const data = JSON.stringify({ coupon: code })
+
   fetch('/coupon_check', {
 		method: 'POST',
 		headers: {
@@ -1377,13 +1377,12 @@ function confirmOrder(e) {
 						
 						Swal.fire({
 							title: 'Proceed to payment',
-							text: 'Are you sure you want to proceed to payment',
 							icon: 'warning',
-							showCancelButton: true,
+							showCancelButton: false,
+							showConfirmButton: true,
+							allowOutsideClick: false,
 							confirmButtonColor: '#008000',
-							cancelButtonColor: '#d33',
-							confirmButtonText: 'Yes',
-							cancelButtonText: 'No'
+							confirmButtonText: 'Pay Now'
 						}).then((result) => {
 							if (result.isConfirmed) {
 								razorpayObject.open(); 
@@ -1406,6 +1405,96 @@ function confirmOrder(e) {
 					});
 				}
 		}); 
+			
+
+	}
+	else {
+		
+		const formData = new FormData(orderConfirm);
+			const plainFormData = Object.fromEntries(formData.entries());
+			const formDataJsonString = JSON.stringify(plainFormData);
+		
+			fetch('/confirm_order', {
+				method: 'POST',
+				headers: {
+					"Content-Type": "application/json",
+					 Accept:"application/json"
+				},
+			body: formDataJsonString
+			}).then((response) => {
+				 return	response.json()
+			})
+				.then((data) => {
+					if (data.payment === "COD") {
+						window.location.href="/confirm_order"
+					}
+					else if (data.payment === "Wallet") {
+						window.location.href="/confirm_order"
+					}else{
+						
+						var options = { 
+							"key": "rzp_test_bePMUEE1PKoNJ7",  
+							"amount": data.amount,  
+							"currency": "INR",  
+							"order_id":data.id,
+							"handler": function (response){ 
+									
+								fetch('/razorpay_status', {
+									method: 'POST',
+									headers: {
+										"Content-Type": "application/json",
+										 Accept:"application/json"
+									},
+								body: JSON.stringify({status:"Complete"})
+								}).then((response) => {
+									 return	response.json()
+								})
+									.then((data) => {
+										window.location.href="/confirm_order"
+								}); 
+		
+							}, 
+							"theme": { 
+									"color": "#FB5531" 
+							} 
+						}; 
+						var razorpayObject = new Razorpay(options); 
+						razorpayObject.on('payment.failed', function (response){ 
+		
+		
+							fetch('/razorpay_status', {
+								method: 'POST',
+								headers: {
+									"Content-Type": "application/json",
+									 Accept:"application/json"
+								},
+							body: JSON.stringify({status:"Failed"})
+							}).then((response) => {
+								 return	response.json()
+							})
+								.then((data) => {
+									window.location.href="/order"
+							}); 
+							
+						}); 
+						
+						Swal.fire({
+							title: 'Proceed to payment',
+							icon: 'warning',
+							showCancelButton: false,
+							allowOutsideClick: false,
+							confirmButtonColor: '#008000',
+							confirmButtonText: 'Pay Now',
+						}).then((result) => {
+							if (result.isConfirmed) {
+								razorpayObject.open(); 
+								
+							}
+						});
+					}
+				}); 
+
+			}
 
 		}//end
 
@@ -1451,7 +1540,7 @@ function orderNew(e) {
 								"Content-Type": "application/json",
 								 Accept:"application/json"
 							},
-						body: JSON.stringify({status:"Complete"})
+						body: JSON.stringify({status:"Complete",attempt:"rePay"})
 						}).then((response) => {
 							 return	response.json()
 						})
@@ -1474,7 +1563,7 @@ function orderNew(e) {
 							"Content-Type": "application/json",
 							 Accept:"application/json"
 						},
-					body: JSON.stringify({status:"Failed"})
+					body: JSON.stringify({status:"Failed",attempt:"rePay"})
 					}).then((response) => {
 						 return	response.json()
 					}).then((data) => {
@@ -1536,6 +1625,335 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 });
 
+
+document.addEventListener('DOMContentLoaded', function () {
+  const createOfferButton = document.getElementById("referralCreate");
+
+  if (createOfferButton) {
+    createOfferButton.addEventListener('click', createReferralOffer);
+  }
+
+  function createReferralOffer() {
+    fetch("/referral_create", { method: 'GET' })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok.');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (data.referral.referral_code) {
+          const referralCodeInput = document.createElement('input');
+          referralCodeInput.type = 'text';
+          referralCodeInput.className = 'form-control';
+          referralCodeInput.id = 'referralCode';
+          referralCodeInput.name = 'name';
+          referralCodeInput.placeholder = 'Referral Code';
+          referralCodeInput.value = data.referral.referral_code;
+
+          const inputDiv = document.createElement('div');
+          inputDiv.className = 'col-md-6 mt-3';
+          inputDiv.appendChild(referralCodeInput);
+
+          const rowDiv = document.createElement('div');
+          rowDiv.className = 'row mt-2 mx-2 d-flex justify-content-center';
+          rowDiv.appendChild(inputDiv);
+
+          const buttonDiv = document.createElement('div');
+          buttonDiv.className = 'mt-4 mb-3 text-center';
+
+          const referButton = document.createElement('button');
+          referButton.className = 'btn profile-button btn-sm';
+          referButton.id = 'referFriends';
+          referButton.type = 'button';
+          referButton.textContent = 'Refer Friends';
+          buttonDiv.appendChild(referButton);
+
+          const referralDiv = document.createElement('div');
+          referralDiv.className = 'hidden';
+          referralDiv.id = 'referral-div';
+
+          const hr = document.createElement('hr');
+          const referralText = document.createElement('h4');
+          referralText.className = 'text-center pt-4';
+          referralText.textContent = 'When they earn you earn too !';
+
+          const referralP = document.createElement('p');
+          referralP.className = 'text-center pt-2';
+          referralP.textContent = 'Wanna Send referral code via Gmail ?';
+
+          const form = document.createElement('form');
+          form.id = 'referralForm';
+
+          const formRow = document.createElement('div');
+          formRow.className = 'row mt-3 mx-2 d-flex justify-content-center';
+
+          const formCol = document.createElement('div');
+          formCol.className = 'col-md-6 mt-3';
+
+          const emailInput = document.createElement('input');
+          emailInput.type = 'text';
+          emailInput.className = 'form-control';
+          emailInput.id = 'referralMail';
+          emailInput.name = 'email';
+          emailInput.placeholder = 'Enter Email to Refer';
+          emailInput.setAttribute('oninput', "clear_error('email-error')");
+
+          formCol.appendChild(emailInput);
+
+          const emailButtonDiv = document.createElement('div');
+          emailButtonDiv.className = 'text-center align-self-end mx-0';
+
+          const emailButton = document.createElement('button');
+          emailButton.className = 'btn btn-dark';
+          emailButton.id = 'inviteFriends';
+          emailButton.type = 'submit';
+          emailButton.textContent = 'Invite';
+
+          emailButtonDiv.appendChild(emailButton);
+
+          formRow.appendChild(formCol);
+          formRow.appendChild(emailButtonDiv);
+
+          form.appendChild(formRow);
+
+          const formErrorRow = document.createElement('div');
+          formErrorRow.className = 'row d-flex mb-2 mb-5 justify-content-center';
+
+          const formErrorSpan = document.createElement('span');
+          formErrorSpan.id = 'email-error';
+          formErrorSpan.className = 'error-msg';
+
+          formErrorRow.appendChild(formErrorSpan);
+
+          form.appendChild(formErrorRow);
+
+          referralDiv.appendChild(hr);
+          referralDiv.appendChild(referralText);
+          referralDiv.appendChild(referralP);
+          referralDiv.appendChild(form);
+
+          const createOfferDiv = createOfferButton.parentElement;
+
+          createOfferDiv.replaceWith(rowDiv);
+          rowDiv.insertAdjacentElement('afterend', buttonDiv);
+          buttonDiv.insertAdjacentElement('afterend', referralDiv);
+
+          // Attach event listener to the dynamically created refer button
+          referButton.addEventListener('click', function() {
+            referralDiv.classList.remove('hidden');
+          });
+
+          // Attach event listener to the dynamically created form
+          attachSubmitEventListener(form);
+        }
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  }
+});
+
+function attachSubmitEventListener(form) {
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const input = document.getElementById("referralMail").value.trim();
+    const validRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    let flag = 1;
+
+    if (input === "" || input == null) {
+      document.getElementById("email-error").innerHTML = "&#x1F6C8; Email is a required field";
+      flag = 0;
+    } else if (input.match(validRegex) === null) {
+      document.getElementById("email-error").innerHTML = "&#x1F6C8; Invalid email address";
+      flag = 0;
+    }
+
+    if (flag !== 0) {
+      const formData = new FormData(form);
+      const plainFormData = Object.fromEntries(formData.entries());
+      const formDataJsonString = JSON.stringify(plainFormData);
+
+      fetch("/invite_friends", {
+        method: 'POST',
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json"
+        },
+        body: formDataJsonString
+      })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok.');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (data) {
+          Swal.fire({
+            title: "Invitation Sent",
+            text: `Email has been sent to ${data}`,
+            icon: "success"
+          }).then(() => {
+            document.getElementById("referralMail").value = "";
+          });
+        }
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+    }
+  });
+}
+
+
+
+var referr = document.getElementById("referFriends")
+if (referr) {
+	document.addEventListener('click',expandReferralDiv)
+}
+function expandReferralDiv() {
+	document.getElementById("referral-div").classList.remove("hidden")
+}
+
+	const referrOfferForm = document.getElementById("referralForm");
+
+	if (referrOfferForm) {
+		referrOfferForm.addEventListener('submit', referFriend);
+	}
+	function referFriend(e) {
+		
+		e.preventDefault()
+		var input = document.getElementById("referralMail").value.trim()
+		var validRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{3,4}$/;
+		var flag = 1;
+		  
+		if (input == null || input == "") {
+			document.getElementById("email-error").innerHTML = "&#x1F6C8; Email is a required field"
+			flag = 0;
+		} else if(input.match(validRegex)==null) {
+			document.getElementById("email-error").innerHTML = "&#x1F6C8; Invalid email address"
+			flag = 0;
+		}
+     
+	const formData = new FormData(referrOfferForm);
+	const plainFormData = Object.fromEntries(formData.entries());
+	const formDataJsonString = JSON.stringify(plainFormData);
+
+
+		if (flag != 0) {
+			fetch("/invite_friends",
+				{
+					method: 'POST',
+					headers: {
+						"Content-Type": "application/json",
+						 Accept:"application/json"
+					},
+				body: formDataJsonString
+				}
+			).then((response) => {
+					if (!response.ok) {
+						throw new Error('Network response was not ok.');
+					}
+					return response.json();
+			}).then((data) =>{
+			    
+				if (data) {
+					Swal.fire({
+						title: "Invitation Sent",
+						text: `Email has been sent to ${data}`,
+						icon: "success"
+					}).then(() => {
+						document.getElementById("referralMail").value=""
+					})
+					}
+				})
+		}
+
+	}
+
+	
+	
+var referralShow = document.getElementById("referralClick")
+if (referralShow) {
+	referralShow.addEventListener('click',showReferralOption)
+}
+function showReferralOption() {
+
+	document.getElementById("referralCodeDisplay").classList.remove("hidden")
+}
+
+
+function referralCheck() {
+
+	var referralCode = document.getElementById('codeReferral') //input
+  var code=referralCode.value.trim()
+	const data = JSON.stringify({ codeReferral: code })
+	
+  fetch('/referral_check', {
+		method: 'POST',
+		headers: {
+			"Content-Type": "application/json",
+			 Accept:"application/json"
+		},
+	body: data
+	}).then((response) => {
+	   return	response.json()
+  })
+		.then((referralData) => {
+			if (referralData.Status === "Valid") {
+					Swal.fire({
+						title: 'Referral offer successfully applied',
+						text: 'The reward will be reflected in your wallet after completing payment',
+						timer: 3000,
+						timerProgressBar: true,
+						allowOutsideClick: true,
+						allowEscapeKey: false,
+						allowEnterKey: false,
+						showConfirmButton: false
+					});
+				   document.getElementById('referralDiscount').value=referralData.data.referral.referral_code
+					document.getElementById("referralApply").classList.add("hidden")
+					document.getElementById("referralRemove").classList.remove("hidden")
+			}
+			else if(referralData.Status==="Applied") {
+				Swal.fire({
+					title: 'Offer claimed already',
+					text: 'This offer is already claimed,This code no longer works for future orders ',
+					timer: 3000,
+					timerProgressBar: true,
+					allowOutsideClick: true,
+					allowEscapeKey: false,
+					allowEnterKey: false,
+					showConfirmButton: false
+				});
+			}
+			else {
+				Swal.fire({
+					title: 'Invalid Referral Code',
+					text: 'The referral code you have entered is invalid',
+					timer: 3000,
+					timerProgressBar: true,
+					allowOutsideClick: true,
+					allowEscapeKey: false,
+					allowEnterKey: false,
+					showConfirmButton: false
+				});
+			}
+		}); 
+
+}
+	
+function referralRemove() {
+	document.getElementById('referralDiscount').value = ""
+	document.getElementById('codeReferral').value=""
+	document.getElementById("referralApply").classList.remove("hidden")
+	document.getElementById("referralRemove").classList.add("hidden")
+}
+
+
+	
 //-----JS for Price Range slider-----
 
 $(function() {

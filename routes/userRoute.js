@@ -95,7 +95,19 @@ user_route.post("/edit_profile",blockCheck, auth.isLogin, userController.editPro
 user_route.get("/wallet", blockCheck, auth.isLogin, userController.loadWallet)
 
 //coupons page
-user_route.get("/coupon",blockCheck, auth.isLogin, userController.loadCoupons)
+user_route.get("/coupon", blockCheck, auth.isLogin, userController.loadCoupons)
+
+//referral page
+user_route.get("/referral", blockCheck, auth.isLogin, userController.referralLoad)
+
+//create referral code
+user_route.get("/referral_create",blockCheck, auth.isLogin, userController.createReferral)
+
+//sent referral email
+user_route.post("/invite_friends", blockCheck, auth.isLogin, userController.sentReferralMail)
+
+//referral check
+user_route.post("/referral_check",blockCheck, auth.isLogin, cartController.referralCheck)
 
 
 //---------------------------------Password Management-----------------------------------
@@ -197,7 +209,7 @@ user_route.post("/confirm_order",blockCheck, auth.isLogin, cartController.confir
 user_route.get("/confirm_order",blockCheck, auth.isLogin, cartController.orderPlaced)
 
 //payment option cod check
-user_route.get("/check_cod",blockCheck, auth.isLogin, cartController.checkCod)
+//user_route.get("/check_cod",blockCheck, auth.isLogin, cartController.checkCod)
 
 //payment option wallet balance check
 user_route.get("/check_wallet",blockCheck, auth.isLogin, cartController.checkWallet)

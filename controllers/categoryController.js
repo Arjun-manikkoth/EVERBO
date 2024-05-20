@@ -10,7 +10,7 @@ const categoriesLoad = async (req, res) => {
     let limit = 4;
     let count = await Category.find({is_deleted:0}).countDocuments()
     let totalPages=Math.ceil(count/limit)
-   const category=await Category.find({is_deleted:0}).limit(limit).skip((page-1)*limit).sort({name:1})
+   const category=await Category.find({is_deleted:0}).limit(limit).skip((page-1)*limit).sort({updatedAt:-1})
     res.render("categories", {category,totalPages,currentPage:page})
   }
   catch (error) {

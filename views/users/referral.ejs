@@ -1,0 +1,60 @@
+<%-include("../layouts/user/header.ejs")-%>
+
+     <div class="col-lg-8 profile-box">
+        <div class=" rounded bg-white mb-5 content">
+              <div class="border-right">
+                  <div class="p-3">
+                      <div class="d-flex justify-content-between align-items-center mb-3 mt-3">
+                          <h4 class="text-right">Refer and Earn</h4>
+                      </div>
+                      <div class="">
+                        <img src="/images/userImages/referral.jpg" class="responsive-img" alt="">
+                      </div>
+                      <div class="my-5 ">
+                        <h3 class="text-center">Refer friends ,Get rewards</h3>
+                        <p class="para-refer mx-1 my-3 text-center ">Refer your friends and get 10% cashback on their first purchase.</p>
+                        <div class="center-text">
+                          <span>T & C apply</span>
+                        </div>
+                      </div>
+                      <%if(!userData.referral.referral_code){%>
+                      <div class="mt-3 mb-5 text-center">
+                        <button class="btn  profile-button btn-sm" type="submit" id="referralCreate">Create Referral Code</button>
+                      </div>
+                    <%}else{%>
+                      <div class="row mt-2 mx-2 d-flex justify-content-center">
+                          <div class="col-md-6 mt-2">
+                            <input type="text" class="form-control" id="referralCode" name="name" placeholder="Referral Code" value="<%=userData.referral.referral_code%>">
+                          </div> 
+                      </div>
+                      <div class="mt-4 mb-5 text-center">
+                       <button class="btn  profile-button btn-sm" id="referFriends">Refer Friends</button>
+                      </div>
+                      <div class="hidden" id="referral-div">
+                        <hr>
+                        <h4 class="text-center pt-4" >When they earn you earn too !</h4>
+                        <p class="text-center pt-2">Wanna Send referral code via Gmail ?</p>
+                           <form id="referralForm">
+                             <div class="row mt-3 mx-2 d-flex  justify-content-center ">
+                               <div class="col-md-6 mt-3">
+                                 <input type="text" class="form-control" id="referralMail" name="email" placeholder="Enter Email to Refer" oninput="clear_error('email-error')" value="">
+                               </div> 
+                               <div class="text-center align-self-end mx-0 ">
+                                 <button class="btn  btn-dark" id="referFriends" type="submit">Invite</button>
+                               </div>
+                             </div> 
+                             <div class="row d-flex mb-2 mb-5 justify-content-center " >
+                               <span id="email-error" class="error-msg"></span>
+                             </div>                   
+                           </form>
+                      </div>
+                  <%}%>
+                  </div>
+              </div>
+          </div>
+      </div>
+  
+</div>
+</div>
+
+<%-include("../layouts/user/footer.ejs")-%>

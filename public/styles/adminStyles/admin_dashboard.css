@@ -451,3 +451,6 @@ margin-top: 8px;
 .date-range-input{
 	max-height: 35px;
 }
+a{
+	text-decoration: none;
+}

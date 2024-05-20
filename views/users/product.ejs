@@ -48,10 +48,10 @@
 					<div class="free_delivery d-flex flex-row align-items-center justify-content-center">
 						<span class="ti-truck"></span><span>free delivery for 1500 above purchase</span>
 					</div>
-					<%if(product.quantity>=1&&product.is_listed===true){%>
+					<%if(product.quantity>=1&&product.is_listed===true&&product.is_deleted===0){%>
 						<div class="stock-div"><span>Stocks left: </span><span id="stocks"><%=product.quantity%></span></div>
-					<%}else if(product.is_listed===false){%>
-						<div class="stock-div"><span id="stocks">Currently Unavailable</span></div>
+					<%}else if(product.is_listed===false||product.is_deleted===1){%>
+						<div class="stock-div"><span id="stocks" class="alert-text">Currently Unavailable</span></div>
 					<%}else{%>
 						<div class="stock-div"><span class="alert-text">Out Of Stock !</span></div>
 					<%}%>
