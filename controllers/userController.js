@@ -402,7 +402,7 @@ const loadOrders = async (req, res) => {
 //load order detial page
 const orderDetail = async (req, res) => {
   try { 
-    const orderData = await Order.findOne({ _id: req.query.id }).populate("addressChosen").populate("userId").populate("cartData.productId").populate("referralData.referredUser")
+    const orderData = await Order.findOne({ _id: req.query.id }).populate("addressChosen").populate("userId").populate("cartData.productId").populate("referralData.referredUser").populate("")
 
     if (orderData) {
       res.render("order_detail",{orderData,session:req.session})
@@ -419,7 +419,8 @@ const orderDetail = async (req, res) => {
 //cancel order
 const cancelOrder = async (req, res) => {
   try {
-    const orderData = await Order.findByIdAndUpdate({ _id: req.body.id }, { $set: { reason: req.body.reason, orderStatus: "Cancelled" } },{new:true}).populate("referralData.referredUser")
+
+    const orderData = await Order.findByIdAndUpdate({ _id: req.body.id }, { $set: { reason: req.body.reason, orderStatus: "Cancelled" } }, { new: true }).populate("referralData.referredUser")
     const data = await User.findByIdAndUpdate({ _id: req.session.user_Id }, {
       $inc: {
     "wallet.walletBalance": orderData.grandTotalCost
@@ -432,31 +433,32 @@ const cancelOrder = async (req, res) => {
         }
       }
     }, { new: true })
-  
-
-        await User.findByIdAndUpdate({ _id: orderData.referralData.referredUser._id }, {
-          $inc: {
-            "wallet.walletBalance": -orderData.referralData.referralDiscountAmount
-          }, $push: {
-            "wallet.walletTransaction": {
-              transactionDate: Date(),
-              transactionAmount: orderData.referralData.referralDiscountAmount,
-              transactionType: "Debit",
-            }
+      
+    if (Object.keys(orderData.referralData ).length === 0) {
+      await User.findByIdAndUpdate({ _id: orderData.referralData.referredUser._id }, {
+        $inc: {
+          "wallet.walletBalance": -orderData.referralData.referralDiscountAmount
+        }, $push: {
+          "wallet.walletTransaction": {
+            transactionDate: Date(),
+            transactionAmount: orderData.referralData.referralDiscountAmount,
+            transactionType: "Debit",
           }
-        })
+        }
+      })
         
-        await User.findByIdAndUpdate({ _id: req.session.user_Id }, {
-          $inc: {
-            "wallet.walletBalance": -orderData.referralData.referralDiscountAmount
-          }, $push: {
-            "wallet.walletTransaction": {
-              transactionDate: Date(),
-              transactionAmount: orderData.referralData.referralDiscountAmount,
-              transactionType: "Debit",
-            }
+      await User.findByIdAndUpdate({ _id: req.session.user_Id }, {
+        $inc: {
+          "wallet.walletBalance": -orderData.referralData.referralDiscountAmount
+        }, $push: {
+          "wallet.walletTransaction": {
+            transactionDate: Date(),
+            transactionAmount: orderData.referralData.referralDiscountAmount,
+            transactionType: "Debit",
           }
-        })
+        }
+      })
+    }
 
 
    orderData.cartData.forEach(async(prod) => {
@@ -478,6 +480,7 @@ const cancelOrder = async (req, res) => {
 //new return reason to db
 const orderReturn = async (req, res) => {
   try {
+
     const orderData = await Order.findByIdAndUpdate({ _id: req.body.id }, { $set: { reason: req.body.reason, orderStatus: "Returned" } }).populate("referralData.referredUser")
     const data = await User.findByIdAndUpdate({ _id: req.session.user_Id }, {
       $inc: {
@@ -492,29 +495,32 @@ const orderReturn = async (req, res) => {
       }
     })
 
-    await User.findByIdAndUpdate({ _id: orderData.referralData.referredUser._id }, {
-      $inc: {
-        "wallet.walletBalance": -orderData.referralData.referralDiscountAmount
-      }, $push: {
-        "wallet.walletTransaction": {
-          transactionDate: Date(),
-          transactionAmount: orderData.referralData.referralDiscountAmount,
-          transactionType: "Debit",
+    if (Object.keys(orderData.referralData ).length === 0) {
+
+      await User.findByIdAndUpdate({ _id: orderData.referralData.referredUser._id }, {
+        $inc: {
+          "wallet.walletBalance": -orderData.referralData.referralDiscountAmount
+        }, $push: {
+          "wallet.walletTransaction": {
+            transactionDate: Date(),
+            transactionAmount: orderData.referralData.referralDiscountAmount,
+            transactionType: "Debit",
+          }
         }
-      }
-    })
+      })
     
-    await User.findByIdAndUpdate({ _id: req.session.user_Id }, {
-      $inc: {
-        "wallet.walletBalance": -orderData.referralData.referralDiscountAmount
-      }, $push: {
-        "wallet.walletTransaction": {
-          transactionDate: Date(),
-          transactionAmount: orderData.referralData.referralDiscountAmount,
-          transactionType: "Debit",
+      await User.findByIdAndUpdate({ _id: req.session.user_Id }, {
+        $inc: {
+          "wallet.walletBalance": -orderData.referralData.referralDiscountAmount
+        }, $push: {
+          "wallet.walletTransaction": {
+            transactionDate: Date(),
+            transactionAmount: orderData.referralData.referralDiscountAmount,
+            transactionType: "Debit",
+          }
         }
-      }
-    })
+      })
+    }
 
     orderData.cartData.forEach(async(prod) => {
       const productData = await Product.findByIdAndUpdate({ _id: prod.productId }, { $inc: { quantity: prod.productQuantity } },{new:true})

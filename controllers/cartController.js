@@ -714,7 +714,6 @@ module.exports = {
   updateAddress,
   chooseCheckoutAddress,
   confirmOrder,
-  // checkCod,
   checkWallet,
   razorPayStatus,
   orderPlaced,

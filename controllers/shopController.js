@@ -20,56 +20,90 @@ const loadLanding = async (req, res) => {
 }
 
 
-//load shop page with products view
 const loadShop = async (req, res) => {
   try {
-     
-    let page =1
+    let page = 1;
     if (req.query.page) {
-      page = req.query.page;
+      page = parseInt(req.query.page);
     }
-    let search = ''
-    if (req.query.search) {
-      search = req.query.search;
-    }
-    let limit = 4;
-    
-    const product = await Product.find({
-      is_listed:true,is_deleted:0,
-      $or: [
-        { name: { $regex: ".*" +search+ ".*" ,$options:"i"} },
-        { description: { $regex: ".*" +search+ ".*",$options:"i" } }
-      ]
-    }).skip((page - 1) * limit).limit(limit)
-    
-    const count = await Product.find({
-      is_listed:true,is_deleted:0,
-      $or: [
-        { name: { $regex: ".*" +search+ ".*" ,$options:"i"} },
-        { description: { $regex: ".*" +search+ ".*",$options:"i" } }
-      ]
-    }).countDocuments()
-    
-    let totalPages = Math.ceil(count / limit)
 
-    const category = await Category.find({ is_listed: true,is_deleted:0 })
-    const userData = await User.findOne({ _id: req.session.user_Id })
-    
-    req.session.cartCount = userData.cart.length
-    req.session.wishlistCount = userData.wishlist.length
-    
+    let search = '';
+    if (req.query.searchTerm) {
+      search = req.query.searchTerm.trim();
+    }
+
+    let minPrice = 0;
+    let maxPrice = Infinity;
+    if (req.query.minPrice) {
+      minPrice = parseInt(req.query.minPrice);
+    }
+    if (req.query.maxPrice) {
+      maxPrice = parseInt(req.query.maxPrice);
+    }
+
+    let sortBy = 'createdAt'; 
+    if (req.query.sortBy) {
+      switch (req.query.sortBy) {
+        case 'Price Low to High':
+          sortBy = 'price';
+          break;
+        case 'Price High to Low':
+          sortBy = '-price';
+          break;
+        case 'aA-zZ':
+          sortBy = 'name';
+          break;
+        case 'Zz-Aa':
+          sortBy = '-name';
+          break;
+        default:
+          sortBy = 'createdAt';
+      }
+    }
+
+    let limit = 4;
+    const skip = (page - 1) * limit;
+
+    const query = {
+      is_listed: true,
+      is_deleted: 0,
+      $or: [
+        { name: { $regex: ".*" + search + ".*", $options: "i" } },
+        { description: { $regex: ".*" + search + ".*", $options: "i" } }
+      ],
+      price: { $gte: minPrice, $lte: maxPrice }
+    };
+   
+    if (req.query.category) {
+      const category = await Category.findOne({ name: req.query.category })
+      query.category = category._id;
+    }
+
+    const product = await Product.find(query)
+      .sort(sortBy)
+      .skip(skip)
+      .limit(limit);
+
+    const count = await Product.countDocuments(query);
+    const totalPages = Math.ceil(count / limit);
+
+    const category = await Category.find({ is_listed: true, is_deleted: 0 });
+    const userData = await User.findOne({ _id: req.session.user_Id });
+
+    req.session.cartCount = userData.cart.length;
+    req.session.wishlistCount = userData.wishlist.length;
+
     res.render("shop", {
       product,
       category,
-      currentPage:page,
+      currentPage: page,
       totalPages,
-      session:req.session
-    })
-  }
-  catch (error) { 
+      session: req.session
+    });
+  } catch (error) {
     console.log(error.message);
   }
-}
+};
 
 //individual product page 
 const loadProduct = async (req, res) => {
@@ -169,10 +203,10 @@ const alphabetAscending = async (req, res) => {
 module.exports = {
   loadLanding,
   loadProduct,
-  priceAscending,
-  priceDescending,
-  alphabetAscending,
-  alphabetDescending,
+  //priceAscending,
+ // priceDescending,
+ // alphabetAscending,
+ // alphabetDescending,
   loadShop
 }
 

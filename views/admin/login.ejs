@@ -1,16 +1,14 @@
 <!DOCTYPE html> 
 <html lang="en"> 
-
 <head> 
 	<meta charset="UTF-8"> 
 	<meta http-equiv="X-UA-Compatible"content="IE=edge"> 
 	<meta name="viewport"content="width=device-width,initial-scale=1.0"> 
 	<title>EVERBO ADMIN</title> 
   <link rel="stylesheet" href="/styles/adminStyles/admin_login.css"> 
-</head> 
 
+</head> 
 <body> 
-	
 	<div class="containerbox">
 		<div class="wrapper">
 			<div class="title-text">
@@ -18,18 +16,14 @@
 						Admin Login
 				 </div>
 			</div>
-
 			<div class="form-container">
-	
 				 <div class="form-inner">
 						<form action="/admin" class="login" method="post" onsubmit="return validateLogin()">
-	
 								<% if(locals.message_signin) {%>
 									<div class="error">
 										<span class="message" id="signin-error"><%=message_signin%></span>
 									</div>
 										 <%}%>
-						
 							 <div class="field">
 									<input type="text" name="email" placeholder="Email Address" id="email-login" oninput="clearError('signin-error')">			
 							 </div>
@@ -46,17 +40,14 @@
 									<input type="submit" class="submit" value="Login">
 							 </div>
 							 </div>
-							 
 						</form>
 				 </div>
 			</div>
 	 </div>
 	 </div>
-
 	</div> 
-</div> 
+</div>
 
 <script src="/scripts/adminScripts/script.js"></script>
-
 </body>
 </html>

@@ -1,67 +1,474 @@
-<%-include("../layouts/admin/header.ejs")-%>
+<!DOCTYPE html> 
+<html lang="en"> 
+
+<head> 
+	<meta charset="UTF-8"> 
+	<meta http-equiv="X-UA-Compatible"content="IE=edge"> 
+	<meta name="viewport"content="width=device-width,initial-scale=1.0"> 
+	<title>EVERBO ADMIN</title> 
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.7/dist/sweetalert2.min.css">
+	<link rel="stylesheet" href="/styles/adminStyles/admin_dashboard.css"> 
+  <link rel="stylesheet" href="/styles/adminStyles/admin_login.css">
+	<link rel="stylesheet" href="/styles/adminStyles/admin_responsive.css"> 
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head> 
+
+<body> 
+	
+	<!-- for header part -->
+	<header> 
+
+		<div class="logosec"> 
+			<div class="logo">EVER<span class="title-span">BO</span></div> 
+			<img src= 
+"https://media.geeksforgeeks.org/wp-content/uploads/20221210182541/Untitled-design-(30).png"
+				class="icn menuicn"
+				id="menuicn"
+				alt="menu-icon"> 
+		</div> 
+ 
+
+		<div class="admin"> 
+			<div class="admin-text">Admin</div> 
+			<div class="dp"> 
+			<img src= 
+"https://media.geeksforgeeks.org/wp-content/uploads/20221210180014/profile-removebg-preview.png"
+					class="dpicn"
+					alt="dp"> 
+			</div> 
+		</div> 
+
+	</header> 
+	
+	<div class="main-container"> 
+		<div class="navcontainer"> 
+			<nav class="nav"> 
+				<div class="nav-upper-options"> 
+          
+					
+				<a href="/admin/sales_report"class="logout">
+					<div class="option2 nav-option" data-route="/admin/sales_report" > 
+						<img src= 
+"/images/adminImages/dashboard.png"
+							class="nav-img"
+							alt="articles"> 
+							<div class="options">SalesReport</div>  
+					</div> 
+				</a>
+
+					<a href="/admin/dashboard"class="logout" >
+					<div class="nav-option option1" data-route="/admin/dashboard"> 
+						<img src= 
+"/images/adminImages/home.png"
+							class="nav-img"
+							alt="dashboard"> 
+							<div class="options">Dashboard</div>   
+					</div> 
+				</a>
+
+				<a href="/admin/users"class="logout">
+					<div class="option2 nav-option" data-route="/admin/users" > 
+						<img src= 
+"/images/adminImages/users.png"
+							class="nav-img"
+							alt="articles"> 
+							<div class="options">Users</div>  
+					</div> 
+				</a>
+
+				<a href="/admin/products"class="logout">
+					<div class="nav-option option3" data-route="/admin/products" > 
+						<img src= 
+"/images/adminImages/products.png"
+							class="nav-img"
+							alt="report"> 
+							<div class="options">Products</div> 
+					</div> 
+				</a>
+
+				<a href="/admin/categories"class="logout" >
+					<div class="nav-option option4" data-route="/admin/categories"> 
+						<img src= 
+"/images/adminImages/category.png"
+							class="nav-img"
+							alt="institution"> 
+							<div class="options">Categories</div> 
+					</div> 
+				</a>
+
+				<a href="/admin/orders"class="logout" >
+					<div class="nav-option option5" data-route="/admin/orders"> 
+						<img src= 
+"/images/adminImages/orders.png"
+							class="nav-img"
+							alt="blog"> 
+							<div class="options">Orders</div>  
+					</div> 
+				</a>
+
+				<a href="/admin/coupons"class="logout">
+					<div class="nav-option option6" data-route="/admin/coupons"> 
+						<img src= 
+"/images/adminImages/coupon.png"
+							class="nav-img"
+							alt="settings"> 
+							<div class="options">Coupons</div>  
+					</div>
+				</a> 
+				<a href="/admin/banner"class="logout">
+					<div class="nav-option option6" data-route="/admin/banner"> 
+						<img src= 
+						"/images/adminImages/banner.png"
+							class="nav-img"
+							alt="settings"> 
+							<div class="options">Banners</div>  
+					</div>
+				</a> 
+					<div class="nav-option option7" data-route="/admin/logout"  onclick="logoutConfirm()"> 
+						<img src= 
+"/images/adminImages/logout.png"
+							class="nav-img"
+							alt="logout"> 
+						<div class="options">Logout</div> 
+					</div>
+				
+			</nav> 
+		</div> 
+		<div class="main"> 
+
 <div class="report-container"> 
-
-  
-
-
-<div class="row">
-  <div class="col-md-6 col-xl-4">
+    <div class="title-container">
+        <div class="table-title ">
+             Dashboard
+         </div>	
+   </div>
+<div class="row top-data">
+  <div class="col-md-6 col-xl-4 mt-2">
       <div class="card mb-3 widget-content bg-midnight-bloom">
-          <div class="widget-content-wrapper text-white">
+          <div class="widget-content-wrapper my-3 mx-3 text-white">
               <div class="widget-content-left">
-                  <div class="widget-heading">Total Orders</div>
-                  <div class="widget-subheading">Last year expenses</div>
-              </div>
-              <div class="widget-content-right">
-                  <div class="widget-numbers text-white"><span>1896</span></div>
-              </div>
-          </div>
-      </div>
-  </div>
-  <div class="col-md-6 col-xl-4">
-      <div class="card mb-3 widget-content bg-arielle-smile">
-          <div class="widget-content-wrapper text-white">
-              <div class="widget-content-left">
-                  <div class="widget-heading">Clients</div>
-                  <div class="widget-subheading">Total Clients Profit</div>
-              </div>
-              <div class="widget-content-right">
-                  <div class="widget-numbers text-white"><span>$ 568</span></div>
-              </div>
-          </div>
-      </div>
-  </div>
-  <div class="col-md-6 col-xl-4">
-      <div class="card mb-3 widget-content bg-grow-early">
-          <div class="widget-content-wrapper text-white">
-              <div class="widget-content-left">
-                  <div class="widget-heading">Followers</div>
-                  <div class="widget-subheading">People Interested</div>
-              </div>
-              <div class="widget-content-right">
-                  <div class="widget-numbers text-white"><span>46%</span></div>
-              </div>
-          </div>
-      </div>
-  </div>
-  <div class="d-xl-none d-lg-block col-md-6 col-xl-4">
-      <div class="card mb-3 widget-content bg-premium-dark">
-          <div class="widget-content-wrapper text-white">
-              <div class="widget-content-left">
-                  <div class="widget-heading">Products Sold</div>
+                  <div class="widget-heading">Total Revenue</div>
                   <div class="widget-subheading">Revenue streams</div>
               </div>
               <div class="widget-content-right">
-                  <div class="widget-numbers text-warning"><span>$14M</span></div>
+                  <div class="widget-numbers text-warning"><span>&#8377;<%=totalRevenue%></span></div>
               </div>
           </div>
       </div>
   </div>
+  <div class="col-md-6 col-xl-4 mt-2">
+      <div class="card mb-3 widget-content bg-arielle-smile">
+          <div class="widget-content-wrapper my-3 mx-3 text-white">
+              <div class="widget-content-left">
+                  <div class="widget-heading">Total Orders</div>
+                  <div class="widget-subheading">Total Successfull Orders</div>
+              </div>
+              <div class="widget-content-right">
+                  <div class="widget-numbers text-white"><span><%=totalOrders%></span></div>
+              </div>
+          </div>
+      </div>
+  </div>
+  <div class="col-md-6 col-xl-4 mt-2" >
+      <div class="card mb-3 widget-content bg-grow-early">
+          <div class="widget-content-wrapper my-3 mx-3 text-white">
+              <div class="widget-content-left">
+                  <div class="widget-heading">Cancelled Orders</div>
+                  <div class="widget-subheading">Dissatisfied orders</div>
+              </div>
+              <div class="widget-content-right">
+                  <div class="widget-numbers text-warning"><span><%=totalCancelledOrders%></span></div>
+              </div>
+          </div>
+      </div>
+  </div>
+  <div class="col-md-6 col-xl-4 mt-2">
+    <div class="card mb-3 widget-content bg-premium-dark">
+        <div class="widget-content-wrapper  my-3 mx-3 text-white">
+            <div class="widget-content-left">
+                <div class="widget-heading">Total Products</div>
+                <div class="widget-subheading">Active products</div>
+            </div>
+            <div class="widget-content-right">
+                <div class="widget-numbers text-white"><span><%=totalProducts%></span></div>
+            </div>
+        </div>
+    </div>
+</div>
+    <div class="col-md-6 col-xl-4 mt-2">
+      <div class="card mb-3 widget-content bg-sunset-glow">
+          <div class="widget-content-wrapper  my-3 mx-3 text-white">
+              <div class="widget-content-left">
+                  <div class="widget-heading">Total Categories</div>
+                  <div class="widget-subheading">Active categories</div>
+              </div>
+              <div class="widget-content-right">
+                  <div class="widget-numbers text-white"><span><%=totalCategories%></span></div>
+              </div>
+          </div>
+      </div>
+  </div>
+  <div class="col-md-6 col-xl-4 mt-2">
+    <div class="card mb-3 widget-content bg-royal-gold">
+        <div class="widget-content-wrapper  my-3 mx-3 text-white">
+            <div class="widget-content-left">
+                <div class="widget-heading">Total Users</div>
+                <div class="widget-subheading">People Intrested</div>
+            </div>
+            <div class="widget-content-right">
+                <div class="widget-numbers text-white"><span><%=totalUsers%></span></div>
+            </div>
+        </div>
+    </div>
+</div>
 </div>
 
-
-
+<div class="row graph-div">
+    <div class="col-xl-12">
+        <div class="card ">
+            <div class="card-header sales-title">
+              Sales Revenue Overview (<span id="duration"><%=header%></span>
+              )</div>
+            <div class="card-body">
+              <div class="d-flex justify-content-end align-items-center pt-3">
+               <div class="pe-2">
+                Select Sales Period :
+               </div>
+              <div>
+                <form id="salesFilter">
+                    <select class="form-select" aria-label="Default select example"  name="salesSelect" value="weekly">
+                        <option value="weekly">Weekly</option>
+                        <option value="monthly">Monthly</option>
+                        <option value="yearly">Yearly</option>
+                      </select>
+                </form>
+              </div>
+              </div> 
+              <div class="bar-chart-div">
+                <canvas id="myChart" style="width:100%;"></canvas>
+              </div>
+            </div>
+          </div>
+     </div>
 </div>
-<%-include("../layouts/admin/footer.ejs")-%>
 
-  
+<div class="row graph-div">
+    <div class="col-xl-12">
+        <div class="card ">
+            <div class="card-header sales-title">
+              Category Wise Sales Overview <span id="duration"></span>
+              </div>
+            <div class="card-body">
+              <div class="d-flex justify-content-end align-items-center pt-3">
+              </div> 
+              <div class="bar-chart-div">
+                <canvas id="categChart" style="width:100%;"></canvas>
+              </div>
+            </div>
+          </div>
+     </div>
+</div>
+
+<div class="row top-ten-div">
+     <div class="col-md-12 col-xl-6">
+        <div class="card top-selling">
+            <div class="card-header best-title">
+              Best selling products(Top 10)
+            </div>
+            <div class="card-body card-content">
+                <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th class="col-2" scope="col"></th>
+                        <th class="col-6" scope="col">Product</th>
+                        <th class="col-4" scope="col">Sales Count</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        <%if(locals.topProducts.length!=0){%>
+                            <%topProducts.forEach((each)=>{%>
+                                <tr>
+                                    <td><img src="/images/userImages/<%=each.productDetails.image%>" class="img-top-products" alt=""></td>
+                                    <td><%=each.productDetails.name%></td>
+                                    <td><%=each.totalSold%></td>                              
+                                </tr>
+                            <%})%>                           
+                        <%}else{%>
+                            <tr>
+								<td colspan="6">
+										<div class="address-msg">
+												No Products Sold
+										</div>
+								</td>
+						</tr>
+                        <%}%>
+                    </tbody>
+                  </table>
+            </div>
+          </div>
+     </div>
+     <div class="col-md-12 col-xl-6">
+        <div class="card top-selling">
+            <div class="card-header best-title">
+               Best selling categories(Top 10)
+            </div>
+            <div class="card-body card-content">
+                <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th class="col-2" scope="col"></th>
+                        <th class="col-6" scope="col">Category</th>
+                        <th class="col-4" scope="col">Sales Count</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        <%if(locals.topCategories.length!=0){%>
+                            <%topCategories.forEach((each)=>{%>
+                                <tr>
+                                    <td><img src="/images/userImages/<%=each.categoryDetails.image%>" class="img-top-products" alt=""></td>
+                                    <td><%=each.categoryDetails.name%></td>
+                                    <td><%=each.totalSold%></td>
+                                </tr>
+                            <%})%>                           
+                        <%}else{%>
+                            <tr>
+								<td colspan="6">
+										<div class="address-msg">
+												No Products Sold
+										</div>
+								</td>
+						</tr>
+                        <%}%>
+                    </tbody>
+                  </table>
+            </div>
+          </div>
+     </div>
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script src="/scripts/adminScripts/script.js"></script>
+<script src="/scripts/adminScripts/toggle.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.7/dist/sweetalert2.all.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const filter = document.getElementById("salesFilter");
+        const select = filter.querySelector("select");
+
+        // Declare the chart variable in the outer scope to maintain its state
+        let salesBarChart;
+
+        // Initialize the chart with the initial data
+        const initialLabels = <%- label%>;
+        const initialData = <%- totalSale %>;
+
+        const categoryLabels = <%-categNames%>;
+        const categoryData = <%-categSalesTotals%>;
+        
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const graph = document.getElementById('categChart').getContext('2d')
+
+        function createChart(labels, data) {
+            return new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Total Sales Amount',
+                        data: data,
+                        backgroundColor: 'rgba(255, 165, 0, 0.5)',
+                        borderColor: 'rgba(255, 140, 0, 1)',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: false,
+                            text: 'Sales Overview'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        function createChartCateg(labels, data) {
+            return new Chart(graph, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Total Sales Amount',
+                        data: data,
+                        backgroundColor: 'rgba(255, 165, 0, 0.5)',
+                        borderColor: 'rgba(255, 140, 0, 1)',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: false,
+                            text: 'Sales Overview'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        salesBarChart = createChart(initialLabels, initialData);
+        createChartCateg(categoryLabels, categoryData);
+        
+
+        function salesFilter(event) {
+            event.preventDefault(); 
+
+            const formData = new FormData(filter);
+            const plainFormData = Object.fromEntries(formData.entries());
+            const formDataJsonString = JSON.stringify(plainFormData);
+
+            fetch('/admin/dashboard_filter', {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                body: formDataJsonString
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Destroy existing chart instance if it exists
+                if (salesBarChart) {
+                    salesBarChart.destroy();
+                }
+                document.getElementById("duration").innerHTML=data.header
+                salesBarChart = createChart(data.labels, data.totalSales);
+            })
+            .catch(error => console.error('Error fetching sales data:', error));
+        }
+
+        select.addEventListener('change', salesFilter);
+    });
+</script>
+</body>
+</html>

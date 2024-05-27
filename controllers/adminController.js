@@ -41,15 +41,6 @@ const verifyLogin = async (req, res) => {
   }
 }
  
-//admin dashboard load
-const loadDashboard = async (req, res) => {
-  try {
-    res.render("dashboard")
-  }
-  catch (error) {
-    console.log(error.message);
-  }
-}
 
 //view users page
 const usersLoad = async (req, res) => {
@@ -176,7 +167,6 @@ const bannerSelect = async (req, res) => {
 module.exports = {
   loadLogin,
   verifyLogin,
-  loadDashboard,
   logout,
   usersLoad,
   userBlock,

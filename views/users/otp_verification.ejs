@@ -1,16 +1,13 @@
 <%-include("../layouts/user/header.ejs")-%>
 
  <div class="forgotbox">
-
 	<div class="wrapper forgot">
 		<div class="title-text">
 			 <div class="title login">
 					Verify OTP
 			 </div>
 		</div>
-
 		<div class="form-container">
-			 
 			 <div class="form-inner">
 					<form action="/otp_verification" class="login" method="post" onsubmit="return validateotp()">
 						<% if(locals.message_otpverification) {%>
@@ -20,26 +17,23 @@
 						<%}%>		   
 						<p class="reset-para">An OTP has been sent to your registered Email,Please check your Email and enter your OTP </p>
 						<div class="containerotp">
-              <div id="inputs" class="inputs">
-                <input class="input" type="text"
-                    inputmode="numeric" maxlength="1" name="input1" id="input1"/>
-                <input class="input" type="text"
-                    inputmode="numeric" maxlength="1" name="input2" id="input2"/>
-                <input class="input" type="text"
-                    inputmode="numeric" maxlength="1" name="input3" id="input3"/>
-                <input class="input" type="text"
-                    inputmode="numeric" maxlength="1" name="input4" id="input4"/>
-          
+               <div id="inputs" class="inputs">
+									<input class="input" type="text"
+											inputmode="numeric" maxlength="1" name="input1" id="input1"/>
+									<input class="input" type="text"
+											inputmode="numeric" maxlength="1" name="input2" id="input2"/>
+									<input class="input" type="text"
+											inputmode="numeric" maxlength="1" name="input3" id="input3"/>
+									<input class="input" type="text"
+											inputmode="numeric" maxlength="1" name="input4" id="input4"/>
+              </div>
             </div>
-            </div>
-       
 						 <span id="email-error-login"></span>
 						 <%if(locals.timer){%>
              <div class="otpspan-div">
 							<p id="otpspan">OTP expires in <span id="countdowntimer">60 </span> Seconds</p>
 						 </div>
 					    <%}%>
-
 						 <div class="otpverify-button">
               <div class="field btns">
 								<div class="btn-layer"></div>
@@ -48,12 +42,8 @@
 						 <div class="resend-otp">
 							<a href="/resend_otp" id="resend-code">Resend code</a>
 						 </div>
-						 
 						 </div>
-						
-		  
 					</form>
-					
 			 </div>
 		</div>
  </div>

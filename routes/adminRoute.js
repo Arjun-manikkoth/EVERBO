@@ -49,7 +49,10 @@ admin_route.get("/logout", auth.isLogin, adminController.logout)
 //-----------------------------------Dashboard----------------------------------------------
 
 //Admin dashboard load
-admin_route.get("/dashboard", auth.isLogin, adminController.loadDashboard)
+admin_route.get("/dashboard", auth.isLogin, dashboardController.loadDashboard)
+
+//Admin dashboard load
+admin_route.post("/dashboard_filter", auth.isLogin, dashboardController.dashboardFilter)
 
 //Admin sales data load
 admin_route.get("/sales_report", auth.isLogin, dashboardController.salesDataLoad)
@@ -168,5 +171,14 @@ admin_route.post("/add_banner", auth.isLogin, upload.single('image'), adminContr
 //Admin banner listing
 admin_route.get("/bannerCheck", auth.isLogin, adminController.bannerSelect)
 
+
+//----------------------------------------------------------------------------
+
+//For invalid routes
+admin_route.get('*', function(req, res){
+    
+  res.render("404")
+    
+  })
 
 module.exports = admin_route;

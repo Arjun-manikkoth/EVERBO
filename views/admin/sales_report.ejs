@@ -7,9 +7,9 @@
         </div>					
 	         <form class="form-group" id="filterSales">
 						<div class="d-flex filter-sales">	
-            <input type="date" class="form-control date-range-input " name="from">
-						<input type="date" class="form-control ms-2 date-range-input" name="to">
-						<button class="btn btn-dark category sales-btn ms-4" type="submit">Filter</button>
+            <input type="date" class="form-control date-range-input " name="from" onfocus="setMaxDate(this)" value="<%=from%>">
+						<input type="date" class="form-control ms-2 date-range-input" name="to" max="3000-01-01" onfocus="this.max=new Date().toISOString().split('T')[0]" value="<%=to%>">
+						<button class="btn btn-dark category sales-btn ms-2 btn-sm" type="submit">Filter</button>
 						</div>
 					 </form>
 				<div class="d-flex">
@@ -20,8 +20,6 @@
 					<button class="btn btn-dark category sales-btn ms-3 " id="downloadSalesPdf">Download Pdf</button>
 					</div>
 				</div>
-					
-			
 				</div> 	   	
 				<table class="table table-hover table-responsive">
 					<thead>
@@ -67,5 +65,15 @@
 				<% } %>
 			</div>
 	 </div> 
+
+<script>
+	function setMaxDate(input) {
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(today.getDate() - 1);
+    const maxDate = yesterday.toISOString().split('T')[0];
+    input.max = maxDate;
+}
+</script>
 
 	<%-include("../layouts/admin/footer.ejs")-%>

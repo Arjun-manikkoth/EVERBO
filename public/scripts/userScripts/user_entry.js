@@ -762,7 +762,7 @@ function cancelOrder(orderId) {
                     }
                     return response.json();
                 }).then((data) => {
-                    window.location.href = "/order";
+                    window.location.href = "/order_detail?id="+data._id;
                     resolve();
                 }).catch((error) => {
                     reject(error); 
@@ -897,7 +897,7 @@ function returnProduct(orderId) {
                     }
                     return response.json();
                 }).then((data) => {
-                    window.location.href = "/order";
+                  window.location.href = "/order_detail?id="+data._id;
                     resolve();
                 }).catch((error) => {
                     reject(error); 
@@ -1290,7 +1290,7 @@ function confirmOrder(e) {
   var discountData = document.getElementById("couponDiscount").value
 
 	if (parseInt(discountData) !== 0) {
-	console.log("coupon ond",typeof(discountData))
+	
 	const data = JSON.stringify({ coupon: code })
 
   fetch('/coupon_check', {
@@ -1952,22 +1952,290 @@ function referralRemove() {
 	document.getElementById("referralRemove").classList.add("hidden")
 }
 
-
 	
 //-----JS for Price Range slider-----
 
+let minPrice;
+let maxPrice
 $(function() {
 	$( "#slider-range" ).slider({
-	  range: true,
-	  min: 200,
-	  max: 3500,
-	  values: [ 200, 3500 ],
-	  slide: function( event, ui ) {
-		$( "#amount" ).val( "Rs." + ui.values[ 0 ] + " - Rs." + ui.values[ 1 ] );
-	  }
+			range: true,
+			min: 200,
+			max: 3500,
+			values: [ 200, 3500 ],
+			slide: function( event, ui ) {
+					$( "#amount" ).val( "Rs." + ui.values[ 0 ] + " - Rs." + ui.values[ 1 ] );
+			}
 	});
 	$( "#amount" ).val( "Rs." + $( "#slider-range" ).slider( "values", 0 ) +
-	  " - Rs." + $( "#slider-range" ).slider( "values", 1 ) );
+			" - Rs." + $( "#slider-range" ).slider( "values", 1 ) );
+
+	// Add event listener to filter button
+	$('.filter_button').on('click', function() {
+			 minPrice = $( "#slider-range" ).slider( "values", 0 );
+		   maxPrice = $("#slider-range").slider("values", 1);
+		
+		filterPrice(minPrice,maxPrice)
+
+	});
 });
 
 
+
+
+// Function to parse URL and update page based on query parameters
+function handleURLChange() {
+  const storedData = sessionStorage.getItem('pageState');
+  const updatedState = storedData ? JSON.parse(storedData) : {};
+
+  // If sessionStorage data is not available, parse URL parameters
+	if (!storedData) {
+		const urlParams = new URLSearchParams(window.location.search);
+
+		// Category
+		const category = urlParams.get('category');
+		if (category) {
+			updatedState.category = category;
+		}
+
+		// Sorting
+		const sortBy = urlParams.get('sortBy');
+		if (sortBy) {
+			updatedState.sortBy = sortBy;
+		}
+
+		// Price range
+		const priceRange = urlParams.get('priceRange');
+		if (priceRange) {
+			updatedState.priceRange = priceRange;
+		}
+
+		// Page
+		const page = parseInt(urlParams.get('page')) || 1;
+		if (page) {
+			updatedState.page = page;
+		}
+
+		// Search term
+		const searchTerm = urlParams.get('searchTerm');
+		if (searchTerm) {
+			updatedState.searchTerm = searchTerm;
+		}
+
+		//price min
+		const priceMin = urlParams.get('priceMin')
+		if (priceMin) {
+			updatedState.priceMin = priceMin
+		}
+
+		//price max
+		const priceMax = urlParams.get('priceMax')
+		if (priceMax) {
+			updatedState.priceMax = priceMax
+		}
+		
+	}
+  // Update state and page
+  updateState(updatedState);
+}
+
+// Function to update sessionStorage with page state
+function updateSessionStorage(key, value) {
+  const storedData = sessionStorage.getItem('pageState');
+  const currentState = storedData ? JSON.parse(storedData) : {};
+  currentState[key] = value;
+  sessionStorage.setItem('pageState', JSON.stringify(currentState));
+}
+
+// Function to update the page UI
+function updateState(newState) {
+
+	if (newState.category) {
+
+		var categList = document.querySelectorAll(".mme-2")
+		var categ = Array.from(categList)
+
+		categ.map((each) => {
+
+			if (each.value == newState.category) {
+				each.checked = true;
+			}
+		})
+	}
+
+	if (newState.searchTerm) {
+	var searchBar = document.getElementById('seachInput')
+		if (searchBar) {
+			searchBar.value = newState.searchTerm;
+			}
+	}
+	if (newState.sortBy) {
+		var sortSpan = document.getElementById('sortSpan')
+		if (sortSpan) {
+			sortSpan.innerHTML = newState.sortBy;
+
+			}
+
+	}
+	if (newState.minPrice && newState.maxPrice) {
+		$(function () {
+			const newMinPrice = newState.minPrice;
+			const newMaxPrice = newState.maxPrice;
+
+			// Initialize the slider with dynamic values
+			$("#slider-range").slider({
+				range: true,
+				min: 200,
+				max: 3500,
+				values: [newMinPrice, newMaxPrice],
+				slide: function (event, ui) {
+					$("#amount").val("Rs." + ui.values[0] + " - Rs." + ui.values[1]);
+				}
+			});
+
+			// Set the initial amount
+			$("#amount").val("Rs." + $("#slider-range").slider("values", 0) +
+				" - Rs." + $("#slider-range").slider("values", 1));
+
+		})
+  }
+}
+// Function to handle search button click
+const searchForm = document.getElementById("searchForm");
+if (searchForm) {
+	searchForm.addEventListener('submit', (e) => {
+		e.preventDefault()
+
+    const searchInput = document.querySelector('.search-bar');
+    const searchTerm = searchInput.value;
+
+    // Update sessionStorage with the latest search term
+    updateSessionStorage('searchTerm', searchTerm);
+
+
+    // Update URL with search term and other parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    urlParams.set('searchTerm', searchTerm);
+
+    window.location.search = urlParams.toString();
+  });
+}
+
+//Function to handle category
+function onlyOne(checkbox) {
+
+	var checkboxes = document.getElementsByName('check')
+	var categoryName = checkbox.value;
+
+	var data = sessionStorage.getItem('pageState')
+	var dataStored = JSON.parse(data)
+
+	// Update URL with search term
+	const urlParams = new URLSearchParams(window.location.search);
+
+		if (categoryName==dataStored?.category){
+
+			checkboxes.forEach((item) => {
+				if (item) item.checked = false
+			})
+			delete dataStored.category
+
+			sessionStorage.setItem('pageState', JSON.stringify(dataStored));
+
+			urlParams.delete('category')
+			
+			window.location.search = urlParams.toString();
+			
+	}
+	 else{
+		
+		checkboxes.forEach((item) => {
+			if (item !== checkbox) item.checked = false
+	})
+     
+	
+    // Update sessionStorage with the latest category name
+    updateSessionStorage('category', categoryName);
+
+
+		urlParams.set('category', categoryName);
+	
+    window.location.search = urlParams.toString();
+	}
+	
+}
+
+function sortProducts(sort) {
+
+	var sortBy = sort.innerHTML;
+  
+    // Update sessionStorage with the sort name
+    updateSessionStorage('sortBy', sortBy);
+
+		const urlParams = new URLSearchParams(window.location.search);
+		urlParams.set('sortBy', sortBy);
+
+		window.location.search = urlParams.toString();
+
+}
+
+function pageSelect(page) {
+
+	var page = page.innerHTML;
+
+   // Update sessionStorage with the page no
+	 updateSessionStorage('page', page);
+	
+		 // Update URL with page no
+		 const urlParams = new URLSearchParams(window.location.search);
+	   urlParams.set('page', page);
+
+
+		 window.location.search = urlParams.toString();
+
+}
+
+function filterPrice(minPrice,maxPrice) {
+
+	var minPrice = minPrice;
+	var maxPrice = maxPrice;
+  
+	// Update sessionStorage with the price range
+	updateSessionStorage('minPrice', minPrice);
+	updateSessionStorage('maxPrice', maxPrice);
+
+	 // Update URL with price range
+	 const urlParams = new URLSearchParams(window.location.search);
+	 urlParams.set('minPrice', minPrice);
+   urlParams.set('maxPrice', maxPrice);
+ 
+
+	 window.location.search = urlParams.toString();
+
+}
+
+
+// Initialize page based on URL
+handleURLChange();
+
+
+//clear all filters function
+var clearFilters = document.getElementById("clearFilters")
+
+if (clearFilters) {
+
+	clearFilters.addEventListener("click", clearAllFilters)
+	
+	function clearAllFilters() {
+
+		const storedData = sessionStorage.getItem('pageState');
+
+		if (storedData) {
+			sessionStorage.removeItem('pageState');
+         
+			window.location.href='/shop'
+		}
+		
+	}
+
+}

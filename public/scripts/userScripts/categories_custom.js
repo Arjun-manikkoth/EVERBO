@@ -334,17 +334,7 @@ jQuery(document).ready(function($)
 	        });
 
     		// Short based on the value from the sorting_type dropdown
-	        sortTypes.each(function()
-	        {
-	        	$(this).on('click', function()
-	        	{
-	        		$('.type_sorting_text').text($(this).text());
-	        		var option = $(this).attr('data-isotope-option');
-	        		option = JSON.parse( option );
-    				$('.product-grid').isotope( option );
-	        	});
-	        });
-
+	   
 	        // Show only a selected number of items
 	        sortNums.each(function()
 	        {

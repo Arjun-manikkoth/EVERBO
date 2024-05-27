@@ -454,3 +454,97 @@ margin-top: 8px;
 a{
 	text-decoration: none;
 }
+.widget-content{
+	box-shadow: 0 .46875rem 2.1875rem rgba(4, 9, 20, .03), 0 .9375rem 1.40625rem rgba(4, 9, 20, .03), 0 .25rem .53125rem rgba(4, 9, 20, .05), 0 .125rem .1875rem rgba(4, 9, 20, .03);
+	border-width: 0;
+	transition: all .2s;
+}
+
+.bg-midnight-bloom {
+  background-image: linear-gradient(-20deg, #1f1f1f 0%, #4e4e4e 100%) !important; /* Dark gray gradient */
+}
+
+.bg-arielle-smile {
+  background-image: radial-gradient(circle 248px at center, #fe7553 0%, #faa767 100%) !important; /* Warm gradient from orange to pink */
+}
+
+.bg-grow-early {
+  background-image: linear-gradient(to top, #e96443 0%, #904e95 100%) !important; /* Vibrant orange to purple gradient */
+}
+
+.bg-premium-dark {
+  background-image: linear-gradient(to right, #3a0ca3 0%, #240046 100%) !important; /* Dark purple to black gradient */
+}
+
+.bg-sunset-glow {
+  background-image: linear-gradient(to right, #ff512f 0%, #dd2476 100%) !important; /* Deep orange to magenta gradient */
+}
+
+.bg-royal-gold {
+  background-image: linear-gradient(to right, #f4be1b 0%, #c29202 100%) !important; /* Luxurious gold gradient */
+}
+
+.top-data{
+margin-top: 50px;
+}
+.top-ten-div{
+	margin-top: 150px;
+}
+.graph-div{
+	margin-top: 125px ;
+}
+.bar-chart-div{
+	margin-top: 50px;
+	margin-left: 150px;
+	margin-right: 150px;
+}
+.widget-content .widget-content-wrapper {
+	display: flex;
+	flex: 1;
+	position: relative;
+	align-items: center;
+}
+.text-white {
+	color: #fff !important;
+}
+
+.widget-content .widget-content-left .widget-heading {
+	opacity: .8;
+	font-weight: 700;
+}
+.widget-content .widget-content-right {
+	margin-left: auto;
+}
+.widget-content .widget-numbers {
+	font-weight: 700;
+	font-size: 1.8rem;
+	display: block;
+}.top-data-row{
+	margin-top: 25px;
+}
+.widget-numbers{
+	font-family: 'Times New Roman', Times, serif!important;
+}
+.best-title{
+	text-align: center;
+	font-weight: 700;
+	font-size: 19px;
+	color: #fe4c50;
+   background-color: rgb(253, 251, 251)!important;
+}
+.card-content{
+	margin-top: 22px;
+}
+.sales-title{
+	font-weight: 600;
+	font-size: 18px;
+   background-color: rgb(253, 251, 251)!important;
+}
+.top-selling{
+	box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  border-width: 0;	
+}
+.img-top-products{
+	width: 100%;
+  height: auto;;
+}

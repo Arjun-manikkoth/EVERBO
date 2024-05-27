@@ -70,17 +70,17 @@ user_route.get("/shop", auth.isLogin,blockCheck, shopController.loadShop);
 //individual product page
 user_route.get("/product",auth.isLogin,blockCheck, shopController.loadProduct);
 
-//price low to high filter
-user_route.get("/price_low_high",blockCheck, auth.isLogin, shopController.priceAscending)
+// //price low to high filter
+// user_route.get("/price_low_high",blockCheck, auth.isLogin, shopController.priceAscending)
 
-//price low to high filter
-user_route.get("/price_high_low",blockCheck, auth.isLogin, shopController.priceDescending)
+// //price low to high filter
+// user_route.get("/price_high_low",blockCheck, auth.isLogin, shopController.priceDescending)
 
-//name ascending sort
-user_route.get("/name_ascending",blockCheck, auth.isLogin, shopController.alphabetAscending)
+// //name ascending sort
+// user_route.get("/name_ascending",blockCheck, auth.isLogin, shopController.alphabetAscending)
 
-//name descending sort
-user_route.get("/name_descending",blockCheck, auth.isLogin, shopController.alphabetDescending)
+// //name descending sort
+// user_route.get("/name_descending",blockCheck, auth.isLogin, shopController.alphabetDescending)
 
 
 //---------------------------------Profile Management-----------------------------------
@@ -230,5 +230,16 @@ user_route.get("/add_to_wishlist",blockCheck, auth.isLogin, wishlistController.w
 
 //remove wishlist product 
 user_route.get("/remove_wishlist/:prodId",blockCheck, auth.isLogin, wishlistController.removeWishlist)
+
+
+//------------------------------------------------------------------------------------------
+
+//For invalid routes
+user_route.get('*', function(req, res){
+    
+  res.render("404")
+    
+  })
+
 
 module.exports = user_route;

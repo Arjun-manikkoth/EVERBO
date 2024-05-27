@@ -1,12 +1,10 @@
 <%-include("../layouts/user/header.ejs")-%>
 
-
 	<div class="container single_product_container">
 		<div class="row">
 			<div class="col">
 
 				<!-- Breadcrumbs -->
-
 				<div class="breadcrumbs d-flex flex-row align-items-center">
 					<ul>
 						<li><a href="/">Home</a></li>
@@ -14,9 +12,8 @@
 						<li class="active"><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i>Single Product</a></li>
 					</ul>
 				</div>
-
 			</div>
-		</div>
+	 </div>
 
 		<div class="row">
 			<div class="col-lg-7">
@@ -75,8 +72,6 @@
 							<li style="background: #60b3f3"></li>
 						</ul>
 					</div>
-
-					
 					<div class="quantity d-flex  flex-sm-row add-buttons">
 				    <div>
               <a href="/add_to_cart?prodId=<%=product._id%>"><button type="button" class="red_buttons add_to_cart_buttons addtocart-btn">Add To Cart</button></a>
@@ -85,12 +80,9 @@
               <a href="/add_to_wishlist?prodId=<%=product._id%>"><button type="button" class="red_buttons add_to_cart_buttons addtocart-btn">Add To Wishlist</button></a>
 						</div>
 					</div>
-	
 				</div>
 			</div>
 		</div>
-
 	</div>
-
 
 <%-include("../layouts/user/footer.ejs")-%>

@@ -12,10 +12,10 @@
 						<li class="active"><a href="/shop"><i class="fa fa-angle-right" aria-hidden="true"></i>Shop</a></li>
 					</ul>
 					<div class="mt-4">
-						<form method="get" action="/shop">
+						<form id="searchForm">
 							<div class="d-flex">
-							<input type="text" class="search-bar" name="search">
-							<button class="btn profile-button btn-sm search-button"><i class="fa fa-search search-icon" aria-hidden="true"></i></button>
+							<input type="search" class="search-bar" id="seachInput" name="search">
+							<button type="submit" class="btn profile-button btn-sm search-button"><i class="fa fa-search search-icon" aria-hidden="true"></i></button>
 							 </div>	
 						</form>	
 					</div>			
@@ -26,40 +26,50 @@
 
 				<div class="sidebar">
 					<div class="sidebar_section">
+						<div class="clear-filters-div">
+							<button class="btn profile-button clear-filters btn-sm" id="clearFilters">Clear Filters</button>
+						</div>
+						<hr>
 						<div class="sidebar_title">
 							<h5>Product Category</h5>
 						</div>
 						<ul class="sidebar_categories">
-              
+              <form id="categSelect">
+								<div class="mt-5">
 							<%category.forEach((categ)=>{%>
 								<%if(categ.is_deleted==0){%>
-							<li><a href="#"><%=categ.name%></a></li>
+							<li>
+								   <div class="d-flex align-items-center justify-content-between">
+										<div class="pt-1">
+						          <label for="categoryFilter"><%=categ.name%></label>
+										</div>
+										<div class="ml-2 pr-4">
+											<input type="checkbox" id="categoryFilter" name="check"  class="mme-2" value="<%=categ.name%>" onclick="onlyOne(this)"  >
+										</div>
+									 </div>	
+							</li>
 							<%}%>
 					   <%})%>
-
+						</div>
+						</form>
 						</ul>
 					</div>
-
 					<!-- Price Range Filtering -->
 					<div class="sidebar_section">
 						<div class="sidebar_title">
 							<h5>Filter by Price</h5>
 						</div>
 							<div class="price-range-slider">
-  
 								<p class="range-value">
 									<input type="text" id="amount" readonly>
 								</p>
-								<div id="slider-range" class="range-bar"></div>
-								
+								<div id="slider-range" class="range-bar"></div>	
 							</div>
-						<div class="filter_button"><span>filter</span></div>
+						<div class="filter_button" onclick="filterPrice()"><span>filter</span></div>
 					</div>
-
 				</div>
 
 				<!-- Main Content -->
-
 				<div class="main_content">
 
 					<!-- Products -->
@@ -73,14 +83,13 @@
 								<div class="product_sorting_container product_sorting_container_top">
 									<ul class="product_sorting">
 										<li>
-											<span class="type_sorting_text">Default Sorting</span>
+											<span class="type_sorting_text" id="sortSpan">Default Sorting</span>
 											<i class="fa fa-angle-down"></i>
 											<ul class="sorting_type">
-												<li class="type_sorting_btn" ><a href="/price_low_high"><span >Price High to Low</span></a></li>
-												<li class="type_sorting_btn" ><a href="/price_high_low"><span>Price Low to High</span></a></li>
-												<li class="type_sorting_btn" ><a href="/name_ascending"><span>aA-zZ</span></a></li>
-												<li class="type_sorting_btn" ><a href="/name_descending"><span>Zz-Aa</span></a></li>
-
+												<li class="type_sorting_btn" ><span onclick="sortProducts(this)" >Price High to Low</span></li>
+												<li class="type_sorting_btn" ><span onclick="sortProducts(this)" >Price Low to High</span></li>
+												<li class="type_sorting_btn" ><span onclick="sortProducts(this)" >aA-zZ</span></li>
+												<li class="type_sorting_btn" ><span onclick="sortProducts(this)" >Zz-Aa</span></li>
 											</ul>
 										</li>								
 									</ul>
@@ -89,15 +98,13 @@
 											<a href="?page=<%=currentPage%>" class="anchor"><li><%=currentPage%></li></a>
 											<ul class="page_selection">
 												<%for(let i=1;i<=totalPages;i++){%>
-												<a href="?page=<%=i%>" class="anchor"><li><%=i%></li></a>
+												<span class="anchor"><li><%=i%></li></span>
 												<%}%>
 											</ul>
 										</div>
 									  <a href="?page=<%=totalPages%>" class="anchor"><div class="page_total"><span>of</span><%=totalPages%></div></a>
-
 										<div id="next_page" class="page_next"><a href=""><i class="fa fa-long-arrow-right" aria-hidden="true"></i></a></div>
 									</div>
-									
 								</div>
 
 								<!-- Product Grid -->
@@ -133,19 +140,17 @@
 								<!-- Product Sorting -->
 
 								<div class="product_sorting_container product_sorting_container_bottom clearfix">
-									
 									<div class="pages d-flex flex-row align-items-center">
 										<div class="page_current">
-											<a href="?page=<%=currentPage%>" class="anchor-footer"><li><%=currentPage%></li></a>
+											<span ><li><%=currentPage%></li></span>
 											<ul class="page_selection">
 												<%for(let i=1;i<=totalPages;i++){%>
-												<a href="?page=<%=i%>" class="anchor"><li><%=i%></li></a>
+												<li onclick="pageSelect(this)"><%=i%></li>
 												<%}%>
 											</ul>
 										</div>
-									  <a href="?page=<%=totalPages%>" class="anchor"><div class="page_total"><span>of</span><%=totalPages%></div></a>
-
-										<div id="next_page" class="page_next"><a href=""><i class="fa fa-long-arrow-right" aria-hidden="true"></i></a></div>
+									  <span><div class="page_total"><span>of</span><%=totalPages%></div></span>
+										<div id="next_page" class="page_next"><i class="fa fa-long-arrow-right" aria-hidden="true"></i></div>
 									</div>
 								</div>
 							</div>
@@ -155,9 +160,8 @@
 			</div>
 		</div>
 	</div>
-
+	
 	<!-- Benefit -->
-
 	<div class="benefit">
 		<div class="container">
 			<div class="row benefit_row">

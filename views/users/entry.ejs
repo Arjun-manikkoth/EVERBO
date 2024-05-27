@@ -1,7 +1,6 @@
 <%-include("../layouts/user/header.ejs")-%>
 
  <div class="containerbox">
-
 	<div class="wrapper">
 		<div class="title-text">
 			 <div class="title login">
@@ -11,7 +10,6 @@
 					Register
 			 </div>
 		</div>
-	
 		<% if(locals.message_signup) {%>
 			<div class="signup-error">
 				<span class="message" id="signup-error"><%=message_signup%></span>
@@ -25,16 +23,13 @@
 					<label for="signup" class="slide signup">Signup</label>
 					<div class="slider-tab"></div>
 			 </div>
-
 			 <div class="form-inner">
 					<form action="/user_login" class="login" method="post" onsubmit="return validatelogin()">
-
 							<% if(locals.message_signin) {%>
 								<div class="error">
 									<span class="message" id="signin-error"><%=message_signin%></span>
 								</div>
 									 <%}%>
-					
 						 <div class="field">
 								<input type="text"name="email" placeholder="Email Address" id="email-login" oninput="clear_error('signin-error')">			
 						 </div>
@@ -54,15 +49,12 @@
 								<input type="submit" class="submit" value="Login">
 						 </div>
 						 </div>
-						 
 						 <div class="signup-link">
 								Don't have an account? <a href="">Signup now</a>
 						 </div>
 			
-		  
 					</form>
 					<form action="/user_registration" class="signup" method="post" onsubmit="return validatesignup()">
-			
 						 <div class="field">
 								<input type="text" name="name"  placeholder="Name" id="name-signup" oninput="clear_error('signup-error')" >
 						 </div>

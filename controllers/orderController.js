@@ -2,6 +2,7 @@ const Order = require("../models/orderModel")
 const User = require("../models/userModel")
 const Product = require("../models/productModel")
 
+
 //--------------------------------Admin Side - Order Management-------------------------------------------
 
 
@@ -12,7 +13,7 @@ const orderLoad = async (req, res) => {
     if (req.query.page) {
       page=req.query.page
     }
-    let limit = 5;
+    let limit = 10;
     let count = await Order.find({}).countDocuments()
     let totalPages=Math.ceil(count/limit)
     const orderData = await Order.find({grandTotalCost:{$exists:true,$ne:null}}).limit(limit).skip((page-1)*limit).sort({createdAt:-1}).populate("addressChosen").populate("userId").populate("cartData.productId")
@@ -33,7 +34,7 @@ const orderLoad = async (req, res) => {
 const orderDetailLoad = async (req, res) => {
   try {
 
-    const orderData = await Order.findOne({_id:req.query.id}).populate("addressChosen").populate("userId").populate("cartData.productId")
+    const orderData = await Order.findOne({_id:req.query.id}).populate("addressChosen").populate("userId").populate("cartData.productId").populate("referralData.referredUser")
     if (orderData) {
       res.render("order_detail", { orderData })
     } 

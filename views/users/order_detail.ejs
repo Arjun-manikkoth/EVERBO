@@ -10,8 +10,8 @@
               <h4 class="mb-0">Order</h4>
             </div>
             <div class="card-body">
-              <!-- Single item -->
 
+              <!-- Single item -->
                <%orderData.cartData.forEach((prod)=>{%>
               <div class="row">
                 <div class="col-lg-3 col-md-12 mb-4 mb-lg-0">
@@ -77,7 +77,6 @@
                 <%}%>
               </div>
               <div class="text-center">
-      
                 <% if (orderData.orderStatus === "Pending" || orderData.orderStatus === "Shipped") { %>
                      <%if(orderData.paymentStatus==="Complete"){%>
                   <button class="btn mx-3 btn-danger" type="button" onclick="cancelOrder('<%=orderData._id%>')">Cancel Order</button>
@@ -169,7 +168,6 @@
                 </li>
                 <%}%>
               </ul>
-  
               <a href="/shop" class="cart-span"><button type="button" class="btn checkout-btn btn-lg btn-block">Continue Shopping</button></a>
             </div>
           </div>
