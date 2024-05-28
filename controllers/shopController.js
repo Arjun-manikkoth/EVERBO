@@ -41,7 +41,7 @@ const loadShop = async (req, res) => {
       maxPrice = parseInt(req.query.maxPrice);
     }
 
-    let sortBy = 'createdAt'; 
+    let sortBy = 'createdAt';
     if (req.query.sortBy) {
       switch (req.query.sortBy) {
         case 'Price Low to High':
@@ -93,13 +93,26 @@ const loadShop = async (req, res) => {
     req.session.cartCount = userData.cart.length;
     req.session.wishlistCount = userData.wishlist.length;
 
-    res.render("shop", {
-      product,
-      category,
-      currentPage: page,
-      totalPages,
-      session: req.session
-    });
+    if (product.length != 0) {
+      res.render("shop", {
+        product,
+        category,
+        currentPage: page,
+        totalPages,
+        session: req.session
+      });
+    }
+    else {
+      res.render("shop", {
+        product,
+        category,
+        currentPage: 1,
+        totalPages: 1,
+        session:req.session
+        
+      })
+    }
+
   } catch (error) {
     console.log(error.message);
   }

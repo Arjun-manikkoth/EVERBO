@@ -32,11 +32,11 @@ app.use("/", userRoute);
 
 
 //creating server
-const PORT = 3000||process.env.PORT;
+const PORT = process.env.PORT||3000;
 app.listen(PORT, (error) => { 
    
   if (!error) {
-    console.log("server running at the port http://localhost:3000");
+    console.log("server running");
   }
   else {
     console.log("Error occured,The server can't start",error)

@@ -306,7 +306,7 @@ const confirmOrder = async (req, res) => {
         };
         instance.orders.create(options, function(err, order) {
           if(!err) 
-          res.json(order) 
+            res.json({ order ,keyId:RAZORPAY_KEY_ID}) 
         else
           res.send(err);
         });
@@ -336,8 +336,10 @@ const confirmOrder = async (req, res) => {
           receipt: "reciept_1020"
         };
         instance.orders.create(options, function(err, order) {
-          if(!err) 
-          res.json(order) 
+          if (!err) {
+            console.log(order)
+            res.json({ order, keyId: RAZORPAY_KEY_ID })
+          }
         else
           res.send(err);
         });

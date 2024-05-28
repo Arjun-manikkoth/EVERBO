@@ -6,7 +6,7 @@ const random = require("random-string-generator");
 const Order = require("../models/orderModel");
 const Product = require("../models/productModel");
 const Coupon = require("../models/couponModel");
-
+const { USER_GMAIL, USER_PASSWORD} = process.env;
 
  
 // ---------------------------------------------User Account Management-------------------------------------------------
@@ -32,12 +32,12 @@ const sentOtpVerificationMail = async (email,id) => {
       secure: false,
       requireTLS: true,
       auth: {
-        user: "itsmearjun1028@gmail.com",
-        pass: "ldhp gham wlcl ofac"
+        user: USER_GMAIL,
+        pass: USER_PASSWORD
       }
     });
     const mailOptions = {
-      from: "itsmearjun1028@gmail.com",
+      from: USER_GMAIL,
       to: email,
       subject: "Verificaton mail",
       html: `<p>Enter this code <b>${generate_otp}</b> to verify your account.</p><p>This code expires in <b>60 seconds</b></p>`
@@ -71,12 +71,12 @@ const sentResetPasswordMail = async (email,id) => {
       secure: false,
       requireTLS: true,
       auth: {
-        user: "itsmearjun1028@gmail.com",
-        pass: "ldhp gham wlcl ofac"
+        user: USER_GMAIL,
+        pass: USER_PASSWORD
       }
     });
     const mailOptions = {
-      from: "itsmearjun1028@gmail.com",
+      from: USER_GMAIL,
       to: email,
       subject: "Password Reset Link",
       html: `<p>Click on this <a href="${resetLink}">link<a/> to reset your account password </p>`
@@ -107,12 +107,12 @@ const sentReferralMail = async (req,res) => {
       secure: false,
       requireTLS: true,
       auth: {
-        user: "itsmearjun1028@gmail.com",
-        pass: "ldhp gham wlcl ofac"
+        user: USER_GMAIL,
+        pass: USER_PASSWORD
       }
     });
     const mailOptions = {
-      from: "itsmearjun1028@gmail.com",
+      from: USER_GMAIL,
       to: req.body.email,
       subject: "Enjoy a 10% Discount on Your Fashion Purchase with This Referral Code!",
       html: `

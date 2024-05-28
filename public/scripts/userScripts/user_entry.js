@@ -1330,10 +1330,10 @@ function confirmOrder(e) {
 					}else{
 						
 						var options = { 
-							"key": "rzp_test_bePMUEE1PKoNJ7",  
-							"amount": data.amount,  
+							"key": data.keyId,  
+							"amount": data.order.amount,  
 							"currency": "INR",  
-							"order_id":data.id,
+							"order_id":data.order.id,
 							"handler": function (response){ 
 									
 								fetch('/razorpay_status', {
@@ -1433,10 +1433,10 @@ function confirmOrder(e) {
 					}else{
 						
 						var options = { 
-							"key": "rzp_test_bePMUEE1PKoNJ7",  
-							"amount": data.amount,  
+							"key": data.keyId,  
+							"amount": data.order.amount,  
 							"currency": "INR",  
-							"order_id":data.id,
+							"order_id":data.order.id,
 							"handler": function (response){ 
 									
 								fetch('/razorpay_status', {
@@ -1528,10 +1528,10 @@ function orderNew(e) {
 		.then((data) => {
 
 				var options = { 
-					"key": "rzp_test_bePMUEE1PKoNJ7",  
-					"amount": data.amount,  
+					"key": data.keyId,  
+					"amount": data.order.amount,  
 					"currency": "INR",  
-					"order_id":data.id,
+					"order_id":data.order.id,
 					"handler": function (response){ 
 							
 						fetch('/razorpay_status', {
