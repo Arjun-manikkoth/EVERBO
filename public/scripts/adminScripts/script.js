@@ -505,6 +505,10 @@ function deleteProduct(prodId) {
 		cancelButtonText: 'No'
 	}).then((result) => {
 		if (result.isConfirmed) {
+     
+			   
+
+
 			window.location.href = "/admin/delete_products?id="+prodId;
 		}
 	});

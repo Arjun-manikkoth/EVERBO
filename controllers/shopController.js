@@ -133,93 +133,11 @@ const loadProduct = async (req, res) => {
   }
 }
 
-//load shop page with products view
-const priceAscending = async (req, res) => {
-  try {
-    let page = 1;
-    if (req.query.page) {
-      page=req.query.page
-    }
-    let limit = 4
 
-    const category = await Category.find({is_listed:true})
-    const product = await Product.find({is_listed:true,is_deleted:0}).sort({ price: -1 }).skip((page - 1) * limit).limit(limit)
-    const count = await Product.find({is_listed:true,is_deleted:0}).sort({ price: -1 }).skip((page - 1) * limit).limit(limit).countDocuments()
-    let totalPages=Math.ceil(count/limit)
-    res.render("shop", {product,category,session:req.session,totalPages,currentPage:page})
-  }
-  catch (error) { 
-    console.log(error.message);
-  }
-}
-
-//load shop page with products view
-const priceDescending = async (req, res) => {
-  try {
-    let page = 1;
-    if (req.query.page) {
-      page=req.query.page
-    }
-    let limit = 4
-
-    const category = await Category.find({is_listed:true,is_deleted:0})
-    const product = await Product.find({is_listed:true,is_deleted:0}).sort({ price: 1 }).skip((page - 1) * limit).limit(limit)
-    const count = await Product.find({is_listed:true,is_deleted:0}).sort({ price: 1 }).skip((page - 1) * limit).limit(limit).countDocuments()
-    let totalPages=Math.ceil(count/limit)
-    res.render("shop", {product,category,session:req.session,totalPages,currentPage:page})
-  }
-  catch (error) { 
-    console.log(error.message);
-  }
-}
-
-//load shop page with products view
-const alphabetDescending = async (req, res) => {
-  try {
-    let page = 1;
-    if (req.query.page) {
-      page=req.query.page
-    }
-    let limit = 4
-
-    const category = await Category.find({is_listed:true,is_deleted:0})
-    const product = await Product.find({is_listed:true,is_deleted:0}).sort({ name: -1 }).skip((page - 1) * limit).limit(limit)
-    const count = await Product.find({is_listed:true,is_deleted:0}).sort({ name :-1 }).skip((page - 1) * limit).limit(limit).countDocuments()
-    let totalPages=Math.ceil(count/limit)
-    res.render("shop", {product,category,session:req.session,totalPages,currentPage:page})
-  }
-  catch (error) { 
-    console.log(error.message);
-  }
-}
-
-//load shop page with products view
-const alphabetAscending = async (req, res) => {
-  try {
-    let page = 1;
-    if (req.query.page) {
-      page=req.query.page
-    }
-    let limit = 4
-
-    const category = await Category.find({is_listed:true,is_deleted:0})
-    const product = await Product.find({is_listed:true,is_deleted:0}).sort({ name: 1 }).skip((page - 1) * limit).limit(limit)
-    const count = await Product.find({is_listed:true,is_deleted:0}).sort({ name: 1 }).skip((page - 1) * limit).limit(limit).countDocuments()
-    let totalPages=Math.ceil(count/limit)
-    res.render("shop", {product,category,session:req.session,totalPages,currentPage:page})
-  }
-  catch (error) { 
-    console.log(error.message);
-  }
-}
 
 module.exports = {
   loadLanding,
   loadProduct,
-  //priceAscending,
- // priceDescending,
- // alphabetAscending,
- // alphabetDescending,
   loadShop
 }
 

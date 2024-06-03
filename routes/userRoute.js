@@ -68,19 +68,7 @@ user_route.post("/reset_password",auth.isLogout, userController.passwordReset);
 user_route.get("/shop", auth.isLogin,blockCheck, shopController.loadShop);
 
 //individual product page
-user_route.get("/product",auth.isLogin,blockCheck, shopController.loadProduct);
-
-// //price low to high filter
-// user_route.get("/price_low_high",blockCheck, auth.isLogin, shopController.priceAscending)
-
-// //price low to high filter
-// user_route.get("/price_high_low",blockCheck, auth.isLogin, shopController.priceDescending)
-
-// //name ascending sort
-// user_route.get("/name_ascending",blockCheck, auth.isLogin, shopController.alphabetAscending)
-
-// //name descending sort
-// user_route.get("/name_descending",blockCheck, auth.isLogin, shopController.alphabetDescending)
+user_route.get("/product", auth.isLogin, blockCheck, shopController.loadProduct);
 
 
 //---------------------------------Profile Management-----------------------------------
@@ -207,9 +195,6 @@ user_route.post("/confirm_order",blockCheck, auth.isLogin, cartController.confir
 
 //confirm order
 user_route.get("/confirm_order",blockCheck, auth.isLogin, cartController.orderPlaced)
-
-//payment option cod check
-//user_route.get("/check_cod",blockCheck, auth.isLogin, cartController.checkCod)
 
 //payment option wallet balance check
 user_route.get("/check_wallet",blockCheck, auth.isLogin, cartController.checkWallet)

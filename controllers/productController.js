@@ -1,5 +1,8 @@
 const Product = require("../models/productModel")
 const Category = require("../models/categoryModel")
+const Order = require("../models/orderModel")
+
+
 
 
 //-----------------------------------------Admin Side Product Management------------------------------------------------
@@ -181,8 +184,11 @@ const updateProductThumb= async (req, res) =>
 const deleteProduct = async (req, res) =>
 {
   try {
+
     const id = req.query.id;
-    await Product.updateOne({ _id: id },{$set:{is_deleted:1}});
+
+    await Product.updateOne({ _id: id }, { $set: { is_deleted: 1 } });
+    
     res.redirect("/admin/products");
   }
   catch (error) {
