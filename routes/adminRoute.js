@@ -1,184 +1,189 @@
 const express = require("express");
 const admin_route = express();
-const session=require("express-session")
-const adminController = require("../controllers/adminController")
-const productController = require("../controllers/productController")
-const categoryController = require("../controllers/categoryController")
-const orderController = require("../controllers/orderController")
-const couponController = require("../controllers/couponController")
-const dashboardController = require("../controllers/dashboardController")
-const auth = require("../middlewares/adminAuth")
-const upload = require('../middlewares/multer')
-const sharpCrop =require('../middlewares/sharp')
+const session = require("express-session");
+const adminController = require("../controllers/adminController");
+const productController = require("../controllers/productController");
+const categoryController = require("../controllers/categoryController");
+const orderController = require("../controllers/orderController");
+const couponController = require("../controllers/couponController");
+const dashboardController = require("../controllers/dashboardController");
+const auth = require("../middlewares/adminAuth");
+const upload = require("../middlewares/multer");
+const sharpCrop = require("../middlewares/sharp");
 
-const productMainCropSize = [
-  { width: 136, height: 136 }
-];
+const productMainCropSize = [{ width: 136, height: 136 }];
 
-const thumbnailCropSize = [
-  { width: 235, height: 235}
-];
+const thumbnailCropSize = [{ width: 235, height: 235 }];
 
-const categoryCropSize = [
-  { width: 370, height: 280 }
-];
-
+const categoryCropSize = [{ width: 370, height: 280 }];
 
 //setting the path for view engine
-admin_route.set("views","./views/admin")
+admin_route.set("views", "./views/admin");
 
-//admin session  
-admin_route.use(session({
-  secret: 'secretadmin',
-  resave: true,
-  saveUninitialized:false
-}));
+//admin session
+admin_route.use(
+    session({
+        secret: "secretadmin",
+        resave: true,
+        saveUninitialized: false,
+    })
+);
 
 //---------------------------------Admin Login-------------------------------------------------
 
 //Admin login page load
-admin_route.get("/",auth.isLogout,adminController.loadLogin)
+admin_route.get("/", auth.isLogout, adminController.loadLogin);
 
 //Admin login verify
-admin_route.post("/",auth.isLogout,adminController.verifyLogin)
+admin_route.post("/", auth.isLogout, adminController.verifyLogin);
 
 //Admin logout
-admin_route.get("/logout", auth.isLogin, adminController.logout)
-
+admin_route.get("/logout", auth.isLogin, adminController.logout);
 
 //-----------------------------------Dashboard----------------------------------------------
 
 //Admin dashboard load
-admin_route.get("/dashboard", auth.isLogin, dashboardController.loadDashboard)
+admin_route.get("/dashboard", auth.isLogin, dashboardController.loadDashboard);
 
 //Admin dashboard load
-admin_route.post("/dashboard_filter", auth.isLogin, dashboardController.dashboardFilter)
+admin_route.post("/dashboard_filter", auth.isLogin, dashboardController.dashboardFilter);
 
 //Admin sales data load
-admin_route.get("/sales_report", auth.isLogin, dashboardController.salesDataLoad)
+admin_route.get("/sales_report", auth.isLogin, dashboardController.salesDataLoad);
 
 //download sales report pdf
-admin_route.get("/download_report", auth.isLogin, dashboardController.downloadSalesPdf)
+admin_route.get("/download_report", auth.isLogin, dashboardController.downloadSalesPdf);
 
 //download sales report csv
-admin_route.get("/download_csv", auth.isLogin, dashboardController.downloadSalesCsv)
+admin_route.get("/download_csv", auth.isLogin, dashboardController.downloadSalesCsv);
 
 //-----------------------------------User Management----------------------------------------
 
 //Admin users page load
-admin_route.get("/users",auth.isLogin,adminController.usersLoad)
+admin_route.get("/users", auth.isLogin, adminController.usersLoad);
 
 //block users
-admin_route.get("/block", auth.isLogin, adminController.userBlock)
-
+admin_route.get("/block", auth.isLogin, adminController.userBlock);
 
 //-----------------------------------Products Management------------------------------------
 
-
 //Admin products page load
-admin_route.get("/products",auth.isLogin, productController.productsLoad)
+admin_route.get("/products", auth.isLogin, productController.productsLoad);
 
 //Add products page load
-admin_route.get("/add_products",auth.isLogin, productController.addProductLoad)
+admin_route.get("/add_products", auth.isLogin, productController.addProductLoad);
 
 //add product to db
-admin_route.post("/add_products", upload.array('image', 3),sharpCrop(productMainCropSize), productController.addProduct)
+admin_route.post(
+    "/add_products",
+    upload.array("image", 3),
+    sharpCrop(productMainCropSize),
+    productController.addProduct
+);
 
 //product list unlist
-admin_route.get("/product_view",auth.isLogin, productController.productView)
+admin_route.get("/product_view", auth.isLogin, productController.productView);
 
 //Edit product page load
-admin_route.get("/edit_products",auth.isLogin, productController.editProductLoad)
-        
+admin_route.get("/edit_products", auth.isLogin, productController.editProductLoad);
+
 //update product to db
-admin_route.post("/update_product",auth.isLogin, productController.updateProduct)
+admin_route.post("/update_product", auth.isLogin, productController.updateProduct);
 
 //update product thumbnail to db
-admin_route.post("/update_product_thumb", upload.single('image'),sharpCrop(thumbnailCropSize), productController.updateProductThumb)
+admin_route.post(
+    "/update_product_thumb",
+    upload.single("image"),
+    sharpCrop(thumbnailCropSize),
+    productController.updateProductThumb
+);
 
 //delete product
-admin_route.get("/delete_products", auth.isLogin, productController.deleteProduct)
-
+admin_route.get("/delete_products", auth.isLogin, productController.deleteProduct);
 
 //-----------------------------------Category Management-----------------------------------
 
 //Admin category page load
-admin_route.get("/categories",auth.isLogin, categoryController.categoriesLoad)
+admin_route.get("/categories", auth.isLogin, categoryController.categoriesLoad);
 
 //Add category page load
-admin_route.get("/add_category",auth.isLogin,categoryController.addCategoryLoad)
+admin_route.get("/add_category", auth.isLogin, categoryController.addCategoryLoad);
 
 //add category to db
-admin_route.post("/add_category", upload.single('image'),sharpCrop(categoryCropSize), categoryController.addCategory)
+admin_route.post(
+    "/add_category",
+    upload.single("image"),
+    sharpCrop(categoryCropSize),
+    categoryController.addCategory
+);
 
 //category list unlist
-admin_route.get("/category_view", auth.isLogin, categoryController.categoryView)
+admin_route.get("/category_view", auth.isLogin, categoryController.categoryView);
 
 //Edit category page load
-admin_route.get("/edit_category",auth.isLogin, categoryController.editCategoryLoad)
+admin_route.get("/edit_category", auth.isLogin, categoryController.editCategoryLoad);
 
 //Update category to db
-admin_route.post("/update_category", upload.single('image'),sharpCrop(categoryCropSize), categoryController.updateCategory)
+admin_route.post(
+    "/update_category",
+    upload.single("image"),
+    sharpCrop(categoryCropSize),
+    categoryController.updateCategory
+);
 
 //delete category
-admin_route.get("/delete_category", auth.isLogin, categoryController.deleteCategory)
-
+admin_route.get("/delete_category", auth.isLogin, categoryController.deleteCategory);
 
 //-----------------------------------Order Management-----------------------------------
 
 //Admin order page load
-admin_route.get("/orders", auth.isLogin, orderController.orderLoad)
+admin_route.get("/orders", auth.isLogin, orderController.orderLoad);
 
 //Admin order detail page load
-admin_route.get("/order_detail", auth.isLogin, orderController.orderDetailLoad)
+admin_route.get("/order_detail", auth.isLogin, orderController.orderDetailLoad);
 
 //Admin order edit page load
-admin_route.post("/order_edit",auth.isLogin, orderController.updateOrder)
-
+admin_route.post("/order_edit", auth.isLogin, orderController.updateOrder);
 
 //-----------------------------------Coupon Management----------------------------------
 
 //Admin coupon page load
-admin_route.get("/coupons", auth.isLogin, couponController.couponLoad)
+admin_route.get("/coupons", auth.isLogin, couponController.couponLoad);
 
 //Add coupon page load
-admin_route.get("/add_coupon", auth.isLogin, couponController.addCouponLoad)
+admin_route.get("/add_coupon", auth.isLogin, couponController.addCouponLoad);
 
-//Add coupon 
-admin_route.post("/add_coupon", auth.isLogin, couponController.addCoupon)
+//Add coupon
+admin_route.post("/add_coupon", auth.isLogin, couponController.addCoupon);
 
 //edit coupon load
-admin_route.get("/edit_coupon", auth.isLogin, couponController.editCouponLoad)
+admin_route.get("/edit_coupon", auth.isLogin, couponController.editCouponLoad);
 
 //edit coupon to db
-admin_route.post("/edit_coupon", auth.isLogin, couponController.updateCoupon)
+admin_route.post("/edit_coupon", auth.isLogin, couponController.updateCoupon);
 
-//Delete coupon 
-admin_route.get("/delete_coupon", auth.isLogin, couponController.deleteCoupon)
- 
+//Delete coupon
+admin_route.get("/delete_coupon", auth.isLogin, couponController.deleteCoupon);
 
 //-----------------------------------Banner Management--------------------------------------
 
 //Admin banner page load
-admin_route.get("/banner", auth.isLogin, adminController.bannerLoad)
+admin_route.get("/banner", auth.isLogin, adminController.bannerLoad);
 
 //Add banner page load
-admin_route.get("/add_banner", auth.isLogin, adminController.addBannerLoad)
+admin_route.get("/add_banner", auth.isLogin, adminController.addBannerLoad);
 
-//Add banner to db 
-admin_route.post("/add_banner", auth.isLogin, upload.single('image'), adminController.addBanner)
+//Add banner to db
+admin_route.post("/add_banner", auth.isLogin, upload.single("image"), adminController.addBanner);
 
 //Admin banner listing
-admin_route.get("/bannerCheck", auth.isLogin, adminController.bannerSelect)
-
+admin_route.get("/bannerCheck", auth.isLogin, adminController.bannerSelect);
 
 //----------------------------------------------------------------------------
 
 //For invalid routes
-admin_route.get('*', function(req, res){
-    
-  res.render("404")
-    
-  })
+admin_route.get("*", function (req, res) {
+    res.render("404");
+});
 
 module.exports = admin_route;
