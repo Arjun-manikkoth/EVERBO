@@ -1,6 +1,7 @@
 const Admin = require("../models/adminModel");
 const User = require("../models/userModel");
 const Banner = require("../models/bannerModel");
+const { BANNER_ADDED, AUTH_MESSAGES, BANNER_MESSAGES } = require("../constants/messages");
 const bcrypt = require("bcrypt");
 
 //admin login load
@@ -25,10 +26,10 @@ const verifyLogin = async (req, res) => {
                 req.session.admin_Id = userData._id;
                 res.redirect("/admin/dashboard");
             } else {
-                res.render("login", { message_signin: "Invalid credentials" });
+                res.render("login", { message_signin: AUTH_MESSAGES.WRONG_CREDENTIALS });
             }
         } else {
-            res.render("login", { message_signin: "Account doesnot exist" });
+            res.render("login", { message_signin: AUTH_MESSAGES.ACCOUNT_NOT_FOUND });
         }
     } catch (error) {
         console.log(error.message);
@@ -119,7 +120,7 @@ const addBanner = async (req, res) => {
             image: req.file.filename,
         });
         await banner.save();
-        res.status(200).json({ message: "Banner added successfully" });
+        res.status(200).json({ message: BANNER_MESSAGES.BANNER_ADDED });
     } catch (error) {
         console.log(error.message);
     }

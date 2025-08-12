@@ -1,12 +1,17 @@
 const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
-const nodemailer = require("nodemailer");
-const moment = require("moment");
+const { sendMail } = require("../services/emailService");
 const random = require("random-string-generator");
 const Order = require("../models/orderModel");
 const Product = require("../models/productModel");
 const Coupon = require("../models/couponModel");
-const { USER_GMAIL, USER_PASSWORD } = process.env;
+const {
+    AUTH_MESSAGES,
+    OTP_MESSAGES,
+    EMAIL_MESSAGES,
+    PASSWORD_MESSAGES,
+    ORDER_MESSAGES,
+} = require("../constants/messages");
 
 // ---------------------------------------------User Account Management-------------------------------------------------
 
@@ -23,29 +28,12 @@ const securePassword = async (password) => {
 const sentOtpVerificationMail = async (email, id) => {
     try {
         generate_otp = Math.floor(1000 + Math.random() * 9000);
-        const transporter = nodemailer.createTransport({
-            host: "smtp.gmail.com",
-            port: 587,
-            secure: false,
-            requireTLS: true,
-            auth: {
-                user: USER_GMAIL,
-                pass: USER_PASSWORD,
-            },
-        });
-        const mailOptions = {
-            from: USER_GMAIL,
-            to: email,
-            subject: "Verificaton mail",
-            html: `<p>Enter this code <b>${generate_otp}</b> to verify your account.</p><p>This code expires in <b>60 seconds</b></p>`,
-        };
-        transporter.sendMail(mailOptions, (error, info) => {
-            if (error) {
-                console.log(error.message);
-            } else {
-                console.log("Mail sent successfully");
-            }
-        });
+
+        await sendMail(
+            email,
+            "Verificaton mail",
+            `<p>Enter this code <b>${generate_otp}</b> to verify your account.</p><p>This code expires in <b>60 seconds</b></p>`
+        );
 
         const otp = generate_otp.toString();
         const otpHash = await bcrypt.hash(otp, 10);
@@ -70,29 +58,12 @@ const sentOtpVerificationMail = async (email, id) => {
 const sentResetPasswordMail = async (email, id) => {
     try {
         const resetLink = `${process.env.PORT}/reset_password?userId=${id}`;
-        const transporter = nodemailer.createTransport({
-            host: "smtp.gmail.com",
-            port: 587,
-            secure: false,
-            requireTLS: true,
-            auth: {
-                user: USER_GMAIL,
-                pass: USER_PASSWORD,
-            },
-        });
-        const mailOptions = {
-            from: USER_GMAIL,
-            to: email,
-            subject: "Password Reset Link",
-            html: `<p>Click on this <a href="${resetLink}">link<a/> to reset your account password </p>`,
-        };
-        transporter.sendMail(mailOptions, (error, info) => {
-            if (error) {
-                console.log(error.message);
-            } else {
-                console.log("Mail sent successfully");
-            }
-        });
+
+        await sendMail(
+            email,
+            "Password Reset Link",
+            `<p>Click on this <a href="${resetLink}">link<a/> to reset your account password </p>`
+        );
     } catch (error) {
         console.log(error.message);
     }
@@ -103,21 +74,11 @@ const sentReferralMail = async (req, res) => {
     try {
         const data = await User.findById({ _id: req.session.user_Id });
 
-        const transporter = nodemailer.createTransport({
-            host: "smtp.gmail.com",
-            port: 587,
-            secure: false,
-            requireTLS: true,
-            auth: {
-                user: USER_GMAIL,
-                pass: USER_PASSWORD,
-            },
-        });
-        const mailOptions = {
-            from: USER_GMAIL,
-            to: req.body.email,
-            subject: "Enjoy a 10% Discount on Your Fashion Purchase with This Referral Code!",
-            html: `
+        await sendMail(
+            req.body.email,
+            "Enjoy a 10% Discount on Your Fashion Purchase with This Referral Code!",
+            `<p>Click on this <a href="${resetLink}">link<a/> to reset your account password </p>`,
+            `
         <p>Hello,</p>
         <p>I am excited to share an exclusive offer with you. Use the referral code below to get a 10% discount on your next purchase from the EVERBO fashions website:</p>
         <p><strong>Referral Code: ${data.referral.referral_code}</strong></p>
@@ -129,16 +90,8 @@ const sentReferralMail = async (req, res) => {
         </ul>
         <p>Don't miss out on this great opportunity to enhance your wardrobe at a discounted price. Happy shopping!</p>
         <p><small>Terms and conditions apply. Visit the website for more details.</small></p>
-      `,
-        };
-
-        transporter.sendMail(mailOptions, (error, info) => {
-            if (error) {
-                console.log(error.message);
-            } else {
-                res.json(req.body.email);
-            }
-        });
+      `
+        );
     } catch (error) {
         console.log(error.message);
     }
@@ -164,7 +117,10 @@ const verifyLogin = async (req, res) => {
         if (userData) {
             if (userData.is_verified == 1) {
                 if (userData.is_blocked == 1) {
-                    res.render("entry", { message_signin: "Access Denied", loggedIn: "false" });
+                    res.render("entry", {
+                        message_signin: AUTH_MESSAGES.ACCESS_DENIED,
+                        loggedIn: "false",
+                    });
                 } else {
                     const passwordMatch = await bcrypt.compare(Password, userData.password);
                     if (passwordMatch) {
@@ -172,7 +128,7 @@ const verifyLogin = async (req, res) => {
                         res.redirect("/shop");
                     } else {
                         res.render("entry", {
-                            message_signin: "Invalid username/password",
+                            message_signin: AUTH_MESSAGES.WRONG_CREDENTIALS,
                             loggedIn: "false",
                         });
                     }
@@ -181,7 +137,10 @@ const verifyLogin = async (req, res) => {
                 res.redirect("/entry");
             }
         } else {
-            res.render("entry", { message_signin: "Account doesnot exist", loggedIn: "false" });
+            res.render("entry", {
+                message_signin: AUTH_MESSAGES.ACCOUNT_NOT_FOUND,
+                loggedIn: "false",
+            });
         }
     } catch (error) {
         console.log(error.message);
@@ -194,7 +153,10 @@ const insertUser = async (req, res) => {
         const signedIn = await User.findOne({ email: req.body.email });
         if (signedIn) {
             if (signedIn.is_verified == 1) {
-                res.render("entry", { message_signup: "Already a user", loggedIn: "false" });
+                res.render("entry", {
+                    message_signup: AUTH_MESSAGES.ACCOUNT_EXISTS,
+                    loggedIn: "false",
+                });
             } else {
                 await sentOtpVerificationMail(req.body.email, signedIn._id);
                 res.render("otp_verification", { timer: true, loggedIn: "false" });
@@ -214,7 +176,10 @@ const insertUser = async (req, res) => {
                 req.session.user_Id = userData._id;
                 res.render("otp_verification", { timer: true });
             } else {
-                res.render("entry", { message_signup: "Registration failed", loggedIn: "false" });
+                res.render("entry", {
+                    message_signup: AUTH_MESSAGES.REGISTRATION_FAILED,
+                    loggedIn: "false",
+                });
             }
         }
     } catch (error) {
@@ -231,7 +196,7 @@ const otpVerifySignUp = async (req, res) => {
         if (userData.otp_verify.expiresAt < Date.now()) {
             await User.updateOne({ _id: userId }, { $set: { "otp_verify.otp": "" } });
             res.render("otp_verification", {
-                message_otpverification: "OTP expired",
+                message_otpverification: OTP_MESSAGES.OTP_EXPIRED,
                 loggedIn: "false",
             });
         } else {
@@ -241,7 +206,7 @@ const otpVerifySignUp = async (req, res) => {
                 res.redirect("/shop");
             } else {
                 res.render("otp_verification", {
-                    message_otpverification: "Invalid OTP",
+                    message_otpverification: OTP_MESSAGES.INVALID_OTP,
                     loggedIn: "false",
                 });
             }
@@ -275,16 +240,18 @@ const forgotLoad = async (req, res) => {
 const forgotVerify = async (req, res) => {
     try {
         const Email = req.body.email;
+
         const userData = await User.findOne({ email: Email });
+
         if (userData) {
             await sentResetPasswordMail(Email, userData._id);
             res.render("forgot_password", {
-                message_forgot: "Please check your Email for the link",
+                message_forgot: EMAIL_MESSAGES.CHECK_MAIL,
                 loggedIn: "false",
             });
         } else {
             res.render("forgot_password", {
-                message_forgot: "Couldn't find an account with specified Email address",
+                message_forgot: EMAIL_MESSAGES.MAIL_ACCOUNT_CHECK_FAILED,
                 loggedIn: "false",
             });
         }
@@ -312,11 +279,14 @@ const passwordReset = async (req, res) => {
 
         if (userData) {
             res.render("entry", {
-                message_signup: "Please login with your new password",
+                message_signup: PASSWORD_MESSAGES.NEW_PASSWORD_LOGIN,
                 loggedIn: "false",
             });
         } else {
-            res.render("entry", { message_signup: "Password reset failed", loggedIn: "false" });
+            res.render("entry", {
+                message_signup: PASSWORD_MESSAGES.PASSWORD_RESET_FAILED,
+                loggedIn: "false",
+            });
         }
     } catch (error) {
         console.log(error.message);
@@ -427,7 +397,7 @@ const orderDetail = async (req, res) => {
         if (orderData) {
             res.render("order_detail", { orderData, session: req.session });
         } else {
-            res.render("order", { msg: "Couldnt find Order", session: req.session });
+            res.render("order", { msg: ORDER_MESSAGES.NO_ORDERS, session: req.session });
         }
     } catch (error) {
         console.log(error.message);
@@ -697,7 +667,10 @@ const confirmPassword = async (req, res) => {
         if (success) {
             res.redirect("/new_password");
         } else {
-            res.render("confirm_password", { msg: "Please Check the password", profile: true });
+            res.render("confirm_password", {
+                msg: PASSWORD_MESSAGES.CONFIRM_PASSWORD_FAILED,
+                profile: true,
+            });
         }
     } catch (error) {
         console.log(error.message);
